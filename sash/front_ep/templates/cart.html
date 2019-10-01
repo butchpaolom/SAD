@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+<div class="row">
+        {% for product in cart %}
+        <div class="product_card col-sm-6 col-lg-4 col-4 mb-3">
+                <div class="card shadow-sm border-0 p-0 m-0">
+                    <div class="card-body bg-whitem-0 p-0" data-placement="left" data-toggle="tooltip" title="{{ product.product_name }}">
+                        <div class="square" style="background-image: url('{{ product.image }}');width: 100%;padding-bottom: 100%;background-size: cover;background-position: center;">
+                        </div>
+                        <h5 class="card-title text-truncate text-center mt-2 ml-2 mr-2 pb-2">{{ product.product }}</h5>
+                        <h5 class="card-title text-truncate text-center mt-2 ml-2 mr-2 pb-2">{{ product.total_price }}</h5>
+                        <h5 class="card-title text-truncate text-center mt-2 ml-2 mr-2 pb-2">{{ product.quantity }}</h5>
+                        </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div> 
+    </div>
+{% endblock content %}
