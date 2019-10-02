@@ -1,19 +1,118 @@
-
-{% load static %}
+ {% load static %}
 <!DOCtype html>
 <html>
 
 <head>
-<script src="{% static '/assets/js/core/jquery.min.js' %}"></script>
-<link href="{% static '/assets/css/bootstrap.min.css' %}" rel="stylesheet" />
+    <script src="{% static '/assets/js/core/jquery.min.js' %}"></script>
+    <link href="{% static '/assets/css/bootstrap.min.css' %}" rel="stylesheet" />
+    <link href="{% static '/assets/css/main.css' %}" rel="stylesheet" />
+    <link href="{% static '/assets/css/util.css' %}" rel="stylesheet" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- <link href="{% static 'images/icons/favicon.ico' %}" rel="stylesheet" /> -->
+    <!--===============================================================================================-->
+
+    <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" />
+    <!--===============================================================================================-->
+    <link href="{% static 'assets/fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}" rel="stylesheet" />
+    <!--===============================================================================================-->
+    <link href="{% static 'assets/fonts/Linearicons-Free-v1.0.0/icon-font.min.css' %}" rel="stylesheet" />
+    <!--===============================================================================================-->
+    <link href="{% static 'assets/vendor/animate/animate.css' %}" rel="stylesheet" />
+    <!--===============================================================================================-->
+    <link href="{% static 'assets/vendor/css-hamburgers/hamburgers.min.css' %}" rel="stylesheet" />
+    <!--===============================================================================================-->
+    <link href="{% static 'assets/vendor/animsition/css/animsition.min.css' %}" rel="stylesheet" />
+    <!--===============================================================================================-->
+    <link href="{% static 'assets/vendor/select2/select2.min.css' %}" rel="stylesheet" />
+    <!--===============================================================================================-->
+    <link href="{% static 'assets/vendor/daterangepicker/daterangepicker.css' %}" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="{% static 'assets/fonts/font-awesome-4.7.0/css/adminicon.png' %}" />
+    <!--===============================================================================================-->
+
+    <!--===============================================================================================-->
+
+    <!--===============================================================================================-->
 </head>
+
 <body class="bg-muted">
-    <h2>Login</h2>
+    <!-- <h2>Login</h2> -->
+
+    <h4><i class="fa fa-user-circle-o"></i> Power Sash Enterprises</h4>
+
     <form method="post">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit">Login</button>
+        {% csrf_token %}
+        <!-- <button type="submit">Login</button> -->
+
+
+        <div class="logindiv">
+            <div class="limiter ">
+                <div class="container-login100 ">
+                    <div class="wrap-login100 p-t-50 p-b-90 ">
+                        <form class="login100-form validate-form flex-sb flex-w ">
+                            <span class="login100-form-title p-b-51 ">
+          Login
+        </span> {{ form.as_p }}
+
+
+                            <!-- <div class="wrap-input100 validate-input m-b-16 " data-validate="Username is required ">
+                        <input class="input100 " type="text " name="username " placeholder="Username ">
+                        <span class="focus-input100 "></span>
+                    </div>
+
+
+                    <div class="wrap-input100 validate-input m-b-16 " data-validate="Password is required ">
+                        <input class="input100 " type="password " name="pass " placeholder="Password ">
+                        <span class="focus-input100 "></span>
+                    </div> -->
+
+                            <!-- <div class="flex-sb-m w-full p-t-3 p-b-24 ">
+                            <div class="contact100-form-checkbox ">
+                                <input class="input-checkbox100 " id="ckb1 " type="checkbox " name="remember-me ">
+                                <label class="label-checkbox100 " for="ckb1 ">
+              Remember me
+            </label>
+                            </div>
+
+                            <div>
+                                <a href="# " class="txt1 ">
+              Forgot?
+            </a>
+                            </div>
+                        </div> -->
+
+                            <div class="container-login100-form-btn m-t-17 ">
+                                <button class="login100-form-btn ">
+            Login
+          </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </form>
+    <div id="dropDownSelect1 "></div>
+
+    <script src="{% static '/assets/vendor/jquery/jquery-3.2.1.min.js' %} "></script>
+    <!--===============================================================================================-->
+    <script src="{% static '/assets/vendor/animsition/js/animsition.min.js' %} "></script>
+    <!--===============================================================================================-->
+    <script src="{% static '/assets/vendor/bootstrap/js/popper.js' %} "></script>
+    <!--===============================================================================================-->
+    <script src="{% static '/assets/vendor/bootstrap/js/bootstrap.min.js' %} "></script>
+    <script src="{% static '/assets/vendor/select2/select2.min.js' %} "></script>
+    <!--===============================================================================================-->
+    <script src="{% static '/assets/vendor/daterangepicker/moment.min.js' %} "></script>
+    <!--===============================================================================================-->
+    <script src="{% static '/assets/vendor/daterangepicker/daterangepicker.js' %} "></script>
+    <!--===============================================================================================-->
+    <script src="{% static '/assets/vendor/countdowntime/countdowntime.js' %} "></script>
+    <script src="{% static '/assets/js/main.js' %} "></script>
+    <!--===============================================================================================-->
+
 </body>
 
 

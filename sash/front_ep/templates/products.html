@@ -1,24 +1,26 @@
-{% extends "base.html" %}
-{% block content %}
-<h2 class="text-center mt-4">{{ category }}</h2>
-<div class="container">
-<div class="row">
-    {% for product in products %}
-    <div class="product_card col-sm-6 col-lg-4 col-4 mb-3">
+{% extends "base2.html" %} {% block content %}
+
+<div class="container mt-0 pt-5">
+    <h2 class="text-center mt-5 ">{{ category }}</h2>
+    <div class="row">
+        {% for product in products %}
+        <div class="product_card col-sm-6 col-lg-4 col-4 mb-3">
             <div class="card shadow-sm border-0 p-0 m-0">
                 <div class="card-body bg-whitem-0 p-0" data-placement="left" data-toggle="tooltip" title="{{ product.product_name }}">
                     <div class="square" style="background-image: url('{{ product.product_image.url }}');width: 100%;padding-bottom: 100%;background-size: cover;background-position: center;">
                     </div>
                     <h5 class="card-title text-truncate text-center mt-2 ml-2 mr-2 pb-2">{{ product.product_name }}</h5>
-                    </div>
-                    <div class="b_group d-flex flex-column justify-content-center bg-white">
-                      <a href="{% url 'product_detail' product.id %}" class="abutton add_c btn btn-success p-0 text-truncate"><p class="text-white m-0">Check this item</p></a>
-                    </div>
+                </div>
+                <div class="b_group d-flex flex-column justify-content-center bg-white">
+                    <a href="{% url 'product_detail' product.id %}" class="abutton add_c btn btn-success p-0 text-truncate">
+                        <p class="text-white m-0">Check this item</p>
+                    </a>
+                </div>
             </div>
         </div>
-    {% endfor %}
-    </div> 
-    
+        {% endfor %}
+    </div>
+
 </div>
-    </div> 
+</div>
 {% endblock content %}

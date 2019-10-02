@@ -20,7 +20,7 @@ def payment_process(request):
         'amount': '%.2f' % order.overall_price.quantize(Decimal('.01')),
         'item_name': 'Order ID: {}'.format(order.trans_id),
         'invoice': str(trans_id),
-        'currency_code': 'PHP',
+        'currency_code': 'USD',
         'notify_url': 'http://{}{}'.format(host, reverse('paypal-ipn')),
         'return_url': 'http://{}{}'.format(host, reverse('payment_done')),
         'cancel_return': 'http://{}{}'.format(host, reverse('payment_cancelled')),
@@ -31,7 +31,6 @@ def payment_process(request):
 
 @csrf_exempt
 def payment_done(request):
-    print(request.POST)
     return render(request, 'done.html')
 
 @csrf_exempt

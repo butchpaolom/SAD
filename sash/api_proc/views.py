@@ -122,7 +122,8 @@ def create_customer_info(request):
             form.save()
             success = True
             data = {
-                "success": success
+                "success": success,
+                "method": post_data['payment_method']
             }
         else:
             success= False

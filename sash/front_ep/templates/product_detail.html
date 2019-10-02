@@ -1,64 +1,67 @@
-{% extends "base.html" %}
-{% block content %}
-{% csrf_token %}
+{% extends "base.html" %} {% block content %} {% csrf_token %}
 <div class="container mt-4" id="product_detail_base">
     <div class="row border shadow-sm">
-    <div class="col-md-12 col-lg-6 col-sm-12 col-12 m-0 p-0 justify-content-center">
-       <div class="square m-0" id="pic" style="background-image: url('{{ product_image }}');width: 100%;padding-bottom: 100%;background-size: cover;background-position: center;">
-       </div>
-    </div>
-   <div class="col-md-12 col-sm-12 col-lg-6  col-12">
-       <div class="container p-0">
-         <div class="card-body">
-           <h3 class="card-title text-dark">{{ product_name }}</h3>
-             <hr>
-           <a href="{% url 'category' category %}"><h5><p class="card-text text-muted">
-             {{ category }}
-             </p></h5></a>
-           <a href=""><p class="card-text text-muted">
-             {{ price }}
-           </p></a>
-             <hr>
-           <p class="card-text">
-             {{ description }}
-           </p>
-           <div class="form-inline">
-           <select class="quantity custom-select form-control">
+        <div class="col-md-12 col-lg-6 col-sm-12 col-12 m-0 p-0 justify-content-center">
+            <div class="square m-0" id="pic" style="background-image: url('{{ product_image }}');width: 100%;padding-bottom: 100%;background-size: cover;background-position: center;">
+            </div>
+        </div>
+        <div class="col-md-12 col-sm-12 col-lg-6  col-12">
+            <div class="container p-0">
+                <div class="card-body">
+                    <h3 class="card-title text-dark">{{ product_name }}</h3>
+                    <hr>
+                    <a href="{% url 'category' category %}">
+                        <h5>
+                            <p class="card-text text-muted">
+                                {{ category }}
+                            </p>
+                        </h5>
+                    </a>
+                    <a href="">
+                        <p class="card-text text-muted">
+                            {{ price }}
+                        </p>
+                    </a>
+                    <hr>
+                    <p class="card-text">
+                        {{ description }}
+                    </p>
+                    <div class="form-inline">
+                        <select class="quantity custom-select form-control">
               {% for i in ""|rjust:stock|slice:"10" %}
               <option value="{{forloop.counter}}">{{forloop.counter}}</option>
               {% endfor %}
             </select>
-           <button class="add_cart btn btn-outline-primary py-2">Add to Cart</button>
-          </div>
-         </div>
-       </div>
-   </div>
+                        <button class="add_cart btn btn-outline-primary py-2">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <script>
-  $('.add_cart').click(function(){
-    $.ajax({
-        url: "{% url 'create_order' %}",
-        method: 'post',
-        data: {
-          product: "{{ id }}",
-          quantity: $('.quantity').val(),
-          image: "{{ product_image }}",
-          csrfmiddlewaretoken: '{{ csrf_token }}',
-        },
-        dataType: 'json',
-        success: function (data) {
-          if (data['success']==true){
-            $('#alert_message').remove();
-            var alert_mes = "";
-            alert_mes += '<div id="alert_message" class="row alert alert-success animated fadeIn" role="alert">';
-            alert_mes += '<strong>' + data['message'] + '<a class="text-primary" href="{% url 'cart_base' %}">&nbsp; Click here to check the cart.</a></strong></div>';
-            $('#product_detail_base').prepend(alert_mes);
-          }
-        }
-      });
-  });
-
+    $('.add_cart').click(function() {
+        $.ajax({
+            url: "{% url 'create_order' %}",
+            method: 'post',
+            data: {
+                product: "{{ id }}",
+                quantity: $('.quantity').val(),
+                image: "{{ product_image }}",
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            dataType: 'json',
+            success: function(data) {
+                if (data['success'] == true) {
+                    $('#alert_message').remove();
+                    var alert_mes = "";
+                    alert_mes += '<div id="alert_message" class="row alert alert-success animated fadeIn" role="alert">';
+                    alert_mes += '<strong>' + data['message'] + '<a class="text-primary" href="{% url 'cart_base' %}">&nbsp; Click here to check the cart.</a></strong></div>';
+                    $('#product_detail_base').prepend(alert_mes);
+                }
+            }
+        });
+    });
 </script>
 
 {% endblock content %}

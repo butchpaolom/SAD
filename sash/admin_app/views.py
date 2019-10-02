@@ -22,6 +22,8 @@ class ProductListView(LoginRequiredMixin, ListView):
     template_name = 'product_tables.html'
     context_object_name = 'products'
 
+
+
 class ProductUpdateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, UpdateView):
     model = Product
     template_name = 'update.html'
@@ -68,5 +70,8 @@ class ProductDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
 class CustomerInfoListView(LoginRequiredMixin, ListView):
     model = CustomerInfo
     template_name = 'customer_info_tables.html'
-    context_object_name = 'customer_info'
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)  
+        context['customer_info'] = CustomerInfo.objects.all()
+        return context

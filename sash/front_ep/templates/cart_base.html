@@ -1,42 +1,48 @@
-{% extends "base.html" %}
-{% block content %}
-{% include "modal.html" %}
-<div class="container mt-4">
-    <div id="cart_base" class="m-0 p-0">
-    </div> 
-        {% if not empty %}
-        <button class="action btn btn-info" data-id="{% url 'customer_form' %}">Checkout</button>
-        <button class="clear btn btn-warning">Empty Cart</button>
-        {% endif %}
+{% extends "base2.html" %} {% block content %} {% include "modal.html" %}
+<div class="container mt-0 pt-5">
+    <div id="cart_base" class="m-5 p-5">
     </div>
-    <script>
-        $(document).ready(function(){
-            $('#cart_base').load("{% url 'cart_view' %}");
+    {% if not empty %}
+    <div class="row">
+        <button class="action btn btn-info col-3" data-id="{% url 'customer_form' %}">Checkout</button>
+        <button class="clear btn btn-warning col-3">Empty Cart</button>
+    </div>
+    <div class="row">
+        <button class="btn btn-secondary  col-6"><a href="/#our_products">Continue Shopping</a></button>
+    </div>
+    {% endif %}
+</div>
+<script>
+    $(document).ready(function() {
+        $('#cart_base').load("{% url 'cart_view' %}");
+    });
+    $(".action").each(function() {
+        $(this).modalForm({
+            formURL: $(this).data('id')
         });
-        $(".action").each(function () {
-            $(this).modalForm({formURL: $(this).data('id')});
-        });
+    });
 
-        $('.clear').click(function(){
-            $(this).text('Are you sure?').removeClass('btn-warning').addClass('btn-danger');
-            $(this).click(function(){
-                $.ajax({
-                    url: "{% url 'clear_cart' %}",
-                    method: 'POST',
-                    data: {
-                        csrfmiddlewaretoken: "{{ csrf_token }}"
-                    },
-                    success(data){
-                        if (data["success"]=true){
-                            $('#cart_view').addClass('animated fadeOut fastest');
-                        setTimeout(function(){
+    $('.clear').click(function() {
+        $(this).text('Are you sure?').removeClass('btn-warning').addClass('btn-danger');
+        $(this).click(function() {
+            $.ajax({
+                url: "{% url 'clear_cart' %}",
+                method: 'POST',
+                data: {
+                    csrfmiddlewaretoken: "{{ csrf_token }}"
+                },
+                success(data) {
+                    if (data["success"] = true) {
+                        $('#cart_view').addClass('animated fadeOut fastest');
+                        setTimeout(function() {
                             $('#cart_base').load("{% url 'cart_view' %}");
-                        },500); 
+                        }, 500);
                         $('.clear').remove();
-                        $('.action').remove();                        }
+                        $('.action').remove();
                     }
-                })
-            });
+                }
+            })
         });
-    </script>
+    });
+</script>
 {% endblock content %}

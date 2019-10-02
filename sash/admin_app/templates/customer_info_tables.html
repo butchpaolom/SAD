@@ -22,7 +22,7 @@
                         Address
                       </th>
                       <th>
-                        Order
+                        Order ID
                       </th>
                       <th>
                         Total Price
@@ -30,8 +30,8 @@
                       <th>
                         Contact Number
                       </th>
-                      <th class="no-sort text-center">
-                        Actions
+                      <th>
+                        Email
                       </th>
                     </thead>
                     <tbody>
@@ -44,11 +44,7 @@
                           {{ customer.address }}
                         </td>
                         <td>
-                          {% for order in customer.final_order.orders.all %}
-                          <li>
-                                {{ order.product }} ({{ order.quantity }}) ₱{{ order.total_price }}
-                          </li>
-                          {% endfor %}
+                          {{ customer.final_order.trans_id }}
                         </td>
                         <td>
                          ₱{{ customer.final_order.overall_price }}
@@ -56,9 +52,8 @@
                         <td>
                           {{ customer.contact_number }}
                         </td>
-                        <td class="text-center">
-                          <button class="action btn btn-info py-2 px-3" data-id="% url 'admin_product_update' product.pk %"><i class="fa fa-edit"></i></button>
-                          <button class="action btn btn-danger py-2 px-3" data-id="% url 'admin_product_delete' product.pk %"><i class="fa fa-trash"></i></button>
+                        <td>
+                          {{ customer.email }}
                         </td>
                       </tr>
                       {% endfor %}

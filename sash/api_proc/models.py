@@ -47,7 +47,7 @@ class FinalOrder(models.Model):
     overall_price = models.DecimalField(null=True, default=0, decimal_places=2, max_digits=8)
     trans_id = models.UUIDField(default=uuid.uuid4, editable=False)
     def __str__(self):
-        return '{0}-{1}'.format(self.overall_price, self.id)
+        return '{0}-{1}'.format(self.overall_price, self.trans_id)
 
 #Customer info + Final Order
 class CustomerInfo(models.Model):
@@ -56,14 +56,21 @@ class CustomerInfo(models.Model):
     first_name = models.CharField(max_length=30, null=True, blank=False)
     last_name = models.CharField(max_length=30, null=True, blank=False)
     middle_initial = models.CharField(max_length=3, null=True, blank=True)
-    contact_number = models.TextField()
+    contact_number = models.TextField(blank=False)
+    email = models.EmailField(blank=False, null=True)
+
+    choices = (
+        (1, "COD"),
+        (2, "PayPal")
+    )
+    payment_method = models.IntegerField(choices, null=True)
 
     def __str__(self):
         return '{0}-{1} {2}'.format(self.final_order.pk, self.first_name, self.last_name)
 
 class Transaction(models.Model):
-    costumer = models.ForeignKey(CustomerInfo, on_delete=models.CASCADE)
-    trans_id = models.UUIDField(default=uuid.uuid4, editable=False)
+    final_order = models.OneToOneField(FinalOrder, on_delete=models.CASCADE, null=True)
+    paid = models.BooleanField(default=0)
     delivery_date = models.DateTimeField()
     delivered_date = models.DateTimeField()
 
