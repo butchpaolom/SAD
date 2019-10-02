@@ -45,7 +45,7 @@ class InitialOrder(models.Model):
 class FinalOrder(models.Model):
     orders = models.ManyToManyField(InitialOrder)
     overall_price = models.DecimalField(null=True, default=0, decimal_places=2, max_digits=8)
-
+    trans_id = models.UUIDField(default=uuid.uuid4, editable=False)
     def __str__(self):
         return '{0}-{1}'.format(self.overall_price, self.id)
 

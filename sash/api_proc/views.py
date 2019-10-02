@@ -1,12 +1,16 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
+from django.urls import reverse
 from .models import *
+from django.conf import settings
 from .serializer import *
 from .forms import *
 from django.views.generic import ListView, TemplateView, UpdateView, CreateView, DeleteView
-
+from decimal import Decimal
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
+
 
 def landing(request):
     products = Product.objects.all()
@@ -110,6 +114,7 @@ def create_customer_info(request):
             finalOrder.save()
         
         post_data['final_order'] = str(finalOrder.id)
+        request.session['trans_id'] = str(finalOrder.trans_id)
         print(post_data)
         form = CustomerInfoForm(post_data)
         print(form.is_valid())
@@ -124,9 +129,7 @@ def create_customer_info(request):
             data = {
                 "success": success
             }
-
     return JsonResponse(data)
-
 
 
 

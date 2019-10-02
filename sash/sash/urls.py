@@ -23,6 +23,9 @@ urlpatterns = [
     path('api/', include('api_proc.urls')),
     path('manage/', include('admin_app.urls')),
     path('', include('front_ep.urls')),
+    path('payment/', include('payment.urls')),
+    path('paypal/', include('paypal.standard.ipn.urls')),
+
 ]
 
 if settings.DEBUG:

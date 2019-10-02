@@ -1,6 +1,7 @@
 from django.urls import path, include
 from .views import *
 
+
 urlpatterns = [
     path('', landing, name='landing_api'),
     path('product/<int:id>', product_detail, name='product_detail'),

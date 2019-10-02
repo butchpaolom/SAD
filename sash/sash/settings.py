@@ -37,12 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
     'api_proc.apps.ApiProcConfig',
     'front_ep.apps.FrontEpConfig',
+    'admin_app.apps.AdminAppConfig',
+    'payment.apps.PaymentConfig',
+    'rest_framework',
     'crispy_forms',
     'widget_tweaks',
-    'admin_app.apps.AdminAppConfig',
+    'paypal.standard.ipn'
 ]
 
 MIDDLEWARE = [
@@ -132,4 +134,9 @@ MEDIA_URL = '/media/'
 
 
 LOGIN_REDIRECT_URL = '/manage/'
+LOGIN_URL = '/manage/login'
+
+
+PAYPAL_RECEIVER_EMAIL = 'powersash@business.example.com'#Lucena.serquina00@gmail.com
+PAYPAL_TEST = True
 
