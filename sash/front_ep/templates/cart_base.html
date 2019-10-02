@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+{% include "modal.html" %}
+<div class="container mt-4">
+    <div id="cart_base" class="m-0 p-0">
+    </div> 
+        {% if not empty %}
+        <button class="action btn btn-info" data-id="{% url 'customer_form' %}">Checkout</button>
+        <button class="clear btn btn-warning">Empty Cart</button>
+        {% endif %}
+    </div>
+    <script>
+        $(document).ready(function(){
+            $('#cart_base').load("{% url 'cart_view' %}");
+        });
+        $(".action").each(function () {
+            $(this).modalForm({formURL: $(this).data('id')});
+        });
+
+        $('.clear').click(function(){
+            $(this).text('Are you sure?').removeClass('btn-warning').addClass('btn-danger');
+            $(this).click(function(){
+                $.ajax({
+                    url: "{% url 'clear_cart' %}",
+                    method: 'POST',
+                    data: {
+                        csrfmiddlewaretoken: "{{ csrf_token }}"
+                    },
+                    success(data){
+                        if (data["success"]=true){
+                            $('#cart_view').addClass('animated fadeOut fastest');
+                        setTimeout(function(){
+                            $('#cart_base').load("{% url 'cart_view' %}");
+                        },500); 
+                        $('.clear').remove();
+                        $('.action').remove();                        }
+                    }
+                })
+            });
+        });
+    </script>
+{% endblock content %}

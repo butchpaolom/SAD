@@ -6,8 +6,10 @@ from crispy_forms.layout import Layout, Field, ButtonHolder, Submit
 
 
 
-# class OrderForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
-#     class Meta:
-#         model = Product
-#         exclude = []
+class CustomerInfoForm(forms.ModelForm):
+    class Meta:
+        model = CustomerInfo
+        fields = '__all__'
+        widgets = {'final_order': forms.HiddenInput()}
+
 

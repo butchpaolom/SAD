@@ -15,6 +15,8 @@ from django.contrib import messages
 class AdminLanding(LoginRequiredMixin, TemplateView):
     template_name = 'dashboard.html'
 
+
+#Product
 class ProductListView(LoginRequiredMixin, ListView):
     model = Product
     template_name = 'product_tables.html'
@@ -60,4 +62,11 @@ class ProductDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         message = "Successfully deleted " + str(product_name)
         messages.warning(self.request, message)
         return super(ProductDeleteView, self).delete(request, *args, **kwargs)
+
+
+#CustomerInfo
+class CustomerInfoListView(LoginRequiredMixin, ListView):
+    model = CustomerInfo
+    template_name = 'customer_info_tables.html'
+    context_object_name = 'customer_info'
     

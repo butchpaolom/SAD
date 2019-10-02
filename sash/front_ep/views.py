@@ -4,6 +4,7 @@ import requests
 import json
 import time
 import urllib3
+from api_proc.forms import *
 
 # Create your views here.
 
@@ -45,3 +46,22 @@ def cart_view(request):
         "cart": cart,
     }
     return render(request, 'cart.html', context)
+
+def cart_base(request):
+    try:
+        cart = request.session['cart']
+        if cart:
+            empty = False
+        else:
+            empty = True
+    except:
+        empty = True
+
+    context = {
+        "empty": empty
+    }
+
+    return render(request, 'cart_base.html', context)
+
+def customer_form(request):
+    return render(request, 'order_form.html', {'form':CustomerInfoForm})

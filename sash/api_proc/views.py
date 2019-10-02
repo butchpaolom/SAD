@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
 from .models import *
 from .serializer import *
+from .forms import *
 from django.views.generic import ListView, TemplateView, UpdateView, CreateView, DeleteView
 
 
@@ -25,14 +26,31 @@ def create_order(request):
         quantity = request.POST['quantity']
         image = request.POST['image']
 
+        product_name = Product.objects.get(id=int(product)).product_name
+        price = Product.objects.get(id=int(product)).price
+
     new_order = {
-        "product": product,
+        "id": product,
+        "product": product_name,
         "quantity": quantity,
         "image": image,
+        "total_price": str(price * int(quantity)),
     }
 
     try:
         cart = request.session['cart']
+        for i in range(len(cart)):
+            if cart[i]['id'] == new_order['id']: #replace changes if existing (for ex. quantity)
+                cart[i] = new_order
+                request.session['cart'] = cart
+                success = True
+                message = 'Cart Updated: The quantity of <strong>{0}</strong> is changed to <strong>{1}</strong>.'.format(new_order['product'], new_order['quantity'])
+                data = {
+                    "success": success,
+                    "message": message
+                }
+                return JsonResponse(data)
+
         cart.append(new_order)
         request.session['cart'] = cart
     except:
@@ -41,12 +59,85 @@ def create_order(request):
         cart.append(new_order)
         request.session['cart'] = cart
 
-    return JsonResponse(new_order)
+    success = True
+    message = 'Successfully added <strong>{0} ({1})</strong> to cart.'.format(new_order['product'], new_order['quantity'])
+    data = {
+        "success": success,
+        "message": message
+    }
+    return JsonResponse(data)
 
 def clear_cart(request):
-    print(request.session['cart'])
-    request.session.clear()
-    print('Session is cleared.')
+    try:
+        request.session['cart']=[]
+        message = "Cart is now empty!"
+        print('Cart is cleared')
+    except:
+        message = "Try again."
 
-    return HttpResponse(200)
+    data = {
+        "message": message
+    }
+
+    return JsonResponse(data)
+
+def create_customer_info(request):
+    success = False
+    if request.method == 'POST':
+        post_data = request.POST.copy()
+
+
+        #create intial order from request.session['cart']
+        orders=[]
+        cart = request.session['cart']
+        for each in cart:
+            order = InitialOrder(
+                product=Product.objects.get(id=each['id']),
+                quantity=each['quantity'],
+                total_price= Product.objects.get(id=each['id']).price*int(each['quantity']))
+            order.save()
+            orders.append(order)
+
+        #create final order from inital order list 'orders'
+
+        finalOrder = FinalOrder()
+        finalOrder.save()
+        overall_price=0
+        for each in orders:
+            overall_price = overall_price + each.total_price
+            finalOrder.overall_price = overall_price
+            finalOrder.orders.add(each)
+            finalOrder.save()
+        
+        post_data['final_order'] = str(finalOrder.id)
+        print(post_data)
+        form = CustomerInfoForm(post_data)
+        print(form.is_valid())
+        if form.is_valid():
+            form.save()
+            success = True
+            data = {
+                "success": success
+            }
+        else:
+            success= False
+            data = {
+                "success": success
+            }
+
+    return JsonResponse(data)
+
+
+
+
+ 
+        
+
+
+
+
+
+
+
+
 

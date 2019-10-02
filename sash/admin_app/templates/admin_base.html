@@ -75,10 +75,10 @@ The above copyright notice and this permission notice shall be included in all c
                             <p>Transactions</p>
                           </a>
                         </li>
-                        <li>
-                          <a href="./notifications.html">
-                            <i class="nc-icon nc-bell-55"></i>
-                            <p>Notifications</p>
+                        <li class="{% with request.resolver_match.view_name as view_name %}{% if view_name == 'admin_customer_infos' %}active{% endif %}{% endwith %}">
+                          <a href="{% url 'admin_customer_infos' %}">
+                              <i class="fa fa-list"></i>
+                            <p>Customer Orders</p>
                           </a>
                         </li>
                         <li>
