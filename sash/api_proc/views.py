@@ -29,16 +29,28 @@ def create_order(request):
         product = request.POST['product']
         quantity = request.POST['quantity']
         image = request.POST['image']
+        
+        if int(quantity) > Product.objects.get(id=int(product)).stock:
+            success = False
+            message = 'Sorry, the product is out of stock.'
+            data = {
+            "success": success,
+            "message": message
+                }
+            return JsonResponse()
 
         product_name = Product.objects.get(id=int(product)).product_name
         price = Product.objects.get(id=int(product)).price
+        delivery_price = Product.objects.get(id=int(product)).delivery_price
 
     new_order = {
         "id": product,
         "product": product_name,
-        "quantity": quantity,
+        "quantity": str(quantity),
         "image": image,
-        "total_price": str(price * int(quantity)),
+        "price": str(price),
+        "delivery_price": str(delivery_price),
+        "total_price": '{:.2f}'.format((price+delivery_price)*abs(int(quantity))),
     }
 
     try:
@@ -125,6 +137,7 @@ def create_customer_info(request):
                 "success": success,
                 "method": post_data['payment_method']
             }
+            request.session['cart']=[]
         else:
             success= False
             data = {

@@ -1,17 +1,40 @@
 <div class="row" id="cart_view">
+        
+        <table class="table table-striped table-bordered">
+            <thead>
+                <th>#</th>
+                <th>Product</th>
+                <th>View</th>
+                <th>Quantity</th>
+                <th>Price per unit</th>
+                <th>Delivery price per unit</th>
+                <th>Total Price</th>
+            </thead>
+            <tbody>
+                {% for product in cart %}
+                <tr class="text-primary">
+                    <td>{{ forloop.counter }}</td>
+                    <td><a href="{% url 'product_detail' product.id %}">{{ product.product }}</a></td>
+                    <td><button class="btn btn-muted btn-sm"><i class="fas fa-eye"></i></button></td>
+                    <td>{{ product.quantity }}</td>
+                    <td>₱{{ product.price }}</td>
+                    <td>₱{{ product.delivery_price }}</td>
+                    <td id="total_price">₱{{ product.total_price }}</td>
+                </tr>
+                {% endfor %}
+                <tr class="text-primary" >
+                    <td colspan="6" class="text-right">Grand Total</td>
+                    <td colspan="1" id="grand_total"></td>
+                </tr>
+            </tbody>
+        </table>
+</div> 
+<script>
+    $(document).ready(function(){
+        var grand_total = 0;
         {% for product in cart %}
-        <div class="col-sm-6 col-lg-4 col-4 mb-3 animated fadeIn">
-                <a href="{% url 'product_detail' product.id %}">
-                <div class="card shadow-sm border-0 p-0 m-0">
-                    <div class="card-body bg-whitem-0 p-0" data-placement="left" data-toggle="tooltip" title="{{ product.product_name }}">
-                        <div class="square" style="background-image: url('{{ product.image }}');width: 100%;padding-bottom: 100%;background-size: cover;background-position: center;">
-                        </div>
-                        <h5 class="card-title text-truncate text-center mt-2 ml-2 mr-2 pb-2">{{ product.product }}</h5>
-                        <h5 class="card-title text-truncate text-center mt-2 ml-2 mr-2 pb-2">Total price: ₱{{ product.total_price }}</h5>
-                        <h5 class="card-title text-truncate text-center mt-2 ml-2 mr-2 pb-2">Quantity: {{ product.quantity }}</h5>
-                        </div>
-                </div>
-            </a>
-            </div>
+        grand_total = grand_total + {{ product.total_price}};
         {% endfor %}
-        </div> 
+        $('#grand_total').text('₱' + grand_total.toFixed(2));
+    });
+</script>

@@ -15,25 +15,18 @@
                   <button class="action px-3 btn btn-info float-right" data-id="{% url 'admin_product_create' %}"><i class="fa fa-plus pr-2"></i>Product</button>
                   <table class="table table-striped table-bordered" id="product-table">
                     <thead class="text-primary">
-                      <th>
-                        Product Name
-                      </th>
-                      <th>
-                        Category
-                      </th>
-                      <th>
-                        Price
-                      </th>
-                      <th>
-                        Stock
-                      </th>
-                      <th class="no-sort text-center">
-                        Actions
-                      </th>
+                      <th>#</th>
+                      <th>Product Name</th>
+                      <th>Category</th>
+                      <th>Price</th>
+                      <th>Stock</th>
+                      <th>Delivery Price</th>
+                      <th class="no-sort text-center">Actions</th>
                     </thead>
                     <tbody>
                     {% for product in products %}
-                      <tr>
+                      <tr {%if not product.in_stock %}class="table-danger"{% endif %}>
+                        <td>{{ forloop.counter }}</td>
                         <td id="product_name{{product.id}}">
                           {{ product.product_name }}
                         </td>
@@ -45,6 +38,9 @@
                         </td>
                         <td id="stock{{product.id}}">
                           {{ product.stock }}
+                        </td>
+                        <td id ="delivery_price{{product.id}}">
+                          ₱{{ product.delivery_price }}
                         </td>
                         <td class="text-center">
                           <button class="action btn btn-info py-2 px-3" data-id="{% url 'admin_product_update' product.pk %}"><i class="fa fa-edit"></i></button>

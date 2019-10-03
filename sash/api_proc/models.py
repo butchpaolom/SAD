@@ -1,9 +1,13 @@
 from django.db import models
 from PIL import Image
 import uuid
+from django.utils import timezone
 
 # Create your models here.
 
+def capitalize(string):
+            string = ' '.join([each.capitalize() for each in string.lower().split()])
+            return string
 #category
 class Category(models.Model):
     category_name = models.CharField(max_length=30)
@@ -19,6 +23,8 @@ class Product(models.Model):
     description = models.TextField()
     price = models.DecimalField(null=True, decimal_places=2, max_digits=8)
     stock = models.IntegerField(null=True)
+    delivery_price = models.DecimalField(null=True, blank=False, decimal_places=2, max_digits=8)
+    views = models.IntegerField(null=True)
 
     def __str__(self):
         return str(self.product_name)
@@ -58,6 +64,7 @@ class CustomerInfo(models.Model):
     middle_initial = models.CharField(max_length=3, null=True, blank=True)
     contact_number = models.TextField(blank=False)
     email = models.EmailField(blank=False, null=True)
+    date_ordered = models.DateTimeField(editable=False, default=timezone.now())
 
     choices = (
         (1, "COD"),
@@ -65,16 +72,25 @@ class CustomerInfo(models.Model):
     )
     payment_method = models.IntegerField(choices, null=True)
 
+    def save(self, *args, **kwargs):
+        self.first_name = capitalize(self.first_name)
+        self.last_name = capitalize(self.last_name)
+        if self.middle_initial:
+            self.middle_initial = capitalize(self.middle_initial)
+        super(CustomerInfo, self).save(*args, **kwargs)
+
+        
     def __str__(self):
         return '{0}-{1} {2}'.format(self.final_order.pk, self.first_name, self.last_name)
 
 class Transaction(models.Model):
     final_order = models.OneToOneField(FinalOrder, on_delete=models.CASCADE, null=True)
     paid = models.BooleanField(default=0)
-    delivery_date = models.DateTimeField()
-    delivered_date = models.DateTimeField()
+    delivery_date = models.DateTimeField(null=True)
+    delivered_date = models.DateTimeField(null=True)
 
     def __str__(self):
-        return '{0} {1} - {2}'.format(self.costumer.first_name, self.costumer.last_name, self.trans_id)
+        return '{0}'.format(self.final_order)
+
 
     

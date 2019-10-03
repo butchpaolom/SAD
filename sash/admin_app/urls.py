@@ -14,5 +14,8 @@ urlpatterns = [
 
     path('customer_infos', CustomerInfoListView.as_view(), name='admin_customer_infos'),
 
+    path('transactions', TransactionListView.as_view(), name='admin_transactions'),
+
+    path('final_order/<int:pk>', FinalOrderDetailView.as_view(), name='admin_final_order_detail'),
 
 ]   

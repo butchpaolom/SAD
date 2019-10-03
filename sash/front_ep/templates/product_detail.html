@@ -26,19 +26,24 @@
                     <p class="card-text">
                         {{ description }}
                     </p>
+                    {% if available %}
                     <div class="form-inline">
                         <select class="quantity custom-select form-control">
-              {% for i in ""|rjust:stock|slice:"10" %}
-              <option value="{{forloop.counter}}">{{forloop.counter}}</option>
-              {% endfor %}
-            </select>
+                            {% for i in ""|rjust:stock|slice:"10" %}
+                            <option value="{{forloop.counter}}">{{forloop.counter}}</option>
+                            {% endfor %}
+                        </select>
                         <button class="add_cart btn btn-outline-primary py-2">Add to Cart</button>
                     </div>
+                    {% else %}
+                            <button class="btn btn-outline-primary py-2" disabled>Out of stock</button>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
 </div>
+{% if available %}
 <script>
     $('.add_cart').click(function() {
         $.ajax({
@@ -62,6 +67,7 @@
             }
         });
     });
+{% endif %}
 </script>
 
 {% endblock content %}

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from api_proc.models import *
 import requests
-from django.views.generic import ListView, TemplateView, UpdateView, CreateView, DeleteView
+from django.views.generic import ListView, TemplateView, UpdateView, CreateView, DeleteView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from bootstrap_modal_forms.mixins import PassRequestMixin
@@ -21,7 +21,6 @@ class ProductListView(LoginRequiredMixin, ListView):
     model = Product
     template_name = 'product_tables.html'
     context_object_name = 'products'
-
 
 
 class ProductUpdateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, UpdateView):
@@ -70,8 +69,34 @@ class ProductDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
 class CustomerInfoListView(LoginRequiredMixin, ListView):
     model = CustomerInfo
     template_name = 'customer_info_tables.html'
-    
+    context_object_name = 'customer_infos'
+
+#Transaction
+class TransactionListView(LoginRequiredMixin, ListView):
+    model = Transaction
+    template_name = 'transaction_tables.html'
+    context_object_name = 'transactions'
+
+    def get_context_data(self, **kwargs):
+        try:
+            search = self.request.GET['id']
+        except:
+            search = ""
+        context = super().get_context_data(**kwargs)  
+        context['search'] = search
+        context['customer_infos'] = CustomerInfo.objects.all()
+        return context
+
+#FinalOrderView
+class FinalOrderDetailView(LoginRequiredMixin, DetailView):
+    model = FinalOrder
+    template_name = 'final_order_detail.html'
+    context_object_name = 'final_order'
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)  
-        context['customer_info'] = CustomerInfo.objects.all()
+        context['customer_info'] = CustomerInfo.objects.get(final_order=self.object)
         return context
+
+    
+

@@ -11,17 +11,24 @@
         <fieldset class="form-group">
             {{ form|crispy }}
             <div>
-                <input type="checkbox"> I have read and agree to the Terms and Conditions and other important reminders and information posted by the company. I hereby confirm that Power Sash Enterprises reserves the right to refuse or cancel my order
+                <input id="cb" type="checkbox"> I have read and agree to the Terms and Conditions and other important reminders and information posted by the company. I hereby confirm that Power Sash Enterprises reserves the right to refuse or cancel my order
                 for any reason relating to my purchase in their sole discretion.</input>
-
             </div>
         </fieldset>
         <div class="modal-footer">
-            <button class="submit btn btn-outline-primary" type="submit">Order Now</button>
+            <button class="submit btn btn-outline-primary" type="submit" disabled>Order Now</button>
         </div>
     </div>
 </div>
 <script>
+   $('#cb').click(function(){
+       if ($('#cb').is(":checked")){
+           $('.submit').removeAttr('disabled').removeClass('btn-outline-primary').addClass('btn-primary');
+       }
+       else{
+        $('.submit').attr('disabled', true).addClass('btn-outline-primary').removeClass('btn-primary');
+       }
+       });
     $('.submit').click(function() {
         $.ajax({
             url: "{% url 'create_customer_info' %}",
@@ -37,6 +44,7 @@
                 contact_number: $('#id_contact_number').val()
             },
             success: function(data){
+                if (data['success']) {
                 if (data['method']=="2"){
                     window.location.replace("{% url 'payment_process' %}");
                 }
@@ -46,6 +54,15 @@
                     var alert_mes = "";
                     alert_mes += '<div id="alert_message" class="row alert alert-success animated fadeIn" role="alert">';
                     alert_mes += "<strong>Order successfully sent. We'll reach you out soon for validation!</strong></div>";
+                    $('#cart_base').prepend(alert_mes);
+                }
+                }
+                else {
+                    $('#modal').modal('toggle');
+                    $('#alert_message').remove();
+                    var alert_mes = "";
+                    alert_mes += '<div id="alert_message" class="row alert alert-danger animated fadeIn" role="alert">';
+                    alert_mes += "<strong>An error occured! Please try again!</strong></div>";
                     $('#cart_base').prepend(alert_mes);
                 }
             }
