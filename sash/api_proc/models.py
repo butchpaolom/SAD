@@ -11,7 +11,7 @@ def capitalize(string):
 #category
 class Category(models.Model):
     category_name = models.CharField(max_length=30)
-
+    image = models.ImageField(null=True, blank=False)
     def __str__(self):
         return str(self.category_name)
 
@@ -19,12 +19,14 @@ class Category(models.Model):
 class Product(models.Model):
     product_name = models.CharField(max_length=50, unique=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
-    product_image = models.ImageField(null=True)
+    product_image = models.ImageField(null=True, blank=False)
+    product_image1 = models.ImageField(null=True, blank=True)
+    product_image2 = models.ImageField(null=True, blank=True)
     description = models.TextField()
     price = models.DecimalField(null=True, decimal_places=2, max_digits=8)
     stock = models.IntegerField(null=True)
     delivery_price = models.DecimalField(null=True, blank=False, decimal_places=2, max_digits=8)
-    views = models.IntegerField(null=True)
+    views = models.PositiveIntegerField(null=True)
 
     def __str__(self):
         return str(self.product_name)
@@ -32,13 +34,9 @@ class Product(models.Model):
     def category_name(self):
         return str(self.category.category_name)
 
-    def in_stock(self):
-        if self.stock != 0:
-            return True
-        else:
-            return False
 
 #Initial Order with quantity
+#no login required
 class InitialOrder(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(null=True)
@@ -48,6 +46,7 @@ class InitialOrder(models.Model):
         return '{0}-{1}'.format(self.product, self.quantity)
 
 #Final Order (Multiple Initial Order)
+#no login required
 class FinalOrder(models.Model):
     orders = models.ManyToManyField(InitialOrder)
     overall_price = models.DecimalField(null=True, default=0, decimal_places=2, max_digits=8)
@@ -56,6 +55,7 @@ class FinalOrder(models.Model):
         return '{0}-{1}'.format(self.overall_price, self.trans_id)
 
 #Customer info + Final Order
+#no login required
 class CustomerInfo(models.Model):
     final_order = models.ForeignKey(FinalOrder, on_delete=models.CASCADE)
     address = models.TextField(blank=False, null=False)
@@ -64,7 +64,7 @@ class CustomerInfo(models.Model):
     middle_initial = models.CharField(max_length=3, null=True, blank=True)
     contact_number = models.TextField(blank=False)
     email = models.EmailField(blank=False, null=True)
-    date_ordered = models.DateTimeField(editable=False, default=timezone.now())
+    date_ordered = models.DateTimeField(editable=False, default=timezone.now)
 
     choices = (
         (1, "COD"),

@@ -3,7 +3,7 @@
 {% load static %}
 {% block content %}
 {% include "modal.html" %}
-<div class="content">
+<div class="content animated bounceInLeft">
     {% include "alert.html" %}
         <div class="row">
           <div class="col-md-12">
@@ -28,10 +28,10 @@
                       <tr>
                         <td>{{ forloop.counter }}</td>
                         <td>
-                          {{ customer_info.first_name }} {% if customer_info.middle_initial %}{{ customer_info.middle_initial }}.{% endif %} {{ customer_info.last_name }}
+                          <a class="action" href="javascript:void(0);" data-id="{% url 'admin_customer_name_update' customer_info.id %}">{{ customer_info.first_name }} {% if customer_info.middle_initial %}{{ customer_info.middle_initial }}.{% endif %} {{ customer_info.last_name }}</a>
                         </td>
                         <td>
-                          {{ customer_info.address }}
+                          <a class="action" href="javascript:void(0);" data-id="{% url 'admin_customer_address_update' customer_info.id %}">{{ customer_info.address }}</a>
                         </td>
                         <td>
                           <a href="{% url 'admin_transactions' %}?id={{ customer_info.final_order.trans_id }}">{{ customer_info.final_order.trans_id }}</a>
@@ -78,5 +78,4 @@
         $(this).modalForm({formURL: $(this).data('id')});
       });
       </script>
-
 {% endblock content %}

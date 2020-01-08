@@ -1,5 +1,20 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block content %}
 
-{% block content %}
-    <h1>Payment successful</h1>
+
+<h3 class=" text-center text-lg text-muted bg-primary " style="border-bottom-style:solid; border-color: gray; padding: 30px ">Payment successful</h3>
+<div class="container-fluid">
+    <div class="row ">
+
+        <div class="col-md-12 jumbotron ">
+            <div class="text-center bg-lg ">
+                <h1><i class="fas fa-check " style="color: green "></i></h1>
+                <h1 style="color: green ">Thank You!</h1>
+                <h3>Your payment has been submitted</h3>
+                <button class="btn btn-success col-md-3 text-center ">Continue Shopping</button>
+                <button class="btn btn-info col-md-3 text-center ">Send a Feedback</button>
+
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

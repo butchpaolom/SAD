@@ -7,7 +7,10 @@ from .serializer import *
 from .forms import *
 from django.views.generic import ListView, TemplateView, UpdateView, CreateView, DeleteView
 from decimal import Decimal
-from django.views.decorators.csrf import csrf_exempt
+from django.core import mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+import threading
 
 # Create your views here.
 
@@ -15,11 +18,20 @@ from django.views.decorators.csrf import csrf_exempt
 def landing(request):
     products = Product.objects.all()
     data = ProductSerializer(products, many=True)
-    print(data)
     return JsonResponse(data.data, safe=False)
+
+def products_cat(request, category):
+    if category == "all":
+        products = Product.objects.all()
+    else:
+        products = Product.objects.filter(category__category_name=category)
+    data = ProductSerializer(products, many=True)
+    return JsonResponse(data.data, safe=False)  
 
 def product_detail(request, id):
     product = Product.objects.get(id=id)
+    product.views = product.views + 1
+    product.save()
     print(product)
     data = ProductSerializer(product)
     return JsonResponse(data.data)
@@ -37,7 +49,7 @@ def create_order(request):
             "success": success,
             "message": message
                 }
-            return JsonResponse()
+            return JsonResponse(data)
 
         product_name = Product.objects.get(id=int(product)).product_name
         price = Product.objects.get(id=int(product)).price
@@ -97,11 +109,20 @@ def clear_cart(request):
 
     return JsonResponse(data)
 
+def send_email(data):
+    final_order = FinalOrder.objects.get(id=data['final_order'])
+    subject = 'We received your order!'
+    html_message = render_to_string('email.html', {'data': data, 'final_order': final_order})
+    plain_message = strip_tags(html_message)
+    from_email = 'realtantan7@gmail.com'
+    to = data['email']
+
+    mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)
+
 def create_customer_info(request):
     success = False
     if request.method == 'POST':
         post_data = request.POST.copy()
-
 
         #create intial order from request.session['cart']
         orders=[]
@@ -110,14 +131,14 @@ def create_customer_info(request):
             order = InitialOrder(
                 product=Product.objects.get(id=each['id']),
                 quantity=each['quantity'],
-                total_price= Product.objects.get(id=each['id']).price*int(each['quantity']))
+                total_price= (Product.objects.get(id=each['id']).delivery_price + Product.objects.get(id=each['id']).price)*int(each['quantity']))
             order.save()
             orders.append(order)
 
         #create final order from inital order list 'orders'
 
         finalOrder = FinalOrder()
-        finalOrder.save()
+        finalOrder.save() #Final order is created 
         overall_price=0
         for each in orders:
             overall_price = overall_price + each.total_price
@@ -126,7 +147,7 @@ def create_customer_info(request):
             finalOrder.save()
         
         post_data['final_order'] = str(finalOrder.id)
-        request.session['trans_id'] = str(finalOrder.trans_id)
+        request.session['trans_id'] = str(finalOrder.trans_id) #stores transaction_id in session -> make client side equivalent in new_gen
         print(post_data)
         form = CustomerInfoForm(post_data)
         print(form.is_valid())
@@ -143,8 +164,26 @@ def create_customer_info(request):
             data = {
                 "success": success
             }
+
+    thread_list = []
+    thread = threading.Thread(target=send_email, args=(post_data,))
+    thread_list.append(thread)
+    thread.start()
     return JsonResponse(data)
 
+
+def get_cart(request):
+    try:
+        cart = request.session['cart']
+    except:
+        request.session['cart'] = []
+        cart = request.session['cart']
+
+    data = {
+        "cart": cart,
+    }
+
+    return JsonResponse(data)
 
 
  

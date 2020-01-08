@@ -1,0 +1,23 @@
+<div class="card card-stats h-100 animated zoomInUp">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5 col-md-4">
+              <div class="icon-big text-center icon-warning">
+                  <i class="fas fa-truck"></i>
+              </div>
+            </div>
+            <div class="col-7 col-md-8">
+              <div class="numbers">
+                <p class="card-category">To be delivered</p>
+                <p class="card-title">{{ be_delivered }} Order{% if be_delivered > 1 %}s{% endif %}<p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <hr>
+          <div class="stats text-right">
+              <a class="goto text-muted" id="transactions" href="{% url 'admin_transactions' %}"><i class="fa fa-money-check-alt"></i>Go to Transactions</a>
+          </div>
+        </div>
+      </div>

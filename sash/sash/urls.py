@@ -26,6 +26,10 @@ urlpatterns = [
     path('payment/', include('payment.urls')),
     path('paypal/', include('paypal.standard.ipn.urls')),
 
+    #new gen
+    path('new_api/', include('new_api.urls')),
+    path('api_auth/', include('rest_framework.urls'))
+
 ]
 
 if settings.DEBUG:

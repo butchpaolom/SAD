@@ -7,8 +7,8 @@
     </button>
   </div>
   <div class="modal-body">
-        <div class="square" style="background-image: url('{{ product.product_image.url }}');width: 100%;padding-bottom: 100%;background-size: cover;background-position: center;">
-            </div>
+    {% if product.product_image.url %}<div class="square" style="background-image: url('{{ product.product_image.url }}');width: 100%;padding-bottom: 100%;background-size: cover;background-position: center;">
+            </div>{% endif %}
 <form method="post" enctype="multipart/form-data">
   {% csrf_token %}
     <div class="{% if form.non_field_errors %}invalid{% endif %} mb-2">

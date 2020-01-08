@@ -9,12 +9,13 @@
 <div class="modal-body">
     <table class="table table-striped table-bordered">
     <thead class="table-info">
-        <th colspan="5">{{ customer_info.first_name }} {% if customer_info.middle_initial %}{{ customer_info.middle_initial }}. {% endif %}{{ customer_info.last_name }}-{{ final_order.trans_id }}</th>
+        <th colspan="6">{{ customer_info.first_name }} {% if customer_info.middle_initial %}{{ customer_info.middle_initial }}. {% endif %}{{ customer_info.last_name }}-{{ final_order.trans_id }}</th>
     </thead>
     <thead>
       <th>#</th>
       <th>Product</th>
       <th>Price per unit</th>
+      <th>Delivery price per unit</th>
       <th>Quantity</th>
       <th>Total Price</th>
     </thead>
@@ -24,12 +25,13 @@
           <td>{{ forloop.counter }}</td>
           <td>{{ initial_order.product }}</td>
           <td>₱{{ initial_order.product.price }}</td>
+          <td>₱{{ initial_order.product.delivery_price }}</td>
           <td>{{ initial_order.quantity }}</td>
           <td>₱{{ initial_order.total_price }}</td>
       </tr>
     {% endfor %}
     <tr>
-      <td class="text-right" colspan="4">Grand Total</td>
+      <td class="text-right" colspan="5">Grand Total</td>
       <td colspan="1">₱{{ final_order.overall_price }}</td>
     </tr>
   </tbody>

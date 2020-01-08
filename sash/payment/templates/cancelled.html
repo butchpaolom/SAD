@@ -1,6 +1,23 @@
-{% extends 'base.html' %}
-
-{% block content %}
-    <h1>Cancelled Payment</h1>
+{% extends 'base.html' %} {% block content %}
+<!-- <h1>Cancelled Payment</h1> -->
+<div class="">
+    <h3 class="bg-primary text-center text-lg text-muted" style="border-bottom-style:solid; border-color: gray; padding: 30px">Payment Cancelled</h3>
+</div>
+<div class="container-fluid">
+    <div class="row ">
+            <div class="col-md-12 jumbotron ">
+            <div class="text-center">
+                <div class="col-md-7" style="margin:auto; ">
+                    <br>
+                    <h1><i class="fas fa-times" style="color: red"></i></h1><br>
+                    <h3>Your payment has been cancelled</h3><br>
+                </div>
+                <button class="btn btn-success col-md-3 text-center">Continue Shopping</button>
+                <button class="btn btn-info col-md-3 text-center">Send a Feedback</button>
+                <br></br>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

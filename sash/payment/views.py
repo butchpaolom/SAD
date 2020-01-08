@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from api_proc.models import *
 from django.conf import settings
 from paypal.standard.forms import PayPalPaymentsForm
+from front_ep.models import FrontAsset
 
 # Create your views here.
 
@@ -31,8 +32,18 @@ def payment_process(request):
 
 @csrf_exempt
 def payment_done(request):
-    return render(request, 'done.html')
+    asset = FrontAsset.objects.first()
+    
+    context = {
+        'asset': asset
+    }
+    return render(request, 'done.html', context)
 
 @csrf_exempt
 def payment_cancelled(request):
-    return render(request, 'cancelled.html')
+    asset = FrontAsset.objects.first()
+    
+    context = {
+        'asset': asset
+    }
+    return render(request, 'cancelled.html', context)

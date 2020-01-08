@@ -1,0 +1,28 @@
+<div class="card card-stats h-100 animated zoomInUp">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5 col-md-4">
+              <div class="icon-big text-center icon-warning">
+                    <i class="text-primary fas fa-money-bill-alt"></i>
+              </div>
+            </div>
+            <div class="col-7 col-md-8">
+              <div class="numbers">
+                <p class="card-category">Total Earnings this month</p>
+                <p class="card-title">₱ {{ total_earnings }}<p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <hr>
+          <div class="stats text-right">
+            <a href="javascript:void(0);" class="text-muted earn_refresh"><i class="fa fa-refresh"></i>Update</a>
+          </div>
+        </div>
+      </div>
+      <script>
+        $('.earn_refresh').click(function(){
+          $('.total_earnings').empty().load("{% url 'admin_total_earnings' %}");
+        });
+      </script>

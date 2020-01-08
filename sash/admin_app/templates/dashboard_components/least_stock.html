@@ -1,0 +1,51 @@
+{% load static %}
+<div class="card card-stats h-100 animated zoomInUp">
+    <div class="numbers">
+        <p class="card-title text-center">Products Stocks and Views</p>
+    </div>
+    <div class="container">
+        <table class="table" id="stocks-table">
+                <thead class="text-primary">
+                  <th>#</th>
+                  <th>Product name</th>
+                  <th>Stock</th>
+                  <th>Views</th>
+                </thead>
+                <tbody>
+                {% for product in products %}
+                  <tr {% if product.stock == 0 %}class="table-danger"{% elif product.stock <= 3 %}class="table-warning"{% endif %}>
+                    <td>{{ forloop.counter }}</td>
+                    <td>
+                      <a class="text-dark" href="{% url 'admin_products' %}?id={{ product.product_name }}">{{ product.product_name}}</a>
+                    </td>
+                    <td>
+                      {{ product.stock }}
+                    </td>
+                    <td>
+                      {{ product.views }}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+      </div>
+    </div>
+    <script src="{% static '/assets/dataTables/js/jquery.dataTables.min.js' %}"></script>
+    <link href="{% static '/assets/dataTables/css/dataTables.material.min.css' %}" rel="stylesheet">
+    <script>
+          $(document).ready(function(){
+            $('#stocks-table').DataTable({
+                "lengthChange": false,
+                "lengthMenu": [5],
+              "order": [],
+              "columnDefs": [ {
+                "targets"  : 'no-sort',
+                "orderable": false,
+                    }],
+                  language: {
+                      searchPlaceholder: "Search",
+                      search: "",
+                  }
+                  });
+      });
+    </script>

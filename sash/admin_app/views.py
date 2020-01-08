@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from front_ep.models import *
 from api_proc.models import *
 import requests
 from django.views.generic import ListView, TemplateView, UpdateView, CreateView, DeleteView, DetailView
@@ -8,19 +9,62 @@ from bootstrap_modal_forms.mixins import PassRequestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from .forms import *
 from django.contrib import messages
+import datetime
+from django.db.models import Sum
+from django.core import mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.contrib.auth import logout
+from django.contrib.auth.models import User
+import threading
+
+
+
+def update_delivery_email(data):
+    customer = CustomerInfo.objects.get(final_order__id=data.final_order.id)
+    name = customer.first_name
+    email = customer.email
+    address = customer.address
+    print(email)
+    subject = 'Delivery update!'
+    html_message = render_to_string('email/deliver_email.html', {
+        'name': name,
+        'address': address,
+        'delivery_date': data.delivery_date,
+        'trans_id': data.final_order.trans_id
+        })
+    plain_message = strip_tags(html_message)
+    from_email = 'realtantan7@gmail.com'
+    to = email
+
+    mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)
 
 # Create your views here.
 
+def logout_request(request):
+    logout(request)
+    return redirect('login')
     
 class AdminLanding(LoginRequiredMixin, TemplateView):
-    template_name = 'dashboard.html'
+    template_name = 'admin_base.html'
 
+class AdminDashboard(LoginRequiredMixin, TemplateView):
+    template_name = 'dashboard.html'
 
 #Product
 class ProductListView(LoginRequiredMixin, ListView):
     model = Product
     template_name = 'product_tables.html'
     context_object_name = 'products'
+
+    def get_context_data(self, **kwargs):
+        try:
+            search = self.request.GET['id']
+        except:
+            search = ""
+        context = super().get_context_data(**kwargs)  
+        context['search'] = search
+        return context
 
 
 class ProductUpdateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, UpdateView):
@@ -29,11 +73,11 @@ class ProductUpdateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixi
     success_url = reverse_lazy('admin_products')
     form_class = ProductForm
     
-
     def get_success_message(self, cleaned_data):
         product_name = Product.objects.get(id=self.kwargs.get('pk'))
         message = "Successfully updated " + str(product_name)
         return message
+
 
 class ProductCreateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
     template_name = 'create.html'
@@ -66,6 +110,28 @@ class ProductDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
 
 
 #CustomerInfo
+class CustomerInfoNameUpdateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, UpdateView):
+    model = CustomerInfo
+    template_name = 'update.html'
+    success_url = reverse_lazy('admin_customer_infos')
+    form_class = CustomerInfoNameUpdate
+
+    def get_success_message(self, cleaned_data):
+        customer = CustomerInfo.objects.get(id=self.kwargs.get('pk'))
+        message = "Successfully updated " + "{0} {1}".format(str(customer.first_name), str(customer.last_name))
+        return message
+
+class CustomerInfoAddressUpdateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, UpdateView):
+    model = CustomerInfo
+    template_name = 'update.html'
+    success_url = reverse_lazy('admin_customer_infos')
+    form_class = CustomerInfoAddressUpdate
+
+    def get_success_message(self, cleaned_data):
+        customer = CustomerInfo.objects.get(id=self.kwargs.get('pk'))
+        message = "Successfully updated " + "{0} {1}".format(str(customer.first_name), str(customer.last_name)) + " address to " + str(customer.address)
+        return message
+
 class CustomerInfoListView(LoginRequiredMixin, ListView):
     model = CustomerInfo
     template_name = 'customer_info_tables.html'
@@ -87,6 +153,38 @@ class TransactionListView(LoginRequiredMixin, ListView):
         context['customer_infos'] = CustomerInfo.objects.all()
         return context
 
+
+class TransactionDeliveryDateSet(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    model = Transaction
+    template_name = 'update.html'
+    success_url = reverse_lazy('admin_transactions')
+    form_class = TransactionDeliveryDateForm
+    
+    def get_success_message(self, cleaned_data):
+        transaction = Transaction.objects.get(id=self.kwargs.get('pk'))
+        trans_id = transaction.final_order.trans_id
+        thread_list = []
+        thread = threading.Thread(target=update_delivery_email, args=(transaction,))
+        thread_list.append(thread)
+        thread.start()
+        message = "Successfully updated " + str(trans_id)
+        return message
+
+
+class TransactionDeliveredDateSet(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    model = Transaction
+    template_name = 'update.html'
+    success_url = reverse_lazy('admin_transactions')
+    form_class = TransactionDeliveredDateForm
+
+    def get_success_message(self, cleaned_data):
+        transaction = Transaction.objects.get(id=self.kwargs.get('pk'))
+        trans_id = transaction.final_order.trans_id
+        message = "Successfully updated " + str(trans_id)
+        return message
+
+
+
 #FinalOrderView
 class FinalOrderDetailView(LoginRequiredMixin, DetailView):
     model = FinalOrder
@@ -97,6 +195,119 @@ class FinalOrderDetailView(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)  
         context['customer_info'] = CustomerInfo.objects.get(final_order=self.object)
         return context
+
+
+#CODUpdate
+class CashOnDeliveryUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    model = Transaction
+    template_name = 'update.html'
+    success_url = reverse_lazy('admin_transactions')
+    form_class = CashOnDeliveryUpdate
+
+    def get_success_message(self, cleaned_data):
+        trans_id = Transaction.objects.get(id=self.kwargs.get('pk')).final_order.trans_id
+        message = "Successfully updated " + str(trans_id)
+        return message
+
+#Assets
+class UpdateAssets(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    model = FrontAsset
+    fields = '__all__'
+    template_name = 'update.html'
+    success_url = reverse_lazy('admin_dashboard')
+
+    def get_success_message(self, cleaned_data):
+        message = "Successfully updated."
+        return message
+
+#DASHBOARD CHARTS
+def sales_chart(request):
+    date_now = datetime.datetime.now()
+    month = date_now.month
+    year = date_now.year
+    today = datetime.date.today()
+    first = today.replace(day=1)
+    last_month = first - datetime.timedelta(days=1)
+    transactions = Transaction.objects.filter(delivered_date__year=year).filter(delivered_date__month=month).filter(paid=True)
+    transactions1 = Transaction.objects.filter(delivered_date__year=year).filter(delivered_date__month=month-1).filter(paid=True)
+    earned_money_current = [0] * 31
+    earned_money_previous = [0] * 31
+    for transaction in transactions:
+        day = transaction.delivered_date.day
+        earned_money_current[day-1] = earned_money_current[day-1] + float(transaction.final_order.overall_price)
+
+    for transaction in transactions1:
+        day = transaction.delivered_date.day
+        earned_money_previous[day-1] = earned_money_previous[day-1] + float(transaction.final_order.overall_price)
+    
+    context = {
+        "earned_current": earned_money_current,
+        "current_month": date_now.strftime("%B"),
+        "earned_previous": earned_money_previous,
+        "previous_month": last_month.strftime("%B")
+    }
+
+
+    return render(request, 'dashboard_components/sales_chart.html', context)
+
+def most_viewed(request):
+    product = Product.objects.all().order_by('views').last()
+
+    context = {
+        "product_name": product.product_name,
+        "views": product.views
+    }
+
+    return render(request, 'dashboard_components/most_viewed.html', context)
+
+def total_transactions(request):
+    date_now = datetime.datetime.now()
+    month = date_now.month
+    year = date_now.year
+    transactions = Transaction.objects.filter(paid=True).filter(delivered_date__year=year).filter(delivered_date__month=month)
+
+    context = {
+        "total_transactions": len(transactions)
+    }
+
+    return render(request, 'dashboard_components/total_transactions.html', context)
+
+def total_earnings(request):
+    date_now = datetime.datetime.now()
+    month = date_now.month
+    year = date_now.year
+    transactions = Transaction.objects.filter(paid=True).filter(delivered_date__year=year).filter(delivered_date__month=month).aggregate(Sum('final_order__overall_price'))
+    print(transactions)
+    context = {
+        "total_earnings": "{:0,.2f}".format(float(transactions['final_order__overall_price__sum']))
+    }
+    
+    return render(request, 'dashboard_components/total_earnings.html', context)
+
+def be_delivered(request):
+    date_now = datetime.datetime.now()
+    month = date_now.month
+    year = date_now.year
+    transactions = Transaction.objects.filter(delivery_date__isnull=False).filter(delivered_date__isnull=True).filter(delivery_date__year=year).filter(delivery_date__month=month)
+    print(transactions)
+    context = {
+        "be_delivered": len(transactions)
+    }
+    
+    return render(request, 'dashboard_components/be_delivered.html', context)
+
+def least_stock(request):
+    products = Product.objects.all().order_by('stock')
+
+    context = {
+        "products": products
+    }
+
+    return render(request, 'dashboard_components/least_stock.html', context)
+
+
+
+
 
     
 

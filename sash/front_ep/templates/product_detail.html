@@ -1,35 +1,47 @@
-{% extends "base.html" %} {% block content %} {% csrf_token %}
-<div class="container mt-4" id="product_detail_base">
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4 animated slideInLeft" id="product_detail_base">
     <div class="row border shadow-sm">
         <div class="col-md-12 col-lg-6 col-sm-12 col-12 m-0 p-0 justify-content-center">
-            <div class="square m-0" id="pic" style="background-image: url('{{ product_image }}');width: 100%;padding-bottom: 100%;background-size: cover;background-position: center;">
+            <div class="square m-0" id="pic" style="background-image: url('{{ data.product_image }}');width: 100%;padding-bottom: 100%;background-size: cover;background-position: center;">
+            </div>
+            <div class="row d-flex justify-content-center">
+                    {% if data.product_image %}
+                    <button class="img btn btn-outline-light m-0 p-0" data-id="{{ data.product_image }}"><img src="{{ data.product_image }}" style="width: 50px;"></button>
+                    {% endif %}
+                    {% if data.product_image1 %}
+                    <button class="img btn btn-outline-light m-0 p-0" data-id="{{ data.product_image1 }}"><img src="{{ data.product_image1 }}" style="width: 50px;"></button>
+                    {% endif %}
+                    {% if data.product_image2 %}
+                    <button class="img btn btn-outline-light m-0 p-0" data-id="{{ data.product_image2 }}"><img src="{{ data.product_image2 }}" style="width: 50px;"></button>
+                    {% endif %}
             </div>
         </div>
         <div class="col-md-12 col-sm-12 col-lg-6  col-12">
             <div class="container p-0">
                 <div class="card-body">
-                    <h3 class="card-title text-dark">{{ product_name }}</h3>
+                    <h3 class="card-title text-dark">{{ data.product_name }}</h3>
                     <hr>
-                    <a href="{% url 'category' category %}">
+                    <a href="{% url 'category' data.category %}">
                         <h5>
                             <p class="card-text text-muted">
-                                {{ category }}
+                                {{ data.category }}
                             </p>
                         </h5>
                     </a>
                     <a href="">
                         <p class="card-text text-muted">
-                            {{ price }}
+                            {{ data.price }}
                         </p>
                     </a>
                     <hr>
                     <p class="card-text">
-                        {{ description }}
+                        {{ data.description|linebreaks }}
                     </p>
-                    {% if available %}
+                    {% if data.available %}
                     <div class="form-inline">
                         <select class="quantity custom-select form-control">
-                            {% for i in ""|rjust:stock|slice:"10" %}
+                            {% for i in ""|rjust:data.stock|slice:"10" %}
                             <option value="{{forloop.counter}}">{{forloop.counter}}</option>
                             {% endfor %}
                         </select>
@@ -43,16 +55,16 @@
         </div>
     </div>
 </div>
-{% if available %}
+{% if data.available %}
 <script>
     $('.add_cart').click(function() {
         $.ajax({
             url: "{% url 'create_order' %}",
             method: 'post',
             data: {
-                product: "{{ id }}",
+                product: "{{ data.id }}",
                 quantity: $('.quantity').val(),
-                image: "{{ product_image }}",
+                image: "{{ data.product_image }}",
                 csrfmiddlewaretoken: '{{ csrf_token }}',
             },
             dataType: 'json',
@@ -69,5 +81,12 @@
     });
 {% endif %}
 </script>
-
+<script>
+    $('.img').click(function(){
+        $('#pic').css({"backgroundImage": "url("+ $(this).data('id') +")"}).removeClass('animated fadeIn');
+        setTimeout(function(){
+            $('#pic').addClass('animated fadeIn')
+        },100)
+    })
+</script>
 {% endblock content %}

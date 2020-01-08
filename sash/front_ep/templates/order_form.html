@@ -21,14 +21,14 @@
     </div>
 </div>
 <script>
-   $('#cb').click(function(){
-       if ($('#cb').is(":checked")){
-           $('.submit').removeAttr('disabled').removeClass('btn-outline-primary').addClass('btn-primary');
-       }
-       else{
-        $('.submit').attr('disabled', true).addClass('btn-outline-primary').removeClass('btn-primary');
-       }
-       });
+    $('#cb').click(function(){
+            if ($('#cb').is(":checked")){
+                $('.submit').removeAttr('disabled').removeClass('btn-outline-primary').addClass('btn-primary');
+            }
+            else{
+                $('.submit').attr('disabled', true).addClass('btn-outline-primary').removeClass('btn-primary');
+            }
+        });
     $('.submit').click(function() {
         $.ajax({
             url: "{% url 'create_customer_info' %}",
@@ -45,17 +45,22 @@
             },
             success: function(data){
                 if (data['success']) {
-                if (data['method']=="2"){
-                    window.location.replace("{% url 'payment_process' %}");
-                }
-                else{
-                    $('#modal').modal('toggle');
-                    $('#alert_message').remove();
-                    var alert_mes = "";
-                    alert_mes += '<div id="alert_message" class="row alert alert-success animated fadeIn" role="alert">';
-                    alert_mes += "<strong>Order successfully sent. We'll reach you out soon for validation!</strong></div>";
-                    $('#cart_base').prepend(alert_mes);
-                }
+                    if (data['method']=="2"){
+                        $('.modal-body').empty().load("{% url 'payment_process' %}");
+                        // window.location.replace("{% url 'payment_process' %}");
+                    }
+                    else{
+                        $('#modal').modal('toggle');
+                        $('#alert_message').remove();
+                        var alert_mes = "";
+                        alert_mes += '<div id="alert_message" class="row alert alert-success animated fadeIn" role="alert">';
+                        alert_mes += "<strong>Order successfully sent. We'll reach you out soon for validation!</strong></div>";
+                        $('#cart_base').prepend(alert_mes);
+                        setTimeout(function(){
+                            $('#cart_base').empty();
+                            $('#cart_base').load("{% url 'cart_view' %}");
+                        },5000)
+                    }
                 }
                 else {
                     $('#modal').modal('toggle');

@@ -41,10 +41,12 @@ INSTALLED_APPS = [
     'front_ep.apps.FrontEpConfig',
     'admin_app.apps.AdminAppConfig',
     'payment.apps.PaymentConfig',
+    'new_api.apps.NewApiConfig',
     'rest_framework',
     'crispy_forms',
     'widget_tweaks',
-    'paypal.standard.ipn'
+    'paypal.standard.ipn',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -77,6 +79,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'sash.wsgi.application'
 
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'PAGE_SIZE': 100,
+}
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
@@ -107,7 +114,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
@@ -119,7 +125,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -140,3 +146,9 @@ LOGIN_URL = '/manage/login'
 PAYPAL_RECEIVER_EMAIL = 'powersash@business.example.com'#Lucena.serquina00@gmail.com
 PAYPAL_TEST = True
 
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'realtantan7@gmail.com'
+EMAIL_HOST_PASSWORD = 'msynuwpgbwokbkbv'
+EMAIL_PORT = 587
