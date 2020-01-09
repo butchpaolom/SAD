@@ -32,6 +32,7 @@ class CustomerInfoView(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
 class TransactionView(viewsets.ModelViewSet):
+    filter_fields = ('paid', 'final_order__overall_price', 'final_order__trans_id')
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
     permission_classes = [permissions.IsAuthenticated]

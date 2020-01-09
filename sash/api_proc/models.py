@@ -28,6 +28,9 @@ class Product(models.Model):
     delivery_price = models.DecimalField(null=True, blank=False, decimal_places=2, max_digits=8)
     views = models.PositiveIntegerField(null=True)
 
+    def in_stock(self):
+        return str(self.stock > 0)
+
     def __str__(self):
         return str(self.product_name)
 
