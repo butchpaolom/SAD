@@ -3,18 +3,18 @@
 {% block content %}
 {% include "templates.html" %}
 <div class="container-fluid px-0 mx-0">
-    <div class="row d-flex justify-content-end mx-0" style="background-color: #222222;">
+    <div class="cat_container row owl-carousel owl-theme w-100 px-0 mx-0">
+    </div>
+    <div class="row d-flex justify-content-end mx-0 mb-4" style="background-color: #222222;">
         <button class="btn btn-outline-light my-2 ml-3 text-light animated bounceInLeft" style="display:none" id="back">
             <i class="fa fa-caret-left my-1 mr-2"></i>Go Back
         </button>
         <div class="input-group my-2 col-5 animated bounceInRight" id="search_bar">
-            <input type="text" class="form-control" placeholder="Search" id="search_input">
+            <input type="text" class="form-control border text-light" style="background-color: #222222;" placeholder="Search" id="search_input">
             <div class="input-group-append">
                 <button class="btn btn-outline-light" id="search_button" type="button"><i class="fa fa-search"></i></button>
             </div>
         </div>
-    </div>
-    <div class="cat_container row owl-carousel owl-theme w-100 px-0 mx-0">
     </div>
 
     <div class="prod_container row mx-2">
@@ -34,7 +34,7 @@
                     $('.cat_container').show()
                     if (category[i].image){
                     var t = document.querySelector('#cat_template');
-                    t.content.querySelector('.cat_card').id = category[i].id;
+                    t.content.querySelector('.cat_card').id = category[i].category_name;
                     t.content.querySelector('#pic').style = "background-image: url('" + category[i].image + "');width: 100%;padding-bottom: 100%;background-size: cover;background-position: center;";
                     t.content.querySelector('#cat_text').textContent = category[i].category_name;
                     var clone = document.importNode(t.content, true);
@@ -44,10 +44,11 @@
         }
         $('.cat_container').owlCarousel({
             autoplay: true,
-            autoplayTimeout: 1000,
+            autoplayTimeout: 2000,
             autoplayHoverPause: true,
             items: 3,
             loop: true,
+            dots: false,
         });
     };
 
@@ -62,7 +63,6 @@
                 t.content.querySelector('.product_card').id = products[i].id;
                 t.content.querySelector('#pic').style = "background-image: url('" + products[i].product_image + "');width: 100%;padding-bottom: 100%;background-size: cover;background-position: center;";
                 t.content.querySelector('#product_text').textContent = products[i].product_name;
-                // t.content.querySelector('#link').href = "{% url 'an_product' 1 %}".replace("1", products[i].id);
                 var clone = document.importNode(t.content, true);
                 document.querySelector('.prod_container').appendChild(clone);
             }
@@ -94,6 +94,7 @@
                 if (data.count > 0){
                 prod_length = data.results.length;
                 products = data.results;
+                $('.prod_container').append("<div class='container-fluid text-center mb-2'><h5 class='animated bounceIn'>Showing (" + data.count + ") results for '" + search_value + "'.</h5></div>");
                 load_product(products);
                 }
                 else if (data.count == 0){
@@ -103,20 +104,21 @@
             })
         }
 
-    function filter_category(cat_id){
+    function filter_category(category){
         $('.prod_container').empty();
         $.ajax({
-            url: "/new_api/api_products/?category=" + cat_id,
+            url: "/new_api/api_products/?category__category_name=" + category,
             method: 'GET',
             dataType: 'json',
             success: function(data) {
                 if (data.count > 0){
                 prod_length = data.results.length;
                 products = data.results;
+                $('.prod_container').append("<div class='container-fluid text-center mb-2'><h5 class='animated bounceIn'>" + category + "</h5></div>");
                 load_product(products);
                 }
                 else if (data.count == 0){
-                    $('.prod_container').append("<div class='container-fluid text-center'><h5 class='animated bounceIn'>We have no more items in this category</h5></div>");
+                    $('.prod_container').append("<div class='container-fluid text-center'><h5 class='animated bounceIn'>We have no more items in " + category + "</h5></div>");
                 }
                 }
             })
@@ -178,17 +180,18 @@
             search(input);
         }
     });
+    //Click back button
     $('#back').click(function(){
         $(this).removeClass('animated bounceInLeft').addClass('animated bounceOutLeft').attr("disabled", true);
         render_products();
     });
-
+    //Click product card
     $(document).on('click', '.product_card', function() {
         $('#back').show().removeClass('animated bounceOutLeft').addClass('animated bounceInLeft').attr("disabled", false);
         prod_id = $(this).attr('id');
         render_product_detail(prod_id);
     });
-
+    //Click category card
     $(document).on('click', '.cat_card', function() {
         id = $(this).attr('id');
         filter_category(id);

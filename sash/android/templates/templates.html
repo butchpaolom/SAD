@@ -13,19 +13,19 @@
 
 <!--Category Template-->
 <template id="cat_template">
-    <div class="cat_card p-0 mb-4">
+    <div class="cat_card p-0">
         <div class="card border-0 p-0 m-0">
-            <div class="card-body bg-whitem-0 p-0" data-placement="left" data-toggle="tooltip" title="">
+            <div class="card-body pb-1 p-0" style="background-color: #222222;">
                     <div class="square" id="pic">
                     </div>
-                    <h6 id="cat_text" class="card-title text-truncate text-dark text-center mt-2 my-2"></h6>
+                    <h6 id="cat_text" class="card-title text-truncate text-light text-center mt-2 my-2"></h6>
             </div>
         </div>
     </div>
 </template>
 
 <template id="prod_detail_template">
-    <div class="container-fluid my-4 mx-2 animated slideInLeft " id="product_detail_base">
+    <div class="container-fluid mb-4 mx-2 animated slideInLeft " id="product_detail_base">
         <div class="row border shadow-sm">
             <div class="col-md-12 col-lg-6 col-sm-12 col-12 m-0 p-0 justify-content-center">
                 <div class="square m-0" id="pic" style="background-image: url('{{ product_image }}');width: 100%;padding-bottom: 100%;background-size: cover;background-position: center;">
@@ -41,16 +41,12 @@
                     <div class="card-body">
                         <h3 id="product_title" class="card-title text-dark"></h3>
                         <hr>
-                        <a href="">
                             <h5>
                                 <p id="product_cat" class="card-text text-muted">
                                 </p>
                             </h5>
-                        </a>
-                        <a href="">
                             <p id="product_price" class="card-text text-muted">
                             </p>
-                        </a>
                         <hr>
                         <span style="white-space: pre-wrap" id="product_desc" class="card-text">
                         </span style="white-space: pre-wrap">

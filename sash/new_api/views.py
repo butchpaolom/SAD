@@ -10,7 +10,7 @@ import django_filters
 
 class ProductView(viewsets.ModelViewSet):
     search_fields = ['category__category_name', 'product_name']
-    filter_fields = ['category', 'product_name']
+    filter_fields = ['category__category_name', 'product_name']
     queryset = Product.objects.all()
     filter_backends = [filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
     
