@@ -95,5 +95,12 @@ class Transaction(models.Model):
     def __str__(self):
         return '{0}'.format(self.final_order)
 
-
+class DeliveryStatus(models.Model):
+    transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE)
+    choices = (
+        (1, "Packaging"),
+        (2, "In Transit"),
+        (3, "Out for Delivery")
+    )
+    status = models.IntegerField(choices, null=True)
     

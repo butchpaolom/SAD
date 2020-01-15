@@ -4,11 +4,16 @@ from rest_framework import viewsets, permissions
 from .serializers import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import filters
+import django_filters
 # Create your views here.
 
 class ProductView(viewsets.ModelViewSet):
-    filter_fields = ('id', 'category', 'stock')
+    search_fields = ['category__category_name', 'product_name']
+    filter_fields = ['category', 'product_name']
     queryset = Product.objects.all()
+    filter_backends = [filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
+    
     serializer_class = ProductSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 

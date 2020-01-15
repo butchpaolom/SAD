@@ -1,0 +1,137 @@
+{% extends "base_android.html" %}
+{% load static %}
+{% block content %}
+{% include "templates.html" %}
+<div class="container-fluid">
+    <div class="row d-flex justify-content-end" style="background-color: #222222;">
+        <button class="btn btn-outline-light my-2 ml-3 text-light animated bounceInLeft" style="display:none" id="back">
+            <i class="fa fa-caret-left my-1 mr-2"></i>Go Back
+        </button>
+        <div class="input-group my-2 col-5 animated bounceInRight" id="search_bar">
+            <input type="text" class="form-control" placeholder="Search" id="search_input">
+            <div class="input-group-append">
+                <button class="btn btn-outline-light" id="search_button" type="button"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+    </div>
+    <div class="cat_container row">
+    </div>
+    <div class="prod_container row mx-2">
+    </div>
+</div>
+    <script>
+    $(document).ready(load_landing());
+    function load_product(products){
+        for (var i=0; i<prod_length; i++){
+                var t = document.querySelector('#prod_template');
+                t.content.querySelector('.product_card').id = products[i].id;
+                t.content.querySelector('#pic').style = "background-image: url('" + products[i].product_image + "');width: 100%;padding-bottom: 100%;background-size: cover;background-position: center;";
+                t.content.querySelector('#product_text').textContent = products[i].product_name;
+                // t.content.querySelector('#link').href = "{% url 'an_product' 1 %}".replace("1", products[i].id);
+                var clone = document.importNode(t.content, true);
+                document.querySelector('.prod_container').appendChild(clone);
+            }
+    }
+    function load_product_detail(product){
+        $('.product_card').remove();
+        $('.cat_card').css('display','none');
+        var t = document.querySelector('#prod_detail_template');
+        t.content.querySelector('#pic').style = "background-image: url('" + product.product_image + "');width: 100%;padding-bottom: 100%;background-size: cover;background-position: center;";
+        t.content.querySelector('#product_title').textContent = product.product_name;
+        t.content.querySelector('#product_cat').textContent = product.category;
+        t.content.querySelector('#product_price').textContent = product.price;
+        t.content.querySelector('#product_desc').textContent = product.description;
+        var clone = document.importNode(t.content, true);
+        if (product.stock != 0){
+            clone.querySelector('#prod_out').remove();
+        }
+        else{
+            clone.querySelector('#product_button').remove();
+        }
+        document.querySelector('.prod_container').appendChild(clone);
+    }
+    function search(){
+        $('.cat_card').removeClass('animated fadeOut').addClass("animated zoomIn").show();
+        var search = $('#search_input').val();
+        $('.prod_container').empty();
+        $.ajax({
+            url: "/new_api/api_products/?search=" + search,
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                if (data.count > 0){
+                prod_length = data.results.length;
+                products = data.results;
+                load_product(products);
+                }
+                else if (data.count == 0){
+                    $('.prod_container').append("<h5 class='animated bounceIn'>No results!</h5>");
+                }
+                }
+            })
+        }
+    function load_landing() {
+        $('#product_detail_base').remove();
+        $('.prod_container').empty();
+        $('.cat_container').empty();
+        $.ajax({
+            url: "/new_api/api_products/",
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                prod_length = data.results.length;
+                products = data.results;
+                load_product(products);
+            }
+        });
+        $.ajax({
+            url: "/new_api/api_category/",
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                cat_length = data.results.length;
+                category = data.results;
+                for (var i=0; i<cat_length; i++){
+                    if (category[i].image){
+                    var t = document.querySelector('#cat_template');
+                    t.content.querySelector('#pic').style = "background-image: url('" + category[i].image + "');width: 100%;padding-bottom: 100%;background-size: cover;background-position: center;";
+                    t.content.querySelector('#cat_text').textContent = category[i].category_name;
+                    var clone = document.importNode(t.content, true);
+                    document.querySelector('.cat_container').appendChild(clone);
+                    }
+                }
+            }
+        });
+    }
+    $('#search_button').click(function(){
+        input = $('#search_input').val();
+        search();
+        }
+    );
+    $('#search_input').keypress(function(e){
+        if (e.which == 13 ){
+            $('.cat_card').removeClass('animated fadeOut').addClass("animated zoomIn").show();
+            search();
+        }
+    });
+    $('#back').click(function(){
+        $(this).removeClass('animated bounceInLeft').addClass('animated bounceOutLeft').attr("disabled", true);
+        load_landing();
+    });
+
+    $(document).on('click', '.product_card', function() {
+        $('#back').show().removeClass('animated bounceOutLeft').addClass('animated bounceInLeft').attr("disabled", false);
+        $('.product_card').not(this).removeClass('animated bounceInLeft').addClass("animated fadeOut");
+        $('.cat_card').removeClass('animated zoomIn').addClass("animated fadeOut");
+        $(this).removeClass('animated bounceInLeft').addClass('animated bounceOutRight');
+        $.ajax({
+            url: "/new_api/api_products/" + $(this).attr('id'),
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                load_product_detail(data);
+            }
+        });
+    });
+    </script>
+{% endblock content %}

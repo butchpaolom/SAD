@@ -28,7 +28,8 @@ urlpatterns = [
 
     #new gen
     path('new_api/', include('new_api.urls')),
-    path('api_auth/', include('rest_framework.urls'))
+    path('api_auth/', include('rest_framework.urls')),
+    path('android/', include('android.urls')),
 
 ]
 

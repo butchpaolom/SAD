@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'admin_app.apps.AdminAppConfig',
     'payment.apps.PaymentConfig',
     'new_api.apps.NewApiConfig',
+    'android.apps.AndroidConfig',
     'rest_framework',
     'crispy_forms',
     'widget_tweaks',
@@ -81,7 +82,7 @@ WSGI_APPLICATION = 'sash.wsgi.application'
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    # 'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'PAGE_SIZE': 100,
 }
 
