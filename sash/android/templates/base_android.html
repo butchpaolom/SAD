@@ -11,7 +11,9 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/animate.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/loading.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.css' %}">
     <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+    <script src="{% static 'js/owl.carousel.js' %}"></script>
   </head>
 
   <body class="bg-white">
@@ -27,7 +29,7 @@
 			<nav id="sidebar" class="position-fixed h-100" style="z-index:4;">
 				<div class="custom-menu">
 					<button type="button" id="sidebarCollapse" class="btn btn-primary">
-	          <i class="fa fa-bars"></i>
+	          <i id="icon_toolbar" class="fa fa-caret-right"></i>
 	          <span class="sr-only">Toggle Menu</span>
 	        </button>
         </div>
@@ -50,7 +52,7 @@
               <a href="#"><span class="fa fa-sticky-note mr-3"></span>Track your Order</a>
 	          </li>
 	        </ul>
-	        <div class="mb-5">
+	        <!-- <div class="mb-5">
 						<h3 class="h6 mb-3">Subscribe for newsletter</h3>
 						<form action="#" class="subscribe-form">
 	            <div class="form-group d-flex">
@@ -58,12 +60,14 @@
 	              <input type="text" class="form-control" placeholder="Enter Email Address">
 	            </div>
 	          </form>
-					</div>
+					</div> -->
 
 	      </div>
       </nav>
         <div id="content">
-          <h1 class="display-4 text-center pt-3">Adidas</h1>
+            <div class="container-fluid p-2">
+              <img class="img-fluid" src="/media/adidas.png">
+          </div>
         <div class="container-fluid px-0">
               <div id="carouselExampleControls" class="carousel slide p-0 m-0 col-12" data-ride="carousel">
                 <div class="carousel-inner">
@@ -97,6 +101,14 @@
         $("body").css("overflow", "auto");
       }, 1000);
     });
+      $("#sidebarCollapse").click(function(){
+        if ($('#sidebar').hasClass('active')){
+          $('#icon_toolbar').removeClass('fa-caret-right').addClass('fa-caret-left');
+        }
+        else{
+          $('#icon_toolbar').removeClass('fa-caret-left').addClass('fa-caret-right');
+        }
+      });
   </script>
 
   </body>
