@@ -9,5 +9,7 @@ router.register('api_customer_info', views.CustomerInfoView)
 router.register('api_transaction', views.TransactionView)
 
 urlpatterns = [
-    path('', include(router.urls))
+    path('', include(router.urls)),
+    path('api_frontasset/<pk>', views.FrontAssetView.as_view())
     ]   
+

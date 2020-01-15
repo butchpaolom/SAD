@@ -4,6 +4,8 @@ from django.db import models
 
 
 class FrontAsset(models.Model):
+    company_logo = models.ImageField(null=True, blank=False)
+    company_name = models.CharField(null=True, blank=True, max_length=30)
     car_img1 = models.ImageField(null=True, blank=False)
     car_img2 = models.ImageField(null=True, blank=True)
     car_img3 = models.ImageField(null=True, blank=True)

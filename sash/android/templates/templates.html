@@ -23,17 +23,17 @@
         </div>
     </div>
 </template>
-
+<!--Product Detail Template-->
 <template id="prod_detail_template">
     <div class="container-fluid mb-4 mx-2 animated slideInLeft " id="product_detail_base">
         <div class="row border shadow-sm">
             <div class="col-md-12 col-lg-6 col-sm-12 col-12 m-0 p-0 justify-content-center">
-                <div class="square m-0" id="pic" style="background-image: url('{{ product_image }}');width: 100%;padding-bottom: 100%;background-size: cover;background-position: center;">
+                <div class="square m-0" id="det_pic" style="background-image: url('{{ product_image }}');width: 100%;padding-bottom: 100%;background-size: cover;background-position: center;">
                 </div>
                 <div class="row d-flex justify-content-center">
-                        <button class="img btn btn-outline-light m-0 p-0" data-id="{{ product_image }}"><img src="{{ product_image }}" style="width: 50px;"></button>
-                        <button class="img btn btn-outline-light m-0 p-0" data-id="{{ product_image1 }}"><img src="{{ product_image1 }}" style="width: 50px;"></button>
-                        <button class="img btn btn-outline-light m-0 p-0" data-id="{{ product_image2 }}"><img src="{{ product_image2 }}" style="width: 50px;"></button>
+                        <button id="bt" class="img_bt btn btn-outline-light m-0 p-0" data-id="{{ product_image }}"><img style="width: 50px;"></button>
+                        <button id="bt1" class="img_bt btn btn-outline-light m-0 p-0" data-id="{{ product_image1 }}"><img style="width: 50px;"></button>
+                        <button id="bt2" class="img_bt btn btn-outline-light m-0 p-0" data-id="{{ product_image2 }}"><img style="width: 50px;"></button>
                 </div>
             </div>
             <div class="col-md-12 col-sm-12 col-lg-6  col-12">
@@ -64,6 +64,34 @@
             </div>
         </div>
     </div>
+</template>
+<!--Carousel Template-->
+<template id="car_template">
+    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            <div class="img1 carousel-item active">
+                <img id="img1" class="d-block w-100">
+            </div>
+            <div class="img2 carousel-item">
+                <img id="img2" class="d-block w-100">
+            </div>
+            <div class="img3 carousel-item">
+                <img id="img3" class="d-block w-100">
+            </div>
+        </div>
+        <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+</template>
+<!--Logo Template-->
+<template id="img_template">
+    <img id="img_logo" class="img-fluid">
 </template>
 
 

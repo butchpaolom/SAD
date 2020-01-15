@@ -6,7 +6,13 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import filters
 import django_filters
+from rest_framework import generics
+from front_ep.models import *
 # Create your views here.
+
+class FrontAssetView(generics.RetrieveAPIView):
+    queryset = FrontAsset.objects.all()
+    serializer_class = FrontAssetSerializer
 
 class ProductView(viewsets.ModelViewSet):
     search_fields = ['category__category_name', 'product_name']

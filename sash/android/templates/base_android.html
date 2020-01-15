@@ -56,31 +56,15 @@
 	      </div>
       </nav>
         <div id="content">
-            <div class="container-fluid p-2">
-              <img class="img-fluid" src="/media/adidas.png">
-          </div>
-          <div class="row d-flex justify-content-center mx-0 text-center" style="background-color: #222222;">
-            <a class="col-4 my-2" href="{% url 'an_landing' %}"><h5 class="text-light">Home</h5></a>
-            <h5 class="text-light col-4 my-2">SALE!</h5>
-            <h5 class="text-light col-4 my-2"><i class="fa fa-shopping-cart mr-2"></i>Cart</h5>
-        </div>
-        <div class="container-fluid px-0">
-              <div id="carouselExampleControls" class="carousel slide p-0 m-0 col-12" data-ride="carousel">
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img class="d-block w-100" src="https://static-ph.zacdn.com/cms/flagshipstore/brands/adidas_men_april_Carousel_Banner_996x350_1.jpg" alt="First slide">
-                    </div>
-                </div>
-                <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
+            <div class="logo_img container-fluid p-2">
             </div>
-          </div>
+          <div class="row d-flex justify-content-center mx-0 text-center" style="background-color: #222222;">
+            <a class="text-light col-4 my-2 h6" href="{% url 'an_landing' %}">Home</a>
+            <a class="text-light col-4 my-2 h6">SALE!</a>
+            <a class="text-light col-4 my-2 h6"><i class="fa fa-shopping-cart mr-2"></i>Cart</a>
+        </div>
+        <div class="container-fluid car px-0">
+        </div>
           
         {% block content %}
         {% endblock content %}
@@ -98,6 +82,7 @@
         $("body").css("overflow", "auto");
       }, 1000);
     });
+
       $("#sidebarCollapse").click(function(){
         if ($('#sidebar').hasClass('active')){
           $('#icon_toolbar').removeClass('fa-caret-right').addClass('fa-caret-left');
@@ -106,7 +91,31 @@
           $('#icon_toolbar').removeClass('fa-caret-left').addClass('fa-caret-right');
         }
       });
-  </script>
+
+      $.ajax({
+            url: "/new_api/api_frontasset/1",
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                  var t = document.querySelector('#car_template');
+                  var l = document.querySelector('#img_template');
+                  l.content.querySelector('#img_logo').src = data.company_logo;
+                  t.content.querySelector('#img1').src = data.car_img1;
+                  t.content.querySelector('#img2').src = data.car_img2;
+                  t.content.querySelector('#img3').src = data.car_img3;
+                  var clone = document.importNode(t.content, true);
+                  var clone_logo = document.importNode(l.content, true);
+                  if (!data.car_img2){
+                    clone.querySelector('.img2').remove();
+                  }
+                  if (!data.car_img3){
+                    clone.querySelector('.img3').remove();
+                  }
+                  document.querySelector('.car').appendChild(clone);
+                  document.querySelector('.logo_img').appendChild(clone_logo);
+              }
+        });
+</script>
 
   </body>
 </html>

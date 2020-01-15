@@ -278,6 +278,8 @@ def total_earnings(request):
     year = date_now.year
     transactions = Transaction.objects.filter(paid=True).filter(delivered_date__year=year).filter(delivered_date__month=month).aggregate(Sum('final_order__overall_price'))
     print(transactions)
+    if transactions['final_order__overall_price__sum'] == None:
+        transactions['final_order__overall_price__sum'] = 0
     context = {
         "total_earnings": "{:0,.2f}".format(float(transactions['final_order__overall_price__sum']))
     }

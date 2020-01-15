@@ -12,7 +12,7 @@
         <div class="input-group my-2 col-5 animated bounceInRight" id="search_bar">
             <input type="text" class="form-control border text-light" style="background-color: #222222;" placeholder="Search" id="search_input">
             <div class="input-group-append">
-                <button class="btn btn-outline-light" id="search_button" type="button"><i class="fa fa-search"></i></button>
+                <button class="btn btn-outline-light" id="search_button" type="button" disabled><i class="fa fa-search"></i></button>
             </div>
         </div>
     </div>
@@ -70,12 +70,24 @@
     }
     function load_product_detail(product){
         var t = document.querySelector('#prod_detail_template');
-        t.content.querySelector('#pic').style = "background-image: url('" + product.product_image + "');width: 100%;padding-bottom: 100%;background-size: cover;background-position: center;";
+        t.content.querySelector('#det_pic').style = "background-image: url('" + product.product_image + "');width: 100%;padding-bottom: 100%;background-size: cover;background-position: center;";
         t.content.querySelector('#product_title').textContent = product.product_name;
+
+        t.content.querySelector('#bt').setAttribute('data-id', product.product_image); 
+        t.content.querySelector('#bt1').setAttribute('data-id', product.product_image1);
+        t.content.querySelector('#bt2').setAttribute('data-id', product.product_image2);
+
+        t.content.querySelector('#bt img').src = product.product_image; 
+        t.content.querySelector('#bt1 img').src = product.product_image1;
+        t.content.querySelector('#bt2 img').src = product.product_image2;
+
         t.content.querySelector('#product_cat').textContent = product.category;
-        t.content.querySelector('#product_price').textContent = product.price;
+        t.content.querySelector('#product_price').textContent = "₱" + product.price;
         t.content.querySelector('#product_desc').textContent = product.description;
         var clone = document.importNode(t.content, true);
+        if (!product.product_image1) clone.querySelector('#bt1').remove();
+        if (!product.product_image2) clone.querySelector('#bt2').remove();
+
         if (product.stock != 0){
             clone.querySelector('#prod_out').remove();
         }
@@ -94,7 +106,9 @@
                 if (data.count > 0){
                 prod_length = data.results.length;
                 products = data.results;
-                $('.prod_container').append("<div class='container-fluid text-center mb-2'><h5 class='animated bounceIn'>Showing (" + data.count + ") results for '" + search_value + "'.</h5></div>");
+                if (search_value != ""){
+                    $('.prod_container').append("<div class='container-fluid text-center mb-2'><h5 class='animated bounceIn'>Showing (" + data.count + ") results for '" + search_value + "'.</h5></div>");
+                }
                 load_product(products);
                 }
                 else if (data.count == 0){
@@ -103,6 +117,14 @@
                 }
             })
         }
+    $('#search_input').keyup(function(){
+    if ($('#search_input').val() == ""){
+        $('#search_button').attr("disabled", true);
+    }
+    else{
+        $('#search_button').attr("disabled", false);
+    }
+    });
 
     function filter_category(category){
         $('.prod_container').empty();
@@ -196,5 +218,10 @@
         id = $(this).attr('id');
         filter_category(id);
     });
+
+    $(document).on('click','.img_bt', function(){
+        $('#det_pic').css({"backgroundImage": "url("+ $(this).data('id') +")"});
+      })
     </script>
+    
 {% endblock content %}

@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from api_proc.models import *
+from front_ep.models import *
 
 #done
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
@@ -24,3 +25,9 @@ class TransactionSerializer(serializers.ModelSerializer):
         model = Transaction
         fields = ['id' , 'final_order', 'paid', 'delivery_date', 'delivered_date']
         depth = 3
+
+class FrontAssetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FrontAsset
+        fields = ['car_img1', 'car_img2', 'car_img3', 'company_name', 'company_logo']
+
