@@ -10,12 +10,19 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="{% static 'css/animate.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/loading.css' %}">
     <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
   </head>
+
   <body class="bg-white">
-    <div id="loading">
-      <img id="loading-image" src="/media/ajax-loader.gif" alt="Loading..." />
-    </div>
+    <div id="loading" class="h-100 w-100" style="background-color: #ffffff; z-index:500; position:fixed;">
+      <div class="loadingio-spinner-double-ring-gnu4acl4iv5" style="top:30%; left:45%; position:fixed;"><div class="ldio-2581lugbjgw">
+        <div></div>
+        <div></div>
+        <div><div></div></div>
+        <div><div></div></div>
+        </div></div>
+      </div>
 		<div class="wrapper d-flex align-items-stretch">
 			<nav id="sidebar" class="position-fixed h-100" style="z-index:4;">
 				<div class="custom-menu">
@@ -85,7 +92,7 @@
     <script>
       $(window).on("load", function() {
       setTimeout(function(){
-        $('#loading').hide();
+        $('#loading').remove();
       }, 1000);
     });
   </script>
