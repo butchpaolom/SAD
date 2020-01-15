@@ -11,8 +11,16 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/animate.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+    <script>
+      $(window).on("load", function() {
+      $('#loading').hide();
+    });
+  </script>
   </head>
   <body class="bg-white">
+    <div id="loading">
+      <img id="loading-image" src="/media/ajax-loader.gif" alt="Loading..." />
+    </div>
 		<div class="wrapper d-flex align-items-stretch">
 			<nav id="sidebar" class="position-fixed h-100" style="z-index:4;">
 				<div class="custom-menu">
@@ -40,7 +48,6 @@
               <a href="#"><span class="fa fa-sticky-note mr-3"></span>Track your Order</a>
 	          </li>
 	        </ul>
-
 	        <div class="mb-5">
 						<h3 class="h6 mb-3">Subscribe for newsletter</h3>
 						<form action="#" class="subscribe-form">
@@ -80,5 +87,6 @@
     <script src="{% static 'js/popper.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
+
   </body>
 </html>
