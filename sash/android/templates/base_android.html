@@ -40,7 +40,7 @@
 	            <a href="{% url 'an_landing' %}"><span class="fa fa-home mr-3"></span>Home</a>
 	          </li>
 	          <li>
-	            <a href="#"><span class="fa fa-shopping-cart mr-3"></span>Cart</a>
+	            <a href="{% url 'an_cart' %}"><span class="fa fa-shopping-cart mr-3"></span>Cart</a>
 	          </li>
 	          <li>
               <a href="#"><span class="fa fa-info mr-4"></span>About</a>
@@ -59,13 +59,12 @@
             <div class="logo_img container-fluid p-2">
             </div>
           <div class="row d-flex justify-content-center mx-0 text-center" style="background-color: #222222;">
-            <a class="text-light col-4 my-2 h6" href="{% url 'an_landing' %}">Home</a>
+            <a href="{% url 'an_landing' %}" class="text-light col-4 my-2 h6" href="{% url 'an_landing' %}">Home</a>
             <a class="text-light col-4 my-2 h6">SALE!</a>
-            <a class="text-light col-4 my-2 h6"><i class="fa fa-shopping-cart mr-2"></i>Cart</a>
+            <a href="{% url 'an_cart' %}" class="text-light col-4 my-2 h6"><i class="fa fa-shopping-cart mr-2"></i>Cart</a>
         </div>
         <div class="container-fluid car px-0">
         </div>
-          
         {% block content %}
         {% endblock content %}
 		  </div>
@@ -80,7 +79,7 @@
       setTimeout(function(){
         $('#loading').remove();
         $("body").css("overflow", "auto");
-      }, 1000);
+      }, 250);
     });
 
       $("#sidebarCollapse").click(function(){

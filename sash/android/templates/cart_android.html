@@ -9,15 +9,14 @@
 </div>
 <div class="container-fluid">
 <p class="h3"><i class="fa fa-shopping-cart mr-2"></i>Your Cart</p>
-<h6 class="font-italic">Note: Delivery time might vary on different locations.</h6>
-<h6 class="font-italic">Total Price includes delivery fee.</h6>
+<span class="font-italic">Note: Delivery time might vary on different locations.</span>
+<span class="font-italic">Total Price includes delivery fee.</span>
 <table id="cart_table" class="table table-striped table-bordered">
     <thead>
-        <th>#</th>
-        <th>Product</th>
-        <th>Qty</th>
-        <th>Price per unit</th>
-        <th>Total Price</th>
+        <th class="p-0">Product</th>
+        <th class="p-0 text-center">Qty</th>
+        <th class="p-0 text-center">Price</th>
+        <th class="p-0 text-center">Total Price</th>
     </thead>
     <tbody id="cart_table_body" class="table-body">
     </tbody>
@@ -25,21 +24,34 @@
 </div>
 <script>
     var cart = JSON.parse(window.localStorage.getItem('cart'));
+    var gt=0;
     for (var i=0; cart.length>i; i++){
         console.log(cart[i].id);
     $.ajax({
             url: "/new_api/api_products/" + cart[i].id,
             method: 'GET',
             dataType: 'json',
+            async: false,
             success: function(data) {
                 for (var x=0; cart.length>x; x++){
                     if (cart[x].id == data.id){
                         console.log(cart[x].id);
                         load_to_table(data, cart[x]);
+                        gt += ((parseFloat(data.price)+parseFloat(data.delivery_price))*cart[x].quantity);
+                        console.log(gt);
+                        
                     }
                 }
             }
         });
+    }
+    add_gt(gt.toFixed(2));
+
+    function add_gt(grand_total){
+        var t = document.querySelector('#gt_template');
+        t.content.querySelector('#gt').textContent = '₱' +grand_total;
+        var clone = document.importNode(t.content, true);
+        document.querySelector('#cart_table_body').appendChild(clone);
     }
 
     function load_to_table(product, cart){
@@ -47,7 +59,7 @@
         t.content.querySelector('#prod_name').textContent = product.product_name;
         t.content.querySelector('#prod_quantity').textContent = cart.quantity;
         t.content.querySelector('#prod_price').textContent = '₱' + product.price;
-        t.content.querySelector('#total_price').textContent = '₱' + (product.price*cart.quantity).toFixed(2);
+        t.content.querySelector('#total_price').textContent = '₱' + ((parseFloat(product.price)+parseFloat(product.delivery_price))*cart.quantity).toFixed(2);
         var clone = document.importNode(t.content, true);
         document.querySelector('#cart_table_body').appendChild(clone);
     }

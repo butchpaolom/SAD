@@ -22,8 +22,8 @@
 </div>
 
 
-    <script>
 
+    <script>
     $(document).ready(load_landing());
     function load_category(category){
         if (category == undefined){
@@ -106,12 +106,13 @@
         document.querySelector('.prod_container').appendChild(clone);
     }
     function search(search_value){
-        $('.prod_container').empty();
         $.ajax({
             url: "/new_api/api_products/?search=" + search_value,
             method: 'GET',
             dataType: 'json',
             success: function(data) {
+                $('.prod_container').empty();
+                $('#back').removeClass('animated bounceInLeft').addClass('animated bounceOutLeft');
                 if (data.count > 0){
                 prod_length = data.results.length;
                 products = data.results;
@@ -142,6 +143,7 @@
             method: 'GET',
             dataType: 'json',
             success: function(data) {
+                $('#back').removeClass('animated bounceInLeft').addClass('animated bounceOutLeft');
                 if (data.count > 0){
                 prod_length = data.results.length;
                 products = data.results;
@@ -188,6 +190,15 @@
         });
     }
 
+    function render_alert(product, quantity){
+        window.location = "#pic";
+        $('.alert').remove(); 
+        var t = document.querySelector('#alert_template');
+        t.content.querySelector('#added').textContent = product + ' (' + quantity +') is succesfully added to your cart.'
+        var clone = document.importNode(t.content, true);
+        document.querySelector('.prod_container').prepend(clone);
+    }
+
     function render_product_detail(id) {
         $.ajax({
             url: "/new_api/api_products/" + id,
@@ -215,6 +226,7 @@
     //Click back button
     $('#back').click(function(){
         $(this).removeClass('animated bounceInLeft').addClass('animated bounceOutLeft').attr("disabled", true);
+        $('#search_input').val('');
         render_products();
     });
     //Click product card
@@ -255,6 +267,7 @@
             cart_old.push(product);
             window.localStorage.setItem('cart', JSON.stringify(cart_old));
         }
+        render_alert($('#product_title').html(), qty);
 
 
     });
