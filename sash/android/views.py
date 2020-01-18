@@ -7,3 +7,6 @@ import requests
 
 def an_landing(request):
     return render(request, 'landing_android.html')
+
+def an_cart(request):
+    return render(request, 'cart_android.html')

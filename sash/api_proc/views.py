@@ -126,6 +126,8 @@ def create_customer_info(request):
 
         #create intial order from request.session['cart']
         orders=[]
+
+        #server side possible from localStorage of cart which contains new order, line 58
         cart = request.session['cart']
         for each in cart:
             order = InitialOrder(

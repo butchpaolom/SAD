@@ -51,13 +51,13 @@
                         <span style="white-space: pre-wrap" id="product_desc" class="card-text">
                         </span style="white-space: pre-wrap">
                         <div id="product_button" class="form-inline col-8 mt-4 px-0">
-                            <select class="quantity custom-select form-control col-3">
-                                <option value="1">1</option>
+                            <select class="quantity form-control col-3">
+                                <option class="qt_option"></option>
                             </select>
-                            <button class="add_cart btn btn-outline-primary py-2 col-9">Add to Cart</button>
+                            <button class="add_cart btn btn-outline-dark py-2 col-9"><i class="fa fa-cart-plus mr-2"></i>Add to Cart</button>
                         </div>
                         <div class="col-12 px-0 mt-4">
-                            <button id="prod_out" class="btn btn-outline-primary py-2 mx-0" disabled>Out of stock</button>
+                            <button id="prod_out" class="btn btn-outline-info py-2 mx-0" disabled>Out of stock</button>
                         </div>
                     </div>
                 </div>
@@ -92,6 +92,16 @@
 <!--Logo Template-->
 <template id="img_template">
     <img id="img_logo" class="img-fluid">
+</template>
+
+<template id="cart_template">
+        <tr class="prod_row text-primary">
+            <td id="count"></td>
+            <td id="prod_name"></td>
+            <td id="prod_quantity"></td>
+            <td id="prod_price"></td>
+            <td id="total_price"></td>
+        </tr>
 </template>
 
 
