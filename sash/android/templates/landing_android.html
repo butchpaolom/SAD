@@ -5,7 +5,8 @@
 <div class="container-fluid px-0 mx-0">
     <div class="cat_container row owl-carousel owl-theme w-100 px-0 mx-0">
     </div>
-    <div class="row d-flex justify-content-end mx-0 mb-4" style="background-color: #222222;">
+
+    <div class="row d-flex justify-content-end mx-0 mb-0" style="background-color: #222222;">
         <button class="btn btn-outline-light my-2 ml-3 text-light animated bounceInLeft" style="display:none" id="back">
             <i class="fa fa-caret-left my-1 mr-2"></i>Go Back
         </button>
@@ -17,13 +18,47 @@
         </div>
     </div>
 
-    <div class="prod_container row mx-2">
+    <div class="prod_filters my-0">
+        <div id="accordion" role="tablist">
+            <div class="card border-0">
+              <div class="card-header py-2" role="tab" id="headingOne">
+                <h5 class="mb-0">
+                  <a class="collapsed" data-toggle="collapse" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                    <span class="text-dark h6">Filters</span>
+                  </a>
+                </h5>
+              </div>
+              <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+                <div class="card-body py-1 px-2">
+                    <div class="container-fluid p-0">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="show_names" checked>
+                        <label class="custom-control-label" for="show_names">Show product names</label>
+                    </div>
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
     </div>
+    
+    <div class="prod_container row mx-2 my-2">
+    </div>
+
 </div>
 
 
 
     <script>
+    $(document).ready(function (){
+        const urlParams = new URLSearchParams(window.location.search);
+        const myParam = urlParams.get('action');
+        const pid =  urlParams.get('id');
+        if (myParam=="load_product"){
+            render_product_detail(pid);
+        }
+    });
     $(document).ready(load_landing());
     function load_category(category){
         if (category == undefined){
@@ -72,7 +107,16 @@
             }, 500);
         }
     }
+    function load_remove_button(id){
+        $('.remove_cart').remove();
+        var t = document.querySelector('#remove_item_template');
+        t.content.querySelector('.remove_cart').id = id;
+        var clone = document.importNode(t.content, true);
+        document.querySelector('#product_button').appendChild(clone);
+    }
+
     function load_product_detail(product){
+        $('.prod_filters').removeClass('animated bounceInLeft').hide();
         var t = document.querySelector('#prod_detail_template');
         t.content.querySelector('#det_pic').style = "background-image: url('" + product.product_image + "');width: 100%;padding-bottom: 100%;background-size: cover;background-position: center;";
         t.content.querySelector('#product_title').textContent = product.product_name;
@@ -107,7 +151,13 @@
             var option_clone = x.cloneNode(true);
             clone.querySelector('.quantity').append(option_clone);
         }
+        var cart=JSON.parse(window.localStorage.getItem('cart'));
         document.querySelector('.prod_container').appendChild(clone);
+        for (var i=0; i<cart.length; i++){
+            if (product.id == cart[i].id){
+                load_remove_button(product.id);
+            }
+        }
     }
     function search(search_value){
         $.ajax({
@@ -153,6 +203,8 @@
                 products = data.results;
                 $('.prod_container').append("<div class='container-fluid text-center mb-2'><h5 class='animated bounceIn'>" + category + "</h5></div>");
                 load_product(products);
+                check_show_names();
+                $('.prod_filters').addClass('animated bounceInLeft').show();
                 }
                 else if (data.count == 0){
                     $('.prod_container').append("<div class='container-fluid text-center'><h5 class='animated bounceIn'>We have no more items in " + category + "</h5></div>");
@@ -172,10 +224,13 @@
             method: 'GET',
             dataType: 'json',
             success: function(data) {
+                $('#back').removeClass('animated bounceInLeft').addClass('animated bounceOutLeft').attr("disabled", true);
                 $('.prod_container').empty();
                 prod_length = data.results.length;
                 products = data.results;
                 load_product(products);
+                check_show_names();
+                $('.prod_filters').addClass('animated bounceInLeft').show();
             }
         });
     }
@@ -194,12 +249,20 @@
         });
     }
 
-    function render_alert(product, quantity){
-        window.location = "#pic";
+    function render_alert(product, quantity, status){
+        $('html, body').animate({
+        scrollTop: $("#pic").offset().top
+        }, 250);
         $('.alert').remove(); 
         var t = document.querySelector('#alert_template');
-        t.content.querySelector('#added').textContent = product + ' (' + quantity +') is succesfully added to your cart.'
+        if (status == 'alert-success'){
+            t.content.querySelector('#added').textContent = product + ' (' + quantity +') is succesfully added to your cart.'
+        }
+        else{
+            t.content.querySelector('#added').textContent = product + ' is succesfully removed from your cart.'
+        }
         var clone = document.importNode(t.content, true);
+        clone.querySelector('.alert').classList.add(status);
         document.querySelector('.prod_container').prepend(clone);
     }
 
@@ -229,7 +292,6 @@
     });
     //Click back button
     $('#back').click(function(){
-        $(this).removeClass('animated bounceInLeft').addClass('animated bounceOutLeft').attr("disabled", true);
         $('#search_input').val('');
         render_products();
     });
@@ -271,9 +333,39 @@
             cart_old.push(product);
             window.localStorage.setItem('cart', JSON.stringify(cart_old));
         }
-        render_alert($('#product_title').html(), qty);
+        render_alert($('#product_title').html(), qty,'alert-success');
+        load_remove_button(prd_id);
 
+    });
+    $(document).on('click', '.remove_cart', function(){
+        var prd_id = $('.remove_cart').attr('id');
+        var cart=JSON.parse(window.localStorage.getItem('cart'));
 
+        for (var i=0; i<cart.length; i++){
+            if (cart[i].id == prd_id){
+                cart.splice(i,1);
+                window.localStorage.setItem('cart', JSON.stringify(cart));
+                $('.remove_cart').remove();
+                $('html, body').animate({
+                scrollTop: $("#pic").offset().top
+                }, 250);
+                render_alert($('#product_title').html(), 0, 'alert-danger')
+            }
+        }
+    });
+    function check_show_names(){
+        const show = $('#show_names').prop("checked");
+        if (show == true){
+            $('.prod_name').addClass('animated bounceIn').show();
+            console.log(show);
+            }
+        else if (show == false){
+            $('.prod_name').removeClass('animated bounceIn').hide();
+        }
+    }
+
+    $(document).on('change', '#show_names' ,function(){
+        check_show_names();
     });
     </script>
     

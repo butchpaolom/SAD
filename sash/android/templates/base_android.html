@@ -52,7 +52,6 @@
               <a href="#"><span class="fa fa-truck mr-3"></span>Track your Order</a>
 	          </li>
 	        </ul>
-
 	      </div>
       </nav>
         <div id="content">
@@ -79,7 +78,10 @@
       setTimeout(function(){
         $('#loading').remove();
         $("body").css("overflow", "auto");
-      }, 250);
+      }, 200);
+    });
+    $(document).on('click', '#content', function(){
+        $('#sidebar').removeClass('active');
     });
 
       $("#sidebarCollapse").click(function(){
@@ -114,7 +116,7 @@
                   document.querySelector('.logo_img').appendChild(clone_logo);
               }
         });
-</script>
+  </script>
 
   </body>
 </html>

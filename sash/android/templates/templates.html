@@ -5,7 +5,7 @@
             <div class="card-body bg-whitem-0 p-0" data-placement="left" data-toggle="tooltip" title="">
                     <div class="square" id="pic">
                     </div>
-                    <h6 id="product_text" class="card-title text-truncate text-center text-dark mt-2 my-2"></h6>
+                    <h6 id="product_text" class="card-title prod_name text-truncate text-center text-dark mt-2 my-2"></h6>
             </div>
         </div>
     </div>
@@ -50,14 +50,14 @@
                         <hr>
                         <span style="white-space: pre-wrap" id="product_desc" class="card-text">
                         </span style="white-space: pre-wrap">
-                        <div id="product_button" class="form-inline col-8 mt-4 px-0">
-                            <select class="quantity form-control col-3">
+                        <div id="product_button" class="form-inline col-12 mt-4 px-0">
+                            <select class="quantity form-control col-2">
                                 <option class="qt_option"></option>
                             </select>
-                            <button class="add_cart btn btn-outline-dark py-2 col-9"><i class="fa fa-cart-plus mr-2"></i>Add to Cart</button>
+                            <button class="add_cart btn btn-outline-dark py-2 px-0 col-4"><i class="fa fa-cart-plus mr-2"></i>Add to Cart</button>
                         </div>
                         <div class="col-12 px-0 mt-4">
-                            <button id="prod_out" class="btn btn-outline-info py-2 mx-0" disabled>Out of stock</button>
+                            <button id="prod_out" class="btn btn-dark py-2 mx-0" disabled>Out of stock</button>
                         </div>
                     </div>
                 </div>
@@ -96,15 +96,16 @@
 
 <template id="cart_template">
         <tr class="text-dark prod_row text-primary">
-            <td class="p-1" id="prod_name"></td>
+            <td class="p-1 text-primary product" id="prod_name"></td>
             <td class="p-1 text-center" id="prod_quantity"></td>
             <td class="p-1" id="prod_price"></td>
+            <td class="p-1" id="del_price"></td>
             <td class="p-1 tp" id="total_price"></td>
         </tr>
 </template>
 
 <template id="alert_template">
-    <div class="container-fluid mx-2 alert alert-success animated fadeInUp" role="alert">
+    <div class="container-fluid mx-2 alert animated fadeInUp" role="alert">
         <span id="added">
         </span>
     </div>
@@ -112,8 +113,11 @@
 
 <template id="gt_template">
     <tr class="text-primary">
-        <td colspan="3" class="text-right py-1 px-2">Grand Total</td>
+        <td colspan="4" class="text-right py-1 px-2">Grand Total</td>
         <td id="gt" colspan="1" class="gt p-1"></td>
     </tr>
 </template>
 
+<template id="remove_item_template">
+    <button class="remove_cart btn btn-outline-danger py-2 px-0 ml-1 my-2 col-5">Remove from Cart</button>
+</template>
