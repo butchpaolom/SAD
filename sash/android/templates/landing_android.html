@@ -57,8 +57,8 @@
             $('.prod_container').show();
         }
         else{
+        $('.prod_container').show();
         for (var i=0; i<prod_length; i++){
-                $('.prod_container').show();
                 var t = document.querySelector('#prod_template');
                 t.content.querySelector('.product_card').id = products[i].id;
                 t.content.querySelector('#pic').style = "background-image: url('" + products[i].product_image + "');width: 100%;padding-bottom: 100%;background-size: cover;background-position: center;";
@@ -66,6 +66,8 @@
                 var clone = document.importNode(t.content, true);
                 document.querySelector('.prod_container').appendChild(clone);
             }
+            $('.prod_container').hide();
+            $('.prod_container').show();
         }
     }
     function load_product_detail(product){
