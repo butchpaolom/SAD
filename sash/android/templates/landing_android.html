@@ -67,7 +67,9 @@
                 document.querySelector('.prod_container').appendChild(clone);
             }
             $('.prod_container').hide();
-            $('.prod_container').show();
+            setTimeout(function(){
+                $('.prod_container').show();
+            }, 500);
         }
     }
     function load_product_detail(product){
