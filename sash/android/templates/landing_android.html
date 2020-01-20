@@ -52,14 +52,24 @@
 
     <script>
     $(document).ready(function (){
+        load_landing();
         const urlParams = new URLSearchParams(window.location.search);
         const myParam = urlParams.get('action');
         const pid =  urlParams.get('id');
+        const cart = [];
+        const settings = {
+            show_pn: true,
+            };
+        if(!window.localStorage.getItem('settings')){
+        window.localStorage.setItem('settings', JSON.stringify(settings));
+        }
         if (myParam=="load_product"){
             render_product_detail(pid);
         }
+        if(!window.localStorage.getItem('cart')){
+        window.localStorage.setItem('cart', JSON.stringify(cart));
+        }
     });
-    $(document).ready(load_landing());
     function load_category(category){
         if (category == undefined){
             $('.cat_container').show();
@@ -320,19 +330,14 @@
             };
         cart.push(product);
 
-        if(!window.localStorage.getItem('cart')){
-        window.localStorage.setItem('cart', JSON.stringify(cart));
-        }
-        else{
-            var cart_old=JSON.parse(window.localStorage.getItem('cart'));
-            for(var i=0; cart_old.length>i; i++){
-                if (cart_old[i].id == product.id){
-                    cart_old.splice(i,1);
-                }
+        var cart_old=JSON.parse(window.localStorage.getItem('cart'));
+        for(var i=0; cart_old.length>i; i++){
+            if (cart_old[i].id == product.id){
+                cart_old.splice(i,1);
             }
-            cart_old.push(product);
-            window.localStorage.setItem('cart', JSON.stringify(cart_old));
         }
+        cart_old.push(product);
+        window.localStorage.setItem('cart', JSON.stringify(cart_old));
         render_alert($('#product_title').html(), qty,'alert-success');
         load_remove_button(prd_id);
 
@@ -353,19 +358,25 @@
             }
         }
     });
-    function check_show_names(){
-        const show = $('#show_names').prop("checked");
+    function check_show_names(){    
+        const show=JSON.parse(window.localStorage.getItem('settings')).show_pn;
         if (show == true){
             $('.prod_name').addClass('animated bounceIn').show();
-            console.log(show);
+            $('#show_names').prop("checked", show);
             }
         else if (show == false){
             $('.prod_name').removeClass('animated bounceIn').hide();
+            $('#show_names').prop("checked", show);
         }
+        
     }
 
     $(document).on('change', '#show_names' ,function(){
-        check_show_names();
+        const show = $('#show_names').prop("checked");
+        var settings=JSON.parse(window.localStorage.getItem('settings'));
+        settings.show_pn = show;
+        window.localStorage.setItem('settings', JSON.stringify(settings));
+        check_show_names(); 
     });
     </script>
     

@@ -14,11 +14,25 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ['id', 'category_name','image']
 
-class CustomerInfoSerializer(serializers.ModelSerializer):
+class FinalOrderSerializer(serializers.ModelSerializer):
     class Meta:
-        depth = 1
+
+        model = FinalOrder
+        fields = ['orders', 'overall_price', 'trans_id']
+
+class CustomerInfoSerializerGet(serializers.ModelSerializer):
+    final_order = FinalOrderSerializer()
+    class Meta:
+
         model = CustomerInfo
         fields = ['final_order', 'address', 'first_name', 'last_name', 'middle_initial', 'contact_number', 'email', 'date_ordered']
+
+class CustomerInfoSerializerPost(serializers.ModelSerializer):
+    class Meta:
+
+        model = CustomerInfo
+        fields = ['final_order', 'address', 'first_name', 'last_name', 'middle_initial', 'contact_number', 'email', 'date_ordered', 'payment_method']
+
 
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:

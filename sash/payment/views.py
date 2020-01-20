@@ -11,7 +11,10 @@ from front_ep.models import FrontAsset
 
 #test
 def payment_process(request):
-    trans_id = request.session['trans_id']
+    try:
+        trans_id = request.session['trans_id']
+    except:
+        trans_id = request.GET['trans_id']
     print(trans_id)
     order = FinalOrder.objects.get(trans_id=trans_id)
     host = request.get_host()
