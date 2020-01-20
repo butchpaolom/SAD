@@ -36,18 +36,21 @@ class CategoryView(viewsets.ModelViewSet):
 class CustomerInfoView(viewsets.ModelViewSet):
     queryset = CustomerInfo.objects.all()
     serializer_class = CustomerInfoSerializerGet
-    permission_classes = [permissions.AllowAny]
-    # def get_permissions(self):
-    #     if self.action == 'create':
-    #         permission_classes = [permissions.AllowAny]
-    #     else:
-    #         permission_classes = [permissions.IsAuthenticated]
 
-    #     return [permission() for permission in permission_classes]
+
+    def get_permissions(self):
+        if self.action == 'create':
+            permission_classes = [permissions.AllowAny]
+        else:
+            permission_classes = [permissions.IsAuthenticated]
+
+        return [permission() for permission in permission_classes]
     
     def create(self, request):
         data = request.data.copy()
         cart = json.loads(data['cart'])
+        print(cart[0])
+        print(data)
         orders=[]
         for each in cart:
             order = InitialOrder(
@@ -73,9 +76,22 @@ class CustomerInfoView(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        return_data = serializer.data
-        return_data['trans_id'] = finalOrder.trans_id
+        return_data = {
+            "trans_id": finalOrder.trans_id
+        }
         return Response(return_data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def retrieve(self, request, pk=None):
+        pass
+
+    def update(self, request, pk=None):
+        pass
+
+    def partial_update(self, request, pk=None):
+        pass
+
+    def destroy(self, request, pk=None):
+        pass
 
 class TransactionView(viewsets.ModelViewSet):
     filter_fields = ('paid', 'final_order__overall_price', 'final_order__trans_id')

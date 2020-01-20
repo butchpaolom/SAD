@@ -57,6 +57,7 @@
         const myParam = urlParams.get('action');
         const pid =  urlParams.get('id');
         const cart = [];
+        const trans_id = []
         const settings = {
             show_pn: true,
             };
@@ -68,6 +69,9 @@
         }
         if(!window.localStorage.getItem('cart')){
         window.localStorage.setItem('cart', JSON.stringify(cart));
+        }
+        if(!window.localStorage.getItem('transactions')){
+        window.localStorage.setItem('transactions', JSON.stringify(trans_id));
         }
     });
     function load_category(category){

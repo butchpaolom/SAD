@@ -51,9 +51,9 @@
             }
         });
     $('.submit').click(function() {
-        const cart = JSON.stringify(window.localStorage.getItem('cart'));
+        const cart = window.localStorage.getItem('cart');
         $.ajax({
-            url: "/new_api/api_products/",
+            url: "/new_api/api_customer_info/",
             method: 'POST',
             dataType: "json",
             data: {
@@ -67,7 +67,10 @@
                 cart: cart,
             },
             success: function(data){
-                alert(1);
+                var trans = JSON.parse(window.localStorage.getItem('transactions'));
+                trans.push(data.trans_id);
+                console.log(data);
+                window.localStorage.setItem('transactions', JSON.stringify(trans));
             }
         })
     })
