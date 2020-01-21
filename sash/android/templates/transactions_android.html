@@ -20,26 +20,31 @@
             method: 'GET',
             dataType: 'json',
             success: function(data) {
-                console.log(data);
                 render_transaction(data);
                 }
             });
     }
     function render_transaction(data){
         var t = document.querySelector('#trans_template');
+        if (data.final_order.payment_method == 'PayPal'){
+            t.content.querySelector('#pm').setAttribute('data-id', data.final_order.trans_id); 
+        }
         t.content.querySelector('#trans_id').textContent = data.final_order.trans_id;
         t.content.querySelector('#status').textContent = data.status;
         t.content.querySelector('#pm').textContent = data.final_order.payment_method;
         t.content.querySelector('#gtotal').textContent = '₱' + data.final_order.overall_price;
         var clone = document.importNode(t.content, true);
+        if (!data.paid){
+            clone.querySelector('#paid').remove();
+        }
         var prod = t.content.querySelector('#trans_products').querySelector('#p_row');
-        console.log(prod);
+        clone.querySelector('#trans_products').querySelector('#p_row').remove();
         for (var i=0; data.final_order.orders.length>i; i++){
             prod.querySelector('#p_name').textContent = data.final_order.orders[i].product;
             prod.querySelector('#p_qty').textContent = data.final_order.orders[i].quantity;
             prod.querySelector('#p_del').textContent = data.final_order.orders[i].delivery;
-            prod.querySelector('#p_price').textContent = data.final_order.orders[i].product_price;
-            prod.querySelector('#p_tprice').textContent = data.final_order.orders[i].total_price;
+            prod.querySelector('#p_price').textContent = '₱' + data.final_order.orders[i].product_price;
+            prod.querySelector('#p_tprice').textContent = '₱' + data.final_order.orders[i].total_price;
             var prod_clone = prod.cloneNode(true);
             clone.querySelector('#trans_products').append(prod_clone);
         }

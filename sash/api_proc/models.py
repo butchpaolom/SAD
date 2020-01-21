@@ -67,18 +67,18 @@ class FinalOrder(models.Model):
 class CustomerInfo(models.Model):
     final_order = models.ForeignKey(FinalOrder, on_delete=models.CASCADE)
     address = models.TextField(blank=False, null=False)
-    first_name = models.CharField(max_length=30, null=True, blank=False)
-    last_name = models.CharField(max_length=30, null=True, blank=False)
-    middle_initial = models.CharField(max_length=3, null=True, blank=True)
+    first_name = models.CharField(max_length=30,  blank=False)
+    last_name = models.CharField(max_length=30,  blank=False)
+    middle_initial = models.CharField(max_length=3,  blank=True)
     contact_number = models.TextField(blank=False)
-    email = models.EmailField(blank=False, null=True)
+    email = models.EmailField(blank=False)
     date_ordered = models.DateTimeField(editable=False, default=timezone.now)
 
     choices = (
         (1, "COD"),
         (2, "PayPal")
     )
-    payment_method = models.IntegerField(choices=choices, null=True)
+    payment_method = models.IntegerField(choices=choices)
 
     def save(self, *args, **kwargs):
         self.first_name = capitalize(self.first_name)

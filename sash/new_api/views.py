@@ -48,40 +48,43 @@ class CustomerInfoView(viewsets.ModelViewSet):
     
     def create(self, request):
         data = request.data.copy()
-        print(data)
-        cart = json.loads(data['cart'])
-        print(cart[0])
-        print(data)
-        orders=[]
-        for each in cart:
-            order = InitialOrder(
-                product=Product.objects.get(id=each['id']),
-                quantity=each['quantity'],
-                total_price= (Product.objects.get(id=each['id']).delivery_price + Product.objects.get(id=each['id']).price)*int(each['quantity']))
-            order.save()
-            orders.append(order)
-        
-        finalOrder = FinalOrder()
-        finalOrder.payment_method = data['payment_method']
-        finalOrder.save() #Final order is created 
-        overall_price=0
-        for each in orders:
-            overall_price = overall_price + each.total_price
-            finalOrder.overall_price = overall_price
-            finalOrder.orders.add(each)
-            finalOrder.save()
-        
-        data['final_order'] = finalOrder.id
+        return_data = ""
+        try:
+            cart = json.loads(data['cart'])
+            orders=[]
+            for each in cart:
+                order = InitialOrder(
+                    product=Product.objects.get(id=each['id']),
+                    quantity=each['quantity'],
+                    total_price= (Product.objects.get(id=each['id']).delivery_price + Product.objects.get(id=each['id']).price)*int(each['quantity']))
+                order.save()
+                orders.append(order)
+            
+            finalOrder = FinalOrder()
+            finalOrder.payment_method = data['payment_method']
+            finalOrder.save() #Final order is created 
+            overall_price=0
+            for each in orders:
+                overall_price = overall_price + each.total_price
+                finalOrder.overall_price = overall_price
+                finalOrder.orders.add(each)
+                finalOrder.save()
+            
+            data['final_order'] = finalOrder.id
+            return_data = {
+                "trans_id": finalOrder.trans_id,
+                "payment_method": data['payment_method']
+            }
+        except:
+            pass
 
         #saving of data on dafault post request
         serializer = CustomerInfoSerializerPost(data=data) 
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        return_data = {
-            "trans_id": finalOrder.trans_id,
-            "payment_method": data['payment_method']
-        }
+        if return_data:
+            return_data = serializer.data
         return Response(return_data, status=status.HTTP_201_CREATED, headers=headers)
     
 

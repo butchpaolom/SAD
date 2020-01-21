@@ -99,7 +99,12 @@
                     var clone = document.importNode(t.content, true);
                     document.querySelector('.cart_cont').appendChild(clone);
                 }
-
+            },
+            error: function(data){
+                $('.col-form-label').removeClass('text-danger');
+                for(var i=0; Object.keys(data.responseJSON).length>i; i++){
+                $("[for='id_"+ Object.keys(data.responseJSON)[i] +"']").addClass('text-danger');
+                }
             }
         })
     })
