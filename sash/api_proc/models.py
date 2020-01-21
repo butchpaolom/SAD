@@ -51,6 +51,11 @@ class InitialOrder(models.Model):
 #Final Order (Multiple Initial Order)
 #no login required
 class FinalOrder(models.Model):
+    choices = (
+        (1, "COD"),
+        (2, "PayPal")
+    )
+    payment_method = models.IntegerField(choices=choices, null=True)
     orders = models.ManyToManyField(InitialOrder)
     overall_price = models.DecimalField(null=True, default=0, decimal_places=2, max_digits=8)
     trans_id = models.UUIDField(default=uuid.uuid4, editable=False)
@@ -73,7 +78,7 @@ class CustomerInfo(models.Model):
         (1, "COD"),
         (2, "PayPal")
     )
-    payment_method = models.IntegerField(choices, null=True)
+    payment_method = models.IntegerField(choices=choices, null=True)
 
     def save(self, *args, **kwargs):
         self.first_name = capitalize(self.first_name)
@@ -91,16 +96,15 @@ class Transaction(models.Model):
     paid = models.BooleanField(default=0)
     delivery_date = models.DateTimeField(null=True)
     delivered_date = models.DateTimeField(null=True)
+    choices = (
+        (1,"Packaging"),
+        (2,"In Transit"),
+        (3,"Out for Delivery"),
+        (4,"Validation")
+    )
+    status = models.IntegerField(choices=choices, null=True, default=4)
 
     def __str__(self):
         return '{0}'.format(self.final_order)
 
-class DeliveryStatus(models.Model):
-    transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE)
-    choices = (
-        (1, "Packaging"),
-        (2, "In Transit"),
-        (3, "Out for Delivery")
-    )
-    status = models.IntegerField(choices, null=True)
     

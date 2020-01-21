@@ -59,7 +59,6 @@
             t.content.querySelector('#added').textContent = "We have received your order. Keep in touch for validation. Please save your transaction id: " + trans_id + ".";
         var clone = document.importNode(t.content, true);
         clone.querySelector('.alert').classList.add('alert-success');
-        clone.querySelector('.alert').classList.add('text-justify');
         clone.querySelector('.alert').classList.add('p-2');
         clone.querySelector('.alert').classList.remove('mx-2');
         document.querySelector('.cart_cont').prepend(clone);

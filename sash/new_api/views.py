@@ -62,6 +62,7 @@ class CustomerInfoView(viewsets.ModelViewSet):
             orders.append(order)
         
         finalOrder = FinalOrder()
+        finalOrder.payment_method = data['payment_method']
         finalOrder.save() #Final order is created 
         overall_price=0
         for each in orders:
@@ -88,6 +89,7 @@ class TransactionView(viewsets.ModelViewSet):
     filter_fields = ('paid', 'final_order__overall_price', 'final_order__trans_id',)
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
+    lookup_field = 'final_order__trans_id'
 
     def get_permissions(self):
         if self.action in ['list', 'update']:

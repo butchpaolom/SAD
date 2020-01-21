@@ -18,6 +18,7 @@ def update_transaction(sender, instance, created, **kwargs):
         transaction = Transaction.objects.get(final_order__trans_id=instance.invoice)
         if instance.payment_status == 'Completed':
             transaction.paid = True
+            transaction.status = 1
             transaction.save()
             orders = transaction.final_order.orders.all()
             for order in orders:

@@ -16,11 +16,11 @@ def an_cart(request):
 def an_order_form(request):
     return render(request, 'android_order_form.html', {'form':CustomerInfoForm})
 
-# @csrf_exempt
+@csrf_exempt
 def an_payment_done(request):
     return render(request, 'done_payment_android.html')
 
-# @csrf_exempt
+@csrf_exempt
 def an_payment_cancelled(request):
     return render(request, 'cancelled_payment_android.html')
 

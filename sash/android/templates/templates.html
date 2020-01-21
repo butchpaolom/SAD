@@ -135,5 +135,40 @@
 </template>
 
 <template id="trans_template">
-
+    <div class="bg-light">
+        <table id="trans_table" class="table table-striped table-bordered">
+            <thead>
+                <th class="py-0 px-1">Products</th>
+                <th class="p-0 text-center">Qty</th>
+                <th class="p-0 text-center">Delivery</th>
+                <th class="p-0 text-center">Price</th>
+                <th class="p-0 text-center">T.Price</th>
+            </thead>
+            <tbody id="trans_products" class="table-body">
+                <tr class="text-dark prod_row text-primary" id="p_row">
+                    <td id="p_name" class="p-1 text-primary">CNY</td>
+                    <td id="p_qty" class="p-1 text-center">3</td>
+                    <td id="p_del" class="p-1 text-center">P50.00</td>
+                    <td id="p_price" class="p-1 text-center">P50.00</td>
+                    <td id="p_tprice" class="p-1 text-center">P500.00</td>
+                </tr>
+            </tbody>
+            <thead>
+                <th class="py-0 px-1">Transaction ID</th>
+                <th class="p-0 text-center">PM</th>
+                <th class="p-0 text-center">Paid</th>
+                <th class="p-0 text-center">Status</th>
+                <th class="p-0 text-center">G.Total</th>
+            </thead>
+            <tbody id="trans_info" class="table-body">
+                <tr class="text-dark prod_row text-primary">
+                    <td id="trans_id" class="p-1 text-primary"></td>
+                    <td id="pm" class="p-1 text-center"></td>
+                    <td id="paid"class="p-1"></td>
+                    <td id="status" class="p-1"></td>
+                    <td id="gtotal" class="p-1"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </template>

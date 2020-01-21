@@ -7,26 +7,43 @@
     </button>
 </div>
 <div class="container-fluid trans_cont">
-    <table id="cart_table" class="table table-striped table-bordered">
-        <thead>
-            <th class="py-0 px-1">Transaction ID</th>
-            <th class="p-0 text-center">Total Price</th>
-            <th class="p-0 text-center">Payment Method</th>
-            <th class="p-0 text-center">Delivery</th>
-            <th class="p-0 text-center">Total Price</th>
-        </thead>
-        <tbody id="cart_table_body" class="table-body">
-            <tr class="text-dark prod_row text-primary">
-                <td class="p-1 text-primary product" id="prod_name"></td>
-                <td class="p-1 text-center" id="prod_quantity"></td>
-                <td class="p-1" id="prod_price"></td>
-                <td class="p-1" id="del_price"></td>
-                <td class="p-1 tp" id="total_price"></td>
-            </tr>
-        </tbody>
-    </table>
+    <p class="h4">Transactions</p>
+    <span>Here are your current Transactions.</span>
 </div>
 <script>
-    
+    const transacs = JSON.parse(window.localStorage.getItem('transactions'));
+    console.log(transacs.length);
+    for (var i=0; transacs.length>i; i++)
+    {
+     $.ajax({
+            url: "/new_api/api_transaction/" + transacs[i],
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                console.log(data);
+                render_transaction(data);
+                }
+            });
+    }
+    function render_transaction(data){
+        var t = document.querySelector('#trans_template');
+        t.content.querySelector('#trans_id').textContent = data.final_order.trans_id;
+        t.content.querySelector('#status').textContent = data.status;
+        t.content.querySelector('#pm').textContent = data.final_order.payment_method;
+        t.content.querySelector('#gtotal').textContent = '₱' + data.final_order.overall_price;
+        var clone = document.importNode(t.content, true);
+        var prod = t.content.querySelector('#trans_products').querySelector('#p_row');
+        console.log(prod);
+        for (var i=0; data.final_order.orders.length>i; i++){
+            prod.querySelector('#p_name').textContent = data.final_order.orders[i].product;
+            prod.querySelector('#p_qty').textContent = data.final_order.orders[i].quantity;
+            prod.querySelector('#p_del').textContent = data.final_order.orders[i].delivery;
+            prod.querySelector('#p_price').textContent = data.final_order.orders[i].product_price;
+            prod.querySelector('#p_tprice').textContent = data.final_order.orders[i].total_price;
+            var prod_clone = prod.cloneNode(true);
+            clone.querySelector('#trans_products').append(prod_clone);
+        }
+        document.querySelector('.trans_cont').appendChild(clone);
+    }
 </script>
 {% endblock content %}
