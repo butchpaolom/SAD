@@ -2,7 +2,7 @@
 <template id="prod_template">
     <div class="product_card col-3 p-0 m-0 animated bounceInLeft">
         <div class="card border-0 p-0 m-0">
-            <div class="card-body bg-whitem-0 p-0" data-placement="left" data-toggle="tooltip" title="">
+            <div class="card-body bg-white m-0 p-0" data-placement="left" data-toggle="tooltip" title="">
                     <div class="square" id="pic">
                     </div>
                     <h6 id="product_text" class="card-title prod_name text-truncate text-center text-dark mt-2 my-2"></h6>
@@ -94,7 +94,7 @@
     <img id="img_logo" class="img-fluid">
 </template>
 <!--Cart Template-->
-<template id="cart_template">
+<template id="cart_row_template">
         <tr class="text-dark prod_row text-primary">
             <td class="p-1 text-primary product" id="prod_name"></td>
             <td class="p-1 text-center" id="prod_quantity"></td>
@@ -124,7 +124,7 @@
 
 <template id="empty_cart_template">
     <div class="container-fluid m-0 p-0">
-        <div class="jumbotron">
+        <div class="jumbotron bg-white">
             <span class="display-4 text-dark">Hello, your cart is empty!</span>
             <hr class="mb-4">
             <span class="h6">
@@ -132,4 +132,8 @@
             </span>
           </div>
     </div>
+</template>
+
+<template id="trans_template">
+
 </template>

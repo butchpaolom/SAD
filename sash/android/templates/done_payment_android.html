@@ -1,0 +1,22 @@
+{% extends 'base_android.html' %} {% block content %}
+{% include "templates.html" %}
+
+<div class="container-fluid px-0">
+    <div class="row d-flex justify-content-end mx-0 pr-3" style="background-color: #222222;">
+        <button class="btn btn-outline-light my-2 ml-3 text-light animated bounceInLeft" onclick="window.location = {% url 'an_landing' %}" id="back">
+            <i class="fa fa-caret-left my-1 mr-2"></i>Go Back
+        </button>
+    </div>
+    <div class="row ">
+
+        <div class="col-md-12 jumbotron ">
+            <div class="text-center bg-lg ">
+                <h1><i class="fa fa-check " style="color: green "></i></h1>
+                <h4 style="color: green ">Thank You!</h4>
+                <h6 class="mb-4">Your payment has been submitted</h6>
+                <button class="btn btn-success text-center ">Continue Shopping</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

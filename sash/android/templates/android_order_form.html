@@ -50,6 +50,21 @@
                 $('.submit').attr('disabled', true).addClass('btn-outline-primary').removeClass('btn-primary');
             }
         });
+    function render_alert(trans_id){
+        $('html, body').animate({
+        scrollTop: $("#bar").offset().top
+        }, 250);
+        $('.alert').remove(); 
+        var t = document.querySelector('#alert_template');
+            t.content.querySelector('#added').textContent = "We have received your order. Keep in touch for validation. Please save your transaction id: " + trans_id + ".";
+        var clone = document.importNode(t.content, true);
+        clone.querySelector('.alert').classList.add('alert-success');
+        clone.querySelector('.alert').classList.add('text-justify');
+        clone.querySelector('.alert').classList.add('p-2');
+        clone.querySelector('.alert').classList.remove('mx-2');
+        document.querySelector('.cart_cont').prepend(clone);
+    }
+    
     $('.submit').click(function() {
         const cart = window.localStorage.getItem('cart');
         $.ajax({
@@ -68,12 +83,22 @@
             },
             success: function(data){
                 var trans = JSON.parse(window.localStorage.getItem('transactions'));
+                const cart = [];
+                window.localStorage.setItem('cart', JSON.stringify(cart));
                 if (trans&&data.payment_method==2){
                     trans.push(data.trans_id);
-                    console.log(data);
                     window.localStorage.setItem('transactions', JSON.stringify(trans));
-                    // window.location = "{% url 'payment_process' %}?trans_id=" + data.trans_id;
                     $('.modal-body').empty().load("{% url 'payment_process' %}?trans_id=" + data.trans_id);
+                }
+                else if (trans&&data.payment_method==1){
+                    $('.cart_cont').empty();
+                    trans.push(data.trans_id);
+                    window.localStorage.setItem('transactions', JSON.stringify(trans));
+                    $("#modal").modal('hide');
+                    render_alert(data.trans_id);
+                    var t = document.querySelector('#empty_cart_template');
+                    var clone = document.importNode(t.content, true);
+                    document.querySelector('.cart_cont').appendChild(clone);
                 }
 
             }

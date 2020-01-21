@@ -12,9 +12,14 @@ from front_ep.models import FrontAsset
 #test
 def payment_process(request):
     try:
-        trans_id = request.session['trans_id']
-    except:
         trans_id = request.GET['trans_id']
+        done = 'an_payment_done'
+        cancel = 'an_payment_cancelled'
+    except:
+        trans_id = request.session['trans_id']
+        done = 'payment_done'
+        cancel = 'payment_cancelled'
+
     print(trans_id)
     order = FinalOrder.objects.get(trans_id=trans_id)
     host = request.get_host()
@@ -26,8 +31,8 @@ def payment_process(request):
         'invoice': str(trans_id),
         'currency_code': 'USD',
         'notify_url': 'http://{}{}'.format(host, reverse('paypal-ipn')),
-        'return_url': 'http://{}{}'.format(host, reverse('payment_done')),
-        'cancel_return': 'http://{}{}'.format(host, reverse('payment_cancelled')),
+        'return_url': 'http://{}{}'.format(host, reverse(done)),
+        'cancel_return': 'http://{}{}'.format(host, reverse(cancel)),
     }
 
     form = PayPalPaymentsForm(initial=paypal_dict)

@@ -36,7 +36,7 @@ class CategoryView(viewsets.ModelViewSet):
 class CustomerInfoView(viewsets.ModelViewSet):
     queryset = CustomerInfo.objects.all()
     serializer_class = CustomerInfoSerializerGet
-
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_permissions(self):
         if self.action == 'create':
@@ -82,16 +82,18 @@ class CustomerInfoView(viewsets.ModelViewSet):
             "payment_method": data['payment_method']
         }
         return Response(return_data, status=status.HTTP_201_CREATED, headers=headers)
+    
 
 class TransactionView(viewsets.ModelViewSet):
-    filter_fields = ('paid', 'final_order__overall_price', 'final_order__trans_id')
+    filter_fields = ('paid', 'final_order__overall_price', 'final_order__trans_id',)
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
     def get_permissions(self):
-        if self.action   in ['list', 'retrieve', 'update']:
+        if self.action in ['list', 'update']:
             permission_classes = [permissions.IsAuthenticated]
+        elif self.action in ['retrieve']:
+            permission_classes = [permissions.AllowAny]
         else:
             permission_classes = [permissions.IsAdminUser]
 
