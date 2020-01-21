@@ -68,9 +68,14 @@
             },
             success: function(data){
                 var trans = JSON.parse(window.localStorage.getItem('transactions'));
-                trans.push(data.trans_id);
-                console.log(data);
-                window.localStorage.setItem('transactions', JSON.stringify(trans));
+                if (trans&&data.payment_method==2){
+                    trans.push(data.trans_id);
+                    console.log(data);
+                    window.localStorage.setItem('transactions', JSON.stringify(trans));
+                    // window.location = "{% url 'payment_process' %}?trans_id=" + data.trans_id;
+                    $('.modal-body').empty().load("{% url 'payment_process' %}?trans_id=" + data.trans_id);
+                }
+
             }
         })
     })
