@@ -19,20 +19,25 @@
     </div>
 
     <div class="prod_filters my-0">
+
+        <div class="row">
+        <div class="col-6 pl-1 p-0">
         <div id="accordion" role="tablist">
             <div class="card border-0">
               <div class="card-header py-2" role="tab" id="headingOne">
                 <h5 class="mb-0">
                   <a class="collapsed" data-toggle="collapse" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                    <span class="text-dark h6">Show/Sort</span>
+                    <div class="text-center">
+                    <span class="text-dark h6">Show</span>
+                    </div>
                   </a>
                 </h5>
               </div>
-              <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+              <div id="collapseOne" class="collapse ml-3" role="tabpanel" aria-labelledby="headingOne">
                 <div class="card-body py-1 px-2">
                     <div class="container-fluid p-0">
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-12">
                                 <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input shower" id="show_names">
                                     <label class="custom-control-label" for="show_names">Show product name</label>
@@ -42,9 +47,33 @@
                                     <label class="custom-control-label" for="show_price">Show product price</label>
                                 </div>
                             </div>
-                            <div class="col-6">
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6 pr-1 p-0">
+          <div id="accordion" role="tablist">
+            <div class="card border-0">
+              <div class="card-header py-2" role="tab" id="headingTwo">
+                <h5 class="mb-0">
+                  <a class="collapsed" data-toggle="collapse" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    <div class="text-center">
+                    <span class="text-dark h6">Sort</span>
+                    </div>
+                  </a>
+                </h5>
+              </div>
+              <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
+                <div class="card-body py-1 px-2">
+                    <div class="container-fluid p-0">
+                        <div class="row">
+                            <div class="col-12">
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input sort" id="views_desc" data-id="views">
+                                    <input type="checkbox" class="custom-control-input sort" id="views_desc" data-id="-views">
                                     <label class="custom-control-label" for="views_desc">Popular</label>
                                 </div>
                                 <div class="custom-control custom-checkbox">
@@ -62,6 +91,9 @@
               </div>
             </div>
           </div>
+        </div>
+
+        </div>
           
     </div>
     
@@ -385,6 +417,7 @@
             dataType: 'json',
             success: function(data) {
                 $('.prod_container').empty();
+                $('.pg_c').remove();
                 $('#back').show().removeClass('animated bounceOutLeft').addClass('animated bounceInLeft').attr("disabled", false);
                 load_product_detail(data);
             }

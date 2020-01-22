@@ -55,7 +55,7 @@ class TransactionSerializer(serializers.ModelSerializer):
 class FrontAssetSerializer(serializers.ModelSerializer):
     class Meta:
         model = FrontAsset
-        fields = ['car_img1', 'car_img2', 'car_img3', 'company_name', 'company_logo', 'address', 'colorscheme']
+        fields = ['car_img1', 'car_img2', 'car_img3', 'company_name', 'company_logo', 'address', 'colorscheme', 'about']
 
 
 

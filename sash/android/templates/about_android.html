@@ -1,0 +1,26 @@
+{% extends "base_android.html" %}
+{% block content %}
+{% include "modal.html" %}
+{% include "templates.html" %}
+<div class="row d-flex justify-content-end mx-0 mb-4 pr-3 cscheme" id="bar" style="background-color: #222222;">
+    <button class="btn btn-outline-light my-2 ml-3 text-light animated bounceInLeft" onclick="window.history.back();" id="back">
+        <i class="fa fa-caret-left my-1 mr-2"></i>Go Back
+    </button>
+</div>
+<div class="container-fluid trans_cont text-center">
+    <p class="h4">About</p>
+    <div class="text-justify">
+    <span id="about">Here are your current Transactions.</span>
+    </div>
+</div>
+<script>
+     $.ajax({
+            url: "/new_api/api_frontasset/1",
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                $('#about').text(data.about);
+                }
+            });
+</script>
+{% endblock content %}

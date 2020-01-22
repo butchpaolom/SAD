@@ -81,11 +81,11 @@
                 cart: cart,
             },
             success: function(data){
-                const count = JSON.parse(window.localStorage.getItem('cart')).length;
-                $('#cart_count').html('(' + count + ')');
                 var trans = JSON.parse(window.localStorage.getItem('transactions'));
                 const cart = [];
                 window.localStorage.setItem('cart', JSON.stringify(cart));
+                const count = JSON.parse(window.localStorage.getItem('cart')).length;
+                $('#cart_count').html('(' + count + ')');
                 if (trans&&data.payment_method==2){
                     trans.push(data.trans_id);
                     window.localStorage.setItem('transactions', JSON.stringify(trans));

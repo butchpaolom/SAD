@@ -1,5 +1,6 @@
 {% extends "base_android.html" %}
 {% block content %}
+{% include "modal.html" %}
 {% include "templates.html" %}
 <div class="row d-flex justify-content-end mx-0 mb-4 pr-3 cscheme" id="bar" style="background-color: #222222;">
     <button class="btn btn-outline-light my-2 ml-3 text-light animated bounceInLeft" onclick="window.history.back();" id="back">
@@ -13,7 +14,12 @@
 </div>
 <script>
     const transacs = JSON.parse(window.localStorage.getItem('transactions'));
-    console.log(transacs.length);
+    if(!transacs.length){
+        $('.trans_cont').empty();
+        var t = document.querySelector('#empty_trans_template');
+        var clone = document.importNode(t.content, true);
+        document.querySelector('.trans_cont').appendChild(clone);
+    }
     for (var i=0; transacs.length>i; i++)
     {
      $.ajax({
@@ -37,6 +43,7 @@
         t.content.querySelector('#trans_id').textContent = data.final_order.trans_id;
         t.content.querySelector('#status').textContent = data.status;
         t.content.querySelector('#pm').textContent = data.final_order.payment_method;
+        t.content.querySelector('#pm').setAttribute('data-id', "{% url 'payment_process' %}" + '?trans_id=' + data.final_order.trans_id);
         t.content.querySelector('#gtotal').textContent = '₱' + data.final_order.overall_price;
         var clone = document.importNode(t.content, true);
         if (!data.paid){
@@ -47,7 +54,7 @@
         for (var i=0; data.final_order.orders.length>i; i++){
             prod.querySelector('#p_name').textContent = data.final_order.orders[i].product;
             prod.querySelector('#p_qty').textContent = data.final_order.orders[i].quantity;
-            prod.querySelector('#p_del').textContent = data.final_order.orders[i].delivery;
+            prod.querySelector('#p_del').textContent = '₱' + data.final_order.orders[i].delivery;
             prod.querySelector('#p_price').textContent = '₱' + data.final_order.orders[i].product_price;
             prod.querySelector('#p_tprice').textContent = '₱' + data.final_order.orders[i].total_price;
             var prod_clone = prod.cloneNode(true);
@@ -55,5 +62,8 @@
         }
         document.querySelector('.trans_cont').appendChild(clone);
     }
+    $(document).on('click', '#pm', function(){
+        window.location = $(this).data('id');
+    });
 </script>
 {% endblock content %}

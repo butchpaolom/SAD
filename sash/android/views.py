@@ -26,3 +26,6 @@ def an_payment_cancelled(request):
 
 def an_transactions(request):
     return render(request, 'transactions_android.html')
+
+def an_about(request):
+    return render(request, 'about_android.html')

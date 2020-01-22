@@ -44,11 +44,10 @@ The above copyright notice and this permission notice shall be included in all c
                     <div class="logo">
                       <a href="http://www.creative-tim.com" class="simple-text logo-mini">
                         <div class="logo-image-small">
-                          <img src="{% static '/assets/img/logo.jpg' %}">
+                          <img id="logoplace">
                         </div>
                       </a>
-                      <a href="/" class="simple-text logo-normal">
-                        Power Sash
+                      <a href="/" class="simple-text logo-normal cname">
                         <!-- <div class="logo-image-big">
                           <img src="../assets/img/logo-big.png">
                         </div> -->
@@ -144,6 +143,15 @@ The above copyright notice and this permission notice shall be included in all c
     $(".action").each(function () {
       $(this).modalForm({formURL: $(this).data('id')});
     });
+    $.ajax({
+            url: "/new_api/api_frontasset/1",
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                $('#logoplace').attr("src",data.company_logo);
+                $('.cname').text(data.company_name);
+                }
+            });
 </script>
 
 </body>
