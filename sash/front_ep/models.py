@@ -13,6 +13,7 @@ class FrontAsset(models.Model):
     mission = models.TextField()
     vision = models.TextField()
     address = models.TextField()
+    colorscheme = models.CharField(max_length=7, default="#222222")
 
     def __str__(self):
         return "Front End Assets"

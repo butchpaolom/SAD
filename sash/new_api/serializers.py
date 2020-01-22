@@ -10,7 +10,7 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
     category = serializers.CharField(source='category_name')
     class Meta:
         model = Product
-        fields = ['url', 'id', 'product_name', 'description', 'category', 'product_image', 'product_image1', 'product_image2', 'price', 'stock', 'delivery_price']
+        fields = ['url', 'id', 'product_name', 'description', 'category', 'product_image', 'product_image1', 'product_image2', 'price', 'stock', 'delivery_price', 'views']
 #done
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -55,7 +55,7 @@ class TransactionSerializer(serializers.ModelSerializer):
 class FrontAssetSerializer(serializers.ModelSerializer):
     class Meta:
         model = FrontAsset
-        fields = ['car_img1', 'car_img2', 'car_img3', 'company_name', 'company_logo']
+        fields = ['car_img1', 'car_img2', 'car_img3', 'company_name', 'company_logo', 'address', 'colorscheme']
 
 
 

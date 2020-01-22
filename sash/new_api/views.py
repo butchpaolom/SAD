@@ -11,6 +11,7 @@ from rest_framework import status
 from front_ep.models import *
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 import json
+from .threader import *
 # Create your views here.
 
 class FrontAssetView(generics.RetrieveAPIView):
@@ -19,12 +20,22 @@ class FrontAssetView(generics.RetrieveAPIView):
 
 class ProductView(viewsets.ModelViewSet):
     search_fields = ['category__category_name', 'product_name']
-    filter_fields = ['category__category_name', 'product_name']
+    filter_fields = ['category__category_name', 'product_name', 'price']
+    ordering_fields = ['views', 'price']
     queryset = Product.objects.all()
-    filter_backends = [filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
+    filter_backends = [filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend, filters.OrderingFilter]
     
     serializer_class = ProductSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def retrieve(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        print(self.object.id)
+        product = Product.objects.get(id=self.object.id)
+        product.views += 1
+        do_thread(product.save(), arg=None)
+        serializer = self.get_serializer(self.object)
+        return Response(serializer.data)
 
 class CategoryView(viewsets.ModelViewSet):
     queryset = Category.objects.all()

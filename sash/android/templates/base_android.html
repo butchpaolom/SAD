@@ -27,7 +27,7 @@
         </div></div>
       </div>
 		<div class="wrapper d-flex align-items-stretch">
-			<nav id="sidebar" class="position-fixed h-100 shadow" style="z-index:4;">
+			<nav id="sidebar" class="position-fixed h-100 shadow cscheme" style="z-index:4;">
 				<div class="custom-menu">
 					<button type="button" id="sidebarCollapse" class="btn btn-primary">
 	          <i id="icon_toolbar" class="fa fa-caret-right"></i>
@@ -35,7 +35,8 @@
 	        </button>
         </div>
 				<div class="p-4">
-		  		<h1><a class="logo">Adidas <span>Adidas Online</span></a></h1>
+          <h1 class="mb-1"><a class="logo">Adidas</a></h1>
+          <span id="address"></span>
 	        <ul class="list-unstyled components mb-5">
 	          <li>
 	            <a href="{% url 'an_landing' %}"><span class="fa fa-home mr-3"></span>Home</a>
@@ -53,11 +54,13 @@
 	      </div>
       </nav>
         <div id="content">
-            <div class="logo_img container-fluid p-2">
+          <div class="container-fluid d-flex justify-content-center">
+            <div class="logo_img col-10 p-4">
             </div>
-          <div class="row d-flex justify-content-center mx-0 text-center" style="background-color: #222222;">
+          </div>
+          <div class="row d-flex justify-content-center mx-0 text-center cscheme" style="background-color: #222222;">
             <a href="{% url 'an_landing' %}" class="text-light col-6 my-2 h6" href="{% url 'an_landing' %}">Home</a>
-            <a href="{% url 'an_cart' %}" class="text-light col-6 my-2 h6"><i class="fa fa-shopping-cart mr-2"></i>Cart</a>
+            <a href="{% url 'an_cart' %}" class="text-light col-6 my-2 h6 tbar_cart"><i class="fa fa-shopping-cart mr-2"></i>Cart</a>
         </div>
         <div class="container-fluid car px-0">
         </div>
@@ -100,6 +103,11 @@
             method: 'GET',
             dataType: 'json',
             success: function(data) {
+                  setTimeout(function (){
+                    $('.cscheme').css("background-color", data.colorscheme);
+                  },200);
+                  $('.logo').html(data.company_name);
+                  $('#address').html(data.address);
                   var t = document.querySelector('#car_template');
                   var l = document.querySelector('#img_template');
                   l.content.querySelector('#img_logo').src = data.company_logo;

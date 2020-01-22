@@ -2,16 +2,16 @@
 {% load static %}
 {% block content %}
 {% include "templates.html" %}
-<div class="container-fluid px-0 mx-0">
+<div class="container-fluid px-0 mx-0 page">
     <div class="cat_container row owl-carousel owl-theme w-100 px-0 mx-0">
     </div>
 
-    <div class="row d-flex justify-content-end mx-0 mb-1" style="background-color: #222222;">
+    <div class="row d-flex justify-content-end mx-0 mb-1 cscheme" style="background-color: #222222;">
         <button class="btn btn-outline-light my-2 ml-3 text-light animated bounceInLeft" style="display:none" id="back">
             <i class="fa fa-caret-left my-1 mr-2"></i>Go Back
         </button>
         <div class="input-group my-2 col-5 animated bounceInRight" id="search_bar">
-            <input type="text" class="form-control border text-light" style="background-color: #222222;" placeholder="Search" id="search_input">
+            <input type="text" class="form-control border text-light cscheme" style="background-color: #222222;" placeholder="Search" id="search_input">
             <div class="input-group-append">
                 <button class="btn btn-outline-light" id="search_button" type="button" disabled><i class="fa fa-search"></i></button>
             </div>
@@ -24,18 +24,40 @@
               <div class="card-header py-2" role="tab" id="headingOne">
                 <h5 class="mb-0">
                   <a class="collapsed" data-toggle="collapse" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                    <span class="text-dark h6">Filters</span>
+                    <span class="text-dark h6">Show/Sort</span>
                   </a>
                 </h5>
               </div>
               <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne">
                 <div class="card-body py-1 px-2">
                     <div class="container-fluid p-0">
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="show_names" checked>
-                        <label class="custom-control-label" for="show_names">Show product names</label>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input shower" id="show_names">
+                                    <label class="custom-control-label" for="show_names">Show product name</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input shower" id="show_price">
+                                    <label class="custom-control-label" for="show_price">Show product price</label>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input sort" id="views_desc" data-id="views">
+                                    <label class="custom-control-label" for="views_desc">Popular</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input sort" id="price_asc" data-id="price">
+                                    <label class="custom-control-label" for="price_asc">Price low to high</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input sort" id="price_des" data-id="-price">
+                                    <label class="custom-control-label" for="price_des">Price high to low</label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
                 </div>
               </div>
             </div>
@@ -52,18 +74,30 @@
 
     <script>
     $(document).ready(function (){
-        load_landing();
         const urlParams = new URLSearchParams(window.location.search);
         const myParam = urlParams.get('action');
         const pid =  urlParams.get('id');
         const cart = [];
         const transid_single = "";
         const trans_id = []
+        const last = {
+            "fnc":"landing",
+            "srch": "",
+            "ctg": "",
+            "page": 1,
+            "spage": 1,
+            "cpage": 1,
+        }
         const settings = {
             show_pn: true,
+            show_pp: false,
+            ordering: "views",
             };
         if(!window.localStorage.getItem('settings')){
         window.localStorage.setItem('settings', JSON.stringify(settings));
+        }
+        if(!window.localStorage.getItem('last')){
+        window.localStorage.setItem('last', JSON.stringify(last));
         }
         if (myParam=="load_product"){
             render_product_detail(pid);
@@ -74,6 +108,7 @@
         if(!window.localStorage.getItem('transactions')){
         window.localStorage.setItem('transactions', JSON.stringify(trans_id));
         }
+        load_landing();
     });
     function update_cart(){
         const count = JSON.parse(window.localStorage.getItem('cart')).length;
@@ -118,13 +153,14 @@
                 t.content.querySelector('.product_card').id = products[i].id;
                 t.content.querySelector('#pic').style = "background-image: url('" + products[i].product_image + "');width: 100%;padding-bottom: 100%;background-size: cover;background-position: center;";
                 t.content.querySelector('#product_text').textContent = products[i].product_name;
+                t.content.querySelector('#product_price').textContent = '₱' + products[i].price;
                 var clone = document.importNode(t.content, true);
                 document.querySelector('.prod_container').appendChild(clone);
             }
             $('.prod_container').hide();
             setTimeout(function(){
                 $('.prod_container').show();
-            }, 500);
+            }, 150);
         }
     }
     function load_remove_button(id){
@@ -179,17 +215,29 @@
             }
         }
     }
-    function search(search_value){
+    function search(search_value, spage){
+        const order = JSON.parse(window.localStorage.getItem('settings')).ordering;
+        if (!spage){
+            spage=1;
+        }
         $.ajax({
-            url: "/new_api/api_products/?search=" + search_value,
+            url: "/new_api/api_products/?search=" + search_value + '&ordering=' + order + '&page=' + spage,
             method: 'GET',
             dataType: 'json',
             success: function(data) {
+                $('.pg').remove();
+                $('.pg_c').remove();
+                var old = JSON.parse(window.localStorage.getItem('last'));
+                old.spage = spage;
+                old.srch = search_value;
+                old.fnc = "search";
+                window.localStorage.setItem('last', JSON.stringify(old));
                 $('.prod_container').empty();
                 $('#back').removeClass('animated bounceInLeft').addClass('animated bounceOutLeft');
                 if (data.count > 0){
                 prod_length = data.results.length;
                 products = data.results;
+                pager(data.previous,data.next, spage);
                 if (search_value != ""){
                     $('.prod_container').append("<div class='container-fluid text-center mb-2'><h5 class='animated bounceIn'>Showing (" + data.count + ") results for '" + search_value + "'.</h5></div>");
                 }
@@ -210,13 +258,21 @@
     }
     });
 
-    function filter_category(category){
+    function filter_category(category, cpage){
+        const order = JSON.parse(window.localStorage.getItem('settings')).ordering;
         $('.prod_container').empty();
         $.ajax({
-            url: "/new_api/api_products/?category__category_name=" + category,
+            url: "/new_api/api_products/?category__category_name=" + category + '&page=' + cpage + '&ordering=' + order,
             method: 'GET',
             dataType: 'json',
             success: function(data) {
+                $('.pg').remove();
+                $('.pg_c').remove();
+                var old = JSON.parse(window.localStorage.getItem('last'));
+                old.cpage = cpage;
+                old.ctg = category;
+                old.fnc = "category";
+                window.localStorage.setItem('last', JSON.stringify(old));
                 $('#back').removeClass('animated bounceInLeft').addClass('animated bounceOutLeft');
                 if (data.count > 0){
                 prod_length = data.results.length;
@@ -224,6 +280,9 @@
                 $('.prod_container').append("<div class='container-fluid text-center mb-2'><h5 class='animated bounceIn'>" + category + "</h5></div>");
                 load_product(products);
                 check_show_names();
+                check_sort();
+                check_show_price();
+                pager(data.previous,data.next, cpage);
                 $('.prod_filters').addClass('animated bounceInLeft').show();
                 }
                 else if (data.count == 0){
@@ -238,21 +297,54 @@
         render_category();
     }
 
-    function render_products() {
+    function render_products(page) {
+        const order = JSON.parse(window.localStorage.getItem('settings')).ordering;
+        if (!page){
+            page=1;
+        }
         $.ajax({
-            url: "/new_api/api_products/",
+            url: "/new_api/api_products/?ordering=" + order  + '&page=' + page,
             method: 'GET',
             dataType: 'json',
             success: function(data) {
+                $('.pg_c').remove();
+                var old = JSON.parse(window.localStorage.getItem('last'));
+                old.fnc = "landing";
+                old.page = page;
+                window.localStorage.setItem('last', JSON.stringify(old));
                 $('#back').removeClass('animated bounceInLeft').addClass('animated bounceOutLeft').attr("disabled", true);
                 $('.prod_container').empty();
                 prod_length = data.results.length;
                 products = data.results;
                 load_product(products);
                 check_show_names();
+                check_sort();
+                check_show_price();
                 $('.prod_filters').addClass('animated bounceInLeft').show();
+                pager(data.previous,data.next, page);
             }
         });
+    }
+
+    function pager(prev,next,current){
+        var t = document.querySelector('#pager_template');
+        t.content.querySelector('#next').setAttribute('data-id', next);
+        if (prev){
+            t.content.querySelector('#prev').setAttribute('data-id', parseInt(current)-1);
+            t.content.querySelector('#prev').disabled = false;
+        }
+        else{
+            t.content.querySelector('#prev').disabled = true;
+        }
+        if (next){
+            t.content.querySelector('#next').setAttribute('data-id', parseInt(current)+1);
+            t.content.querySelector('#next').disabled = false;
+        }
+        else{
+            t.content.querySelector('#next').disabled = true;
+        }
+        var clone = document.importNode(t.content, true);
+        document.querySelector('.page').appendChild(clone);
     }
 
     function render_category() {
@@ -323,7 +415,8 @@
     //Click category card
     $(document).on('click', '.cat_card', function() {
         id = $(this).attr('id');
-        filter_category(id);
+        const last = JSON.parse(window.localStorage.getItem('last'));
+        filter_category(id, last.cpage);
     });
     //Change images of product detail
     $(document).on('click','.img_bt', function(){
@@ -379,15 +472,73 @@
             $('.prod_name').removeClass('animated bounceIn').hide();
             $('#show_names').prop("checked", show);
         }
-        
+    }
+    function check_show_price(){    
+        const show=JSON.parse(window.localStorage.getItem('settings')).show_pp;
+        if (show == true){
+            $('.prod_price').addClass('animated bounceIn').show();
+            $('#show_price').prop("checked", show);
+            }
+        else if (show == false){
+            $('.prod_price').removeClass('animated bounceIn').hide();
+            $('#show_price').prop("checked", show);
+        }
     }
 
-    $(document).on('change', '#show_names' ,function(){
-        const show = $('#show_names').prop("checked");
+    function check_sort(){
+        $('.sort').prop("checked", false);
+        const sort=JSON.parse(window.localStorage.getItem('settings')).ordering;
+        const sort_checkbox = $('.sort')
+        for (var i=0; sort_checkbox.length>i; i++){
+            if (sort_checkbox[i].getAttribute('data-id')==sort){
+                sort_checkbox[i].checked=true;
+            }
+        }
+    }
+
+    $(document).on('change', '.shower' ,function(){
+        const shown = $('#show_names').prop("checked");
+        const showp = $('#show_price').prop("checked");
         var settings=JSON.parse(window.localStorage.getItem('settings'));
-        settings.show_pn = show;
+        settings.show_pn = shown;
+        settings.show_pp = showp;
         window.localStorage.setItem('settings', JSON.stringify(settings));
         check_show_names(); 
+        check_show_price();
+        check_sort();
+    });
+
+    $(document).on('change', '.sort' ,function(){
+        $('.sort').not(this).prop("checked", false);
+        const sort = $(this).attr('data-id');
+        var settings=JSON.parse(window.localStorage.getItem('settings'));
+        settings.ordering = sort;
+        window.localStorage.setItem('settings', JSON.stringify(settings));
+        const last = JSON.parse(window.localStorage.getItem('last'));
+        const fnc = last.fnc;
+        if (fnc == "landing"){
+            render_products(last.page);
+        }
+        else if (fnc == "search"){
+            search(last.srch, last.spage);
+        }
+        else if (fnc == "category"){
+            filter_category(last.ctg, last.cpage);
+        }
+    });
+    
+    $(document).on('click', '.pg' ,function(){
+        const last = JSON.parse(window.localStorage.getItem('last'));
+        page = $(this).attr('data-id');
+        if (last.fnc == "landing"){
+            render_products(page);
+        }
+        else if (last.fnc == "search"){
+            search(last.srch, page);
+        }
+        else if (last.fnc == "category"){
+            filter_category(last.ctg, page);
+        }
     });
     </script>
     

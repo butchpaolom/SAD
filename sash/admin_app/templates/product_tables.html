@@ -8,51 +8,60 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h4 class="card-title">Products</h4>
+                <div class="row">
+                <div class="col"><h4 class="card-title">Products</h4></div>
+                <div class="col"><button class="action px-3 btn btn-info float-right" data-id="{% url 'admin_product_create' %}"><i class="fa fa-plus pr-2"></i>Product</button></div>
               </div>
-              <div class="card-body">
-                  <button class="action px-3 btn btn-info float-right" data-id="{% url 'admin_product_create' %}"><i class="fa fa-plus pr-2"></i>Product</button>
-                  <table class="table table-striped table-bordered" id="product-table">
-                    <thead class="text-primary">
-                      <th>#</th>
-                      <th>Product Name</th>
-                      <th>Category</th>
-                      <th>Price</th>
-                      <th>Stock</th>
-                      <th>Views</th>
-                      <th>Delivery Price</th>
-                      <th class="no-sort text-center">Actions</th>
-                    </thead>
-                    <tbody>
-                    {% for product in products %}
-                      <tr {%if not product.in_stock %}class="table-danger"{% endif %}>
-                        <td>{{ forloop.counter }}</td>
-                        <td id="product_name{{product.id}}">
-                          {{ product.product_name }}
-                        </td>
-                        <td id="category{{product.id}}">
-                          {{ product.category}}
-                        </td>
-                        <td id="price{{product.id}}">
-                         ₱{{ product.price }}
-                        </td>
-                        <td id="stock{{product.id}}">
-                          {{ product.stock }}
-                        </td>
-                        <td>
-                          {{ product.views }}
-                        </td>
-                        <td id ="delivery_price{{product.id}}">
-                          ₱{{ product.delivery_price }}
-                        </td>
-                        <td class="text-center">
-                          <button class="action btn btn-info py-2 px-3" data-id="{% url 'admin_product_update' product.pk %}"><i class="fa fa-edit"></i></button>
-                          <button class="action btn btn-danger py-2 px-3" data-id="{% url 'admin_product_delete' product.pk %}"><i class="fa fa-trash"></i></button>
-                        </td>
-                      </tr>
-                      {% endfor %}
-                    </tbody>
-                  </table>
+              </div>
+              <div class="card-body border">
+                  
+                  <div class="overflow-auto">
+                    <div class="container-fluid table-responsive">
+                      <div class="row flex-row flex-nowrap">
+                        <table class="table table-striped table-bordered overflow-auto" id="product-table" >
+                          <thead class="text-primary">
+                            <th class="col">#</th>
+                            <th class="col">Item Name</th>
+                            <th class="col">Categ</th>
+                            <th class="col">Price</th>
+                            <th class="col">Stock</th>
+                            <th class="col">Views</th>
+                            <th class="col">Delivery Price</th>
+                            <th class="col" class="no-sort text-center">Actions</th>
+                          </thead>
+                          <tbody>
+                          {% for product in products %}
+                            <tr {%if not product.in_stock %}class="table-danger"{% endif %}>
+                              <td>{{ forloop.counter }}</td>
+                              <td id="product_name{{product.id}}">
+                                {{ product.product_name }}
+                              </td>
+                              <td id="category{{product.id}}">
+                                {{ product.category}}
+                              </td>
+                              <td id="price{{product.id}}">
+                              ₱{{ product.price }}
+                              </td>
+                              <td id="stock{{product.id}}">
+                                {{ product.stock }}
+                              </td>
+                              <td>
+                                {{ product.views }}
+                              </td>
+                              <td id ="delivery_price{{product.id}}">
+                                ₱{{ product.delivery_price }}
+                              </td>
+                              <td class="text-center">
+                                <button class="action btn btn-info py-2 px-3" data-id="{% url 'admin_product_update' product.pk %}"><i class="fa fa-edit"></i></button>
+                                <button class="action btn btn-danger py-2 px-3" data-id="{% url 'admin_product_delete' product.pk %}"><i class="fa fa-trash"></i></button>
+                              </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                </div>
               </div>
             </div>
           </div>
@@ -80,6 +89,8 @@
       });
       </script>
       <script>
+
+   
       $(".action").each(function () {
         $(this).modalForm({formURL: $(this).data('id')});
       });
