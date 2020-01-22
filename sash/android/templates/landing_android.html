@@ -19,22 +19,25 @@
     </div>
 
     <div class="prod_filters my-0">
+
+        <div class="row mx-0">
+        <div class="col-6 p-0">
         <div id="accordion" role="tablist" class="mx-0">
             <div class="card border-0">
               <div class="card-header py-2" role="tab" id="headingOne">
                 <h5 class="mb-0">
                   <a class="collapsed" data-toggle="collapse" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                     <div class="text-center">
-                    <span class="text-dark h6">Show/Sort</span>
+                    <span class="text-dark h6">Show</span>
                     </div>
                   </a>
                 </h5>
               </div>
               <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne">
-                <div class="card-body px-3 py-2">
+                <div class="card-body py-2 px-2">
                     <div class="container-fluid p-0">
-                        <div class="row mx-0">
-                            <div class="col-6">
+                        <div class="row">
+                            <div class="col-12">
                                 <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input shower" id="show_names">
                                     <label class="custom-control-label" for="show_names">Show product name</label>
@@ -44,7 +47,31 @@
                                     <label class="custom-control-label" for="show_price">Show product price</label>
                                 </div>
                             </div>
-                            <div class="col-6">
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6 p-0">
+          <div id="accordion" role="tablist" class="mx-0">
+            <div class="card border-0">
+              <div class="card-header py-2" role="tab" id="headingTwo">
+                <h5 class="mb-0">
+                  <a class="collapsed" data-toggle="collapse" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    <div class="text-center">
+                    <span class="text-dark h6">Sort</span>
+                    </div>
+                  </a>
+                </h5>
+              </div>
+              <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
+                <div class="card-body py-2 px-2">
+                    <div class="container-fluid p-0">
+                        <div class="row">
+                            <div class="col-12">
                                 <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input sort" id="views_desc" data-id="-views">
                                     <label class="custom-control-label" for="views_desc">Popular</label>
@@ -64,6 +91,10 @@
               </div>
             </div>
           </div>
+        </div>
+
+        </div>
+          
     </div>
     
     <div class="prod_container row mx-2 my-2">
