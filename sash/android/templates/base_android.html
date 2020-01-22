@@ -79,11 +79,13 @@
         });
 
       $("body").css("overflow", "hidden");
+      $('.prod_container').hide();
       $(window).on("load", function() {
       setTimeout(function(){
         $('#loading').remove();
         $("body").css("overflow", "auto");
-      }, 200);
+        $('.prod_container').show();
+      }, 300);
     });
     $(document).on('click', '#content', function(){
         $('#sidebar').removeClass('active');
