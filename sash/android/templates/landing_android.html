@@ -270,7 +270,6 @@
                 prod_length = data.results.length;
                 products = data.results;
                 pager(data.previous,data.next, spage);
-                check_sort();
                 if (search_value != ""){
                     $('.prod_container').append("<div class='container-fluid text-center mb-2'><h5 class='animated bounceIn'>Showing (" + data.count + ") results for '" + search_value + "'.</h5></div>");
                 }
@@ -279,7 +278,9 @@
                 else if (data.count == 0){
                     $('.prod_container').append("<div class='container-fluid text-center'><h5 class='animated bounceIn'>No results!</h5></div>");
                 }
+                check_sort();
                 }
+                
             })
         }
     $('#search_input').keyup(function(){
@@ -313,7 +314,7 @@
                 $('.prod_container').append("<div class='container-fluid text-center mb-2'><h5 class='animated bounceIn'>" + category + "</h5></div>");
                 load_product(products);
                 check_show_names();
-                check_sort();
+                
                 check_show_price();
                 pager(data.previous,data.next, cpage);
                 $('.prod_filters').addClass('animated flipInX').show();
@@ -321,6 +322,7 @@
                 else if (data.count == 0){
                     $('.prod_container').append("<div class='container-fluid text-center'><h5 class='animated bounceIn'>We have no more items in " + category + "</h5></div>");
                 }
+                check_sort();
                 }
             })
         }
