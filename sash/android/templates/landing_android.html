@@ -7,10 +7,10 @@
     </div>
 
     <div class="row d-flex justify-content-end mx-0 mb-1 cscheme" style="background-color: #222222;">
-        <button class="btn btn-outline-light my-2 ml-3 text-light animated bounceInLeft" style="display:none" id="back">
+        <button class="btn btn-outline-light my-2 ml-3 text-light animated flipInX" style="display:none" id="back">
             <i class="fa fa-caret-left my-1 mr-2"></i>Go Back
         </button>
-        <div class="input-group my-2 col-5 animated bounceInRight" id="search_bar">
+        <div class="input-group my-2 col-5 animated flipInX" id="search_bar">
             <input type="text" class="form-control border text-light cscheme" style="background-color: #222222;" placeholder="Search" id="search_input">
             <div class="input-group-append">
                 <button class="btn btn-outline-light" id="search_button" type="button" disabled><i class="fa fa-search"></i></button>
@@ -97,7 +97,7 @@
           
     </div>
     
-    <div class="prod_container row mx-2 my-2">
+    <div class="prod_container row mx-2 my-2" style="overflow-x: hidden;">
     </div>
 
 </div>
@@ -204,7 +204,7 @@
     }
 
     function load_product_detail(product){
-        $('.prod_filters').removeClass('animated bounceInLeft').hide();
+        $('.prod_filters').removeClass('animated flipInX').hide();
         var t = document.querySelector('#prod_detail_template');
         t.content.querySelector('#det_pic').style = "background-image: url('" + product.product_image + "');width: 100%;padding-bottom: 100%;background-size: cover;background-position: center;";
         t.content.querySelector('#product_title').textContent = product.product_name;
@@ -265,11 +265,12 @@
                 old.fnc = "search";
                 window.localStorage.setItem('last', JSON.stringify(old));
                 $('.prod_container').empty();
-                $('#back').removeClass('animated bounceInLeft').addClass('animated bounceOutLeft');
+                $('#back').removeClass('animated flipInX').addClass('animated flipOutX');
                 if (data.count > 0){
                 prod_length = data.results.length;
                 products = data.results;
                 pager(data.previous,data.next, spage);
+                check_sort();
                 if (search_value != ""){
                     $('.prod_container').append("<div class='container-fluid text-center mb-2'><h5 class='animated bounceIn'>Showing (" + data.count + ") results for '" + search_value + "'.</h5></div>");
                 }
@@ -305,7 +306,7 @@
                 old.ctg = category;
                 old.fnc = "category";
                 window.localStorage.setItem('last', JSON.stringify(old));
-                $('#back').removeClass('animated bounceInLeft').addClass('animated bounceOutLeft');
+                $('#back').removeClass('animated flipInX').addClass('animated flipOutX');
                 if (data.count > 0){
                 prod_length = data.results.length;
                 products = data.results;
@@ -315,7 +316,7 @@
                 check_sort();
                 check_show_price();
                 pager(data.previous,data.next, cpage);
-                $('.prod_filters').addClass('animated bounceInLeft').show();
+                $('.prod_filters').addClass('animated flipInX').show();
                 }
                 else if (data.count == 0){
                     $('.prod_container').append("<div class='container-fluid text-center'><h5 class='animated bounceIn'>We have no more items in " + category + "</h5></div>");
@@ -344,7 +345,7 @@
                 old.fnc = "landing";
                 old.page = page;
                 window.localStorage.setItem('last', JSON.stringify(old));
-                $('#back').removeClass('animated bounceInLeft').addClass('animated bounceOutLeft').attr("disabled", true);
+                $('#back').removeClass('animated flipInX').addClass('animated flipOutX').attr("disabled", true);
                 $('.prod_container').empty();
                 prod_length = data.results.length;
                 products = data.results;
@@ -352,7 +353,7 @@
                 check_show_names();
                 check_sort();
                 check_show_price();
-                $('.prod_filters').addClass('animated bounceInLeft').show();
+                $('.prod_filters').addClass('animated flipInX').show();
                 pager(data.previous,data.next, page);
             }
         });
@@ -376,6 +377,10 @@
             t.content.querySelector('#next').disabled = true;
         }
         var clone = document.importNode(t.content, true);
+        if (!prev&&!next){
+            clone.querySelector('#next').remove();
+            clone.querySelector('#prev').remove();
+        }
         document.querySelector('.page').appendChild(clone);
     }
 
@@ -418,7 +423,7 @@
             success: function(data) {
                 $('.prod_container').empty();
                 $('.pg_c').remove();
-                $('#back').show().removeClass('animated bounceOutLeft').addClass('animated bounceInLeft').attr("disabled", false);
+                $('#back').show().removeClass('animated flipOutX').addClass('animated flipInX').attr("disabled", false);
                 load_product_detail(data);
             }
         });
