@@ -2,23 +2,25 @@
 {% block content %}
 <div class="container-fluid pt-5" id="our_products">
     <br class="p-5">
-    <h1 class="text-center pt-4">Our Products</h1>
-    <div class="container">
+    <h1 class="text-center pt-0">Our Products</h1>
+    <div class="container mt-5">
         <div class="row">
-            <div class="product_card col-4 mb-3 animated fadeIn delay-250ms">
+            {% for each in cat %}
+            <div class="product_card col-3 mb-3 animated fadeIn">
                 <div class="card shadow-sm border-0 p-0 m-0">
                     <div class="card-body bg-whitem-0 p-0" data-placement="left" data-toggle="tooltip" title="">
                         <i class="icon_star text-warning float-left m-1"></i>
                         <i class="checkAdded float-right text-success fas fa-check" value="" style="display:none;"></i>
-                        <a href="/products/doors">
-                            <div class="square" style="background-image: url('../static/images/door.jpg');width: 100%;padding-bottom: 100%;background-size: cover;background-position: center;">
+                        <a href="/products/{{ each.category_name }}">
+                            <div class="square" style="background-image: url('{{ each.image.url }}');width: 100%;padding-bottom: 100%;background-size: cover;background-position: center;">
                             </div>
-                            <h3 class="card-title text-truncate text-center mt-2 ml-2 mr-2 pb-2">Doors</h3>
+                            <h3 class="card-title text-truncate text-center mt-2 ml-2 mr-2 pb-2">{{ each.category_name }}</h3>
                         </a>
                     </div>
                 </div>
             </div>
-            <div class="product_card col-4 mb-3 animated fadeIn delay-500ms">
+            {% endfor %}
+            <!-- <div class="product_card col-4 mb-3 animated fadeIn delay-500ms">
                 <div class="card shadow-sm border-0 p-0 m-0">
                     <div class="card-body bg-whitem-0 p-0" data-placement="left" data-toggle="tooltip" title="">
                         <i class="icon_star text-warning float-left m-1"></i>
@@ -43,7 +45,7 @@
                         </a>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </div>

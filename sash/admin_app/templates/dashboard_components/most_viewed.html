@@ -1,16 +1,16 @@
 <div class="card card-stats h-100 animated zoomInUp">
         <div class="card-body ">
           <div class="row">
-            <div class="col-5 col-md-4">
+            <div class="col-12 col-md-4">
               <div class="icon-big text-center icon-warning">
                   <i class="text-danger fas fa-eye"></i>
               </div>
             </div>
-            <div class="col-7 col-md-8">
+            <div class="col-12 col-md-8">
               <div class="numbers">
-                <p class="card-category">Most Viewed Product</p>
-                <a href="{% url 'admin_products' %}?id={{ product_name }}" class="text-dark"><p class="card-title">{{ product_name }}<p></a>
-                <p class="card-category">{{ views }} view{% if views > 1 %}s{% endif %}<p>
+                <p class="card-category text-center">Most Viewed Product</p>
+                <a href="{% url 'admin_products' %}?id={{ product_name }}" class="text-dark text-center"><p class="card-title">{{ product_name }}<p></a>
+                <p class="card-category text-center">{{ views }} view{% if views > 1 %}s{% endif %}<p>
               </div>
             </div>
           </div>

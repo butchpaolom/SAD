@@ -97,7 +97,7 @@
           
     </div>
     
-    <div class="prod_container row mx-2 my-2" style="overflow-x: hidden;">
+    <div class="prod_container row mx-2 my-2">
     </div>
 
 </div>
@@ -279,6 +279,8 @@
                     $('.prod_container').append("<div class='container-fluid text-center'><h5 class='animated bounceIn'>No results!</h5></div>");
                 }
                 check_sort();
+                check_show_names();
+                check_show_price();
                 }
                 
             })

@@ -17,8 +17,8 @@ class Category(models.Model):
 
 #default Product table
 class Product(models.Model):
-    product_name = models.CharField(max_length=50, unique=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
+    product_name = models.CharField(max_length=50)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT, null=True)
     product_image = models.ImageField(null=True, blank=False)
     product_image1 = models.ImageField(null=True, blank=True)
     product_image2 = models.ImageField(null=True, blank=True)
@@ -27,6 +27,7 @@ class Product(models.Model):
     stock = models.IntegerField(null=True)
     delivery_price = models.DecimalField(null=True, blank=False, decimal_places=2, max_digits=8)
     views = models.PositiveIntegerField(null=True)
+    hidden = models.BooleanField(default=False)
 
     def in_stock(self):
         return str(self.stock > 0)
@@ -37,11 +38,14 @@ class Product(models.Model):
     def category_name(self):
         return str(self.category.category_name)
 
+    class Meta:
+        unique_together = ('product_name', 'category', 'price')
+
 
 #Initial Order with quantity
 #no login required
 class InitialOrder(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.PROTECT)
     quantity = models.IntegerField(null=True)
     total_price = models.DecimalField(null=True, blank=False, decimal_places=2, max_digits=8)
 
@@ -65,7 +69,7 @@ class FinalOrder(models.Model):
 #Customer info + Final Order
 #no login required
 class CustomerInfo(models.Model):
-    final_order = models.ForeignKey(FinalOrder, on_delete=models.CASCADE)
+    final_order = models.ForeignKey(FinalOrder, on_delete=models.PROTECT)
     address = models.TextField(blank=False, null=False)
     first_name = models.CharField(max_length=30,  blank=False)
     last_name = models.CharField(max_length=30,  blank=False)
@@ -92,7 +96,7 @@ class CustomerInfo(models.Model):
         return '{0}-{1} {2}'.format(self.final_order.pk, self.first_name, self.last_name)
 
 class Transaction(models.Model):
-    final_order = models.OneToOneField(FinalOrder, on_delete=models.CASCADE, null=True)
+    final_order = models.OneToOneField(FinalOrder, on_delete=models.PROTECT, null=True)
     paid = models.BooleanField(default=0)
     delivery_date = models.DateTimeField(null=True)
     delivered_date = models.DateTimeField(null=True)

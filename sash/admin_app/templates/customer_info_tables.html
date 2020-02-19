@@ -12,53 +12,42 @@
         </div>
         <div class="card-body border">
           <!-- <button class="action px-3 btn btn-info float-right" data-id="% url 'admin_product_create' %"><i class="fa fa-plus pr-2"></i>Product</button> -->
-          <div class="overflow-auto">
-            <div class="container-fluid table-responsive">
-              <div class="row flex-row flex-nowrap">
-                <table class="table table-striped table-bordered" id="customer-info-table">
-                  <thead class="text-primary">
-                    <th>#</th>
-                    <th>Customer Name</th>
-                    <th>Address</th>
-                    <th>Order ID</th>
-                    <th>Total Price</th>
-                    <th>Contact Number</th>
-                    <th>Email</th>
-                  </thead>
-                  <tbody>
-                    {% for customer_info in customer_infos %}
-                    <tr>
-                      <td>{{ forloop.counter }}</td>
-                      <td>
-                        <a class="action" href="javascript:void(0);"
-                          data-id="{% url 'admin_customer_name_update' customer_info.id %}">{{ customer_info.first_name }}
-                          {% if customer_info.middle_initial %}{{ customer_info.middle_initial }}.{% endif %}
-                          {{ customer_info.last_name }}</a>
-                      </td>
-                      <td>
-                        <a class="action" href="javascript:void(0);"
-                          data-id="{% url 'admin_customer_address_update' customer_info.id %}">{{ customer_info.address }}</a>
-                      </td>
-                      <td>
-                        <a
-                          href="{% url 'admin_transactions' %}?id={{ customer_info.final_order.trans_id }}">{{ customer_info.final_order.trans_id }}</a>
-                      </td>
-                      <td>
-                        ₱{{ customer_info.final_order.overall_price }}
-                      </td>
-                      <td>
-                        {{ customer_info.contact_number }}
-                      </td>
-                      <td>
-                        {{ customer_info.email }}
-                      </td>
-                    </tr>
-                    {% endfor %}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
+          <table class="table table-striped table-bordered" id="customer-info-table">
+            <thead class="text-primary">
+              <th class="d-none d-sm-table-cell">#</th>
+              <th>Customer Name</th>
+              <th class="d-none d-sm-table-cell">Address</th>
+              <th>Order ID</th>
+              <th>Total Price</th>
+              <th>Contact Number</th>
+              <th class="d-none d-sm-table-cell">Email</th>
+            </thead>
+            <tbody>
+            {% for customer_info in customer_infos %}
+              <tr>
+                <td class="d-none d-sm-table-cell">{{ forloop.counter }}</td>
+                <td>
+                  {{ customer_info.first_name }} {% if customer_info.middle_initial %}{{ customer_info.middle_initial }}.{% endif %} {{ customer_info.last_name }}
+                </td>
+                <td class="d-none d-sm-table-cell">
+                  {{ customer_info.address }}
+                </td>
+                <td>
+                  <a href="{% url 'admin_transactions' %}?id={{ customer_info.final_order.trans_id }}">{{ customer_info.final_order.trans_id }}</a>
+                </td>
+                <td>
+                 ₱{{ customer_info.final_order.overall_price }}
+                </td>
+                <td>
+                  {{ customer_info.contact_number }}
+                </td>
+                <td class="d-none d-sm-table-cell">
+                  {{ customer_info.email }}
+                </td class="d-none d-sm-table-cell">
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

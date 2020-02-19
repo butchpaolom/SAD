@@ -10,7 +10,38 @@ from django.contrib.auth.models import User
 class ProductForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
     class Meta:
         model = Product
+        exclude = ['views','hidden']
+
+class ProductEditForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
+    price = forms.DecimalField(
+    widget=forms.TextInput(attrs={'readonly':'readonly'})
+    )
+    delivery_price = forms.DecimalField(
+    widget=forms.TextInput(attrs={'readonly':'readonly'})
+    )
+    class Meta:
+        model = Product
         exclude = ['views']
+
+class ProductRepriceForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
+    def get_products():
+        names = []
+        for each in Product.objects.all():
+            tup = (each.product_name, each.product_name)
+            if each.product_name not in names:
+                names.append(tup)
+
+        return tuple(names)
+
+
+    product_name = forms.CharField(
+        widget=forms.Select(choices=get_products(), attrs={'class':'p-2'})
+        )
+    class Meta:
+        model = Product
+        fields = ['product_name', 'price', 'delivery_price']
+        # exclude = ['views']
+
 
 class TransactionDeliveryDateForm(PopRequestMixin, forms.ModelForm):
     delivery_date = forms.DateTimeField(

@@ -1,10 +1,10 @@
 {% extends "base2.html" %}
 {% block content %}
 <div class="container mt-0 pt-5">
-    <h2 class="text-center mt-5">{{ category }}</h2>
-    <div class="row">
+    <h2 class="text-center mt-5 pt-4">{{ category }}</h2>
+    <div class="row mt-4">
         {% for product in products %} 
-        <div class="product_card col-sm-6 col-lg-4 col-4 mb-3">
+        <div class="product_card col-sm-6 col-lg-2 col-4 mb-3">
             <div class="card shadow-sm border-0 p-0 m-0" id="prod{{ forloop.counter }}" style="display:none;">
                 <div class="card-body bg-whitem-0 p-0" data-placement="left" data-toggle="tooltip" title="{{ product.product_name }}">
                     <div class="square" style="background-image: url('{{ product.product_image }}');width: 100%;padding-bottom: 100%;background-size: cover;background-position: center;">
@@ -13,7 +13,7 @@
                 </div>
                 <div class="b_group d-flex flex-column justify-content-center bg-white">
                     <a href="{% url 'product_detail' product.id %}" class="abutton add_c btn btn-success p-0 text-truncate">
-                        <p class="text-white m-0">Check this item</p>
+                        <p class="text-white m-0 lead">Check item</p>
                     </a>
                 </div>
             </div>
@@ -27,7 +27,7 @@
     {% for i in products %}
     setTimeout(function(){ 
         $('#prod{{ forloop.counter }}').show().addClass('animated bounceInLeft');
-    }, {{ forloop.counter }}*300);
+    }, {{ forloop.counter }}*50);
     {% endfor %}
     });
 </script>

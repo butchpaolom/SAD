@@ -71,12 +71,24 @@ class ProductUpdateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixi
     model = Product
     template_name = 'update.html'
     success_url = reverse_lazy('admin_products')
-    form_class = ProductForm
+    form_class = ProductEditForm
     
     def get_success_message(self, cleaned_data):
         product_name = Product.objects.get(id=self.kwargs.get('pk'))
         message = "Successfully updated " + str(product_name)
         return message
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        old_list = Product.objects.filter(product_name=self.object.product_name)
+        old = old_list.first()
+        for each in old_list:
+            each.hidden = True
+            each.save()
+        if old_list:
+            self.hidden=False
+        self.object.save()
+        return super(ProductUpdateView, self).form_valid(form)
 
 
 class ProductCreateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
@@ -88,6 +100,46 @@ class ProductCreateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixi
     def get_success_message(self, cleaned_data):
         message = "Successfully added " + str(self.object.product_name)
         return message 
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        old_list = Product.objects.filter(product_name=self.object.product_name)
+        old = old_list.first()
+        for each in old_list:
+            each.hidden = True
+            each.save()
+        if old_list:
+            self.hidden=False
+        self.object.save()
+        return super(ProductCreateView, self).form_valid(form)
+
+class ProductRepriceView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
+    template_name = 'reprice.html'
+    form_class = ProductRepriceForm
+    context_object_name = 'product'
+    success_url = reverse_lazy('admin_products')
+
+    def get_success_message(self, cleaned_data):
+        message = "Successfully repriced " + str(self.object.product_name)
+        return message 
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        old_list = Product.objects.filter(product_name=self.object.product_name)
+        old = old_list.first()
+        for each in old_list:
+            each.hidden = True
+            each.save()
+        self.object.category = old.category
+        self.object.product_image = old.product_image
+        self.object.product_image1 = old.product_image1
+        self.object.product_image2 = old.product_image2
+        self.object.description = old.description
+        self.object.stock = old.stock
+        self.object.views = old.views
+        self.hidden=False
+        self.object.save()
+        return super(ProductRepriceView, self).form_valid(form)
     
 
 class ProductDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
