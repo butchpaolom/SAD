@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 {% include "templates.html" %}
-<div class="container-fluid px-0 mx-0 page">
+<div class="container-fluid px-0 mx-0 page" id="xd1">
     <div class="cat_container row owl-carousel owl-theme w-100 px-0 mx-0">
     </div>
 
@@ -81,8 +81,8 @@
                                     <label class="custom-control-label" for="price_asc">Price low to high</label>
                                 </div>
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input sort" id="price_des" data-id="-price">
-                                    <label class="custom-control-label" for="price_des">Price high to low</label>
+                                    <input type="checkbox" class="custom-control-input sort" id="price_desc" data-id="-price">
+                                    <label class="custom-control-label" for="price_desc">Price high to low</label>
                                 </div>
                             </div>
                         </div>
@@ -134,7 +134,7 @@
         const pid =  urlParams.get('id');
         const cart = [];
         const transid_single = "";
-        const trans_id = []
+        const trans_id = "";
         const last = {
             "fnc":"landing",
             "srch": "",
@@ -142,11 +142,12 @@
             "page": 1,
             "spage": 1,
             "cpage": 1,
+            "sale": "False"
         }
         const settings = {
             show_pn: true,
             show_pp: false,
-            ordering: "views",
+            ordering: "-views",
             };
         if(!window.localStorage.getItem('settings')){
         window.localStorage.setItem('settings', JSON.stringify(settings));
@@ -211,8 +212,16 @@
                 t.content.querySelector('.product_card').id = products[i].id;
                 t.content.querySelector('#pic').style = "background-image: url('" + products[i].product_image + "');width: 100%;padding-bottom: 100%;background-size: cover;background-position: center;";
                 t.content.querySelector('#product_text').textContent = products[i].product_name;
-                t.content.querySelector('#product_price').textContent = '₱' + products[i].price;
+                if (products[i].sale != 0){
+                    t.content.querySelector('#product_price').innerHTML = `₱${(products[i].price*(100-products[i].sale)*0.01).toFixed(2)} ${products[i].sale}%<i class="fa fa-arrow-down"></i>`;
+                }
+                else{
+                    t.content.querySelector('#product_price').textContent = '₱' + products[i].price;
+                }
                 var clone = document.importNode(t.content, true);
+                if (products[i].sale !=0){
+                    clone.getElementById('product_price').classList.add('text-danger');
+                }
                 document.querySelector('.prod_container').appendChild(clone);
                 }
             else{
@@ -260,7 +269,12 @@
 
         t.content.querySelector('#product_cat').textContent = product.category;
         t.content.querySelector('.add_cart').id = product.id;
-        t.content.querySelector('#product_price').textContent = "₱" + product.price;
+        if (product.sale !=0 ){
+            t.content.querySelector('#product_price').innerHTML = `₱<s>${product.price}</s> <h6 class="text-danger">₱${(product.price*(100-product.sale)*0.01).toFixed(2)} ${product.sale}% <i class="fa fa-arrow-down"></i></h6>`;
+        }
+        else{
+            t.content.querySelector('#product_price').textContent = "₱" + product.price;
+        }
         t.content.querySelector('#product_desc').textContent = product.description;
         var clone = document.importNode(t.content, true);
         if (!product.product_image1) clone.querySelector('#bt1').remove();
@@ -335,11 +349,15 @@
     }
     });
 
-    function filter_category(category, cpage){
+    function filter_category(category, cpage, sale_list){
         const order = JSON.parse(window.localStorage.getItem('settings')).ordering;
+        if (sale_list ==  null){
+            sale_list = 0
+        }
+
         $('.prod_container').empty();
         $.ajax({
-            url: "/new_api/api_products/?category__category_name=" + category + '&page=' + cpage + '&ordering=' + order,
+            url: "/new_api/api_products/?category__category_name=" + category + '&page=' + cpage + '&ordering=' + order + '&sale_list=' + sale_list,
             method: 'GET',
             dataType: 'json',
             success: function(data) {
@@ -376,6 +394,7 @@
     }
     
     function load_categories(){
+        const last = JSON.parse(window.localStorage.getItem('last'));
         $.ajax({
             url: "/new_api/api_list_categ",
             method: 'GET',
@@ -394,7 +413,7 @@
                     opt.append(acateg);
                 }
                 opt.addEventListener('change', function(){
-                    filter_category(this.value, 1);
+                    filter_category(this.value, 1, last.sale);
                 });
                 const catlist= document.getElementById('catlist');
                 catlist.append(opt);
@@ -526,7 +545,7 @@
     $(document).on('click', '.cat_card', function() {
         id = $(this).attr('id');
         const last = JSON.parse(window.localStorage.getItem('last'));
-        filter_category(id, last.cpage);
+        filter_category(id, last.cpage, last.sale);
     });
     //Change images of product detail
     $(document).on('click','.img_bt', function(){
@@ -633,7 +652,7 @@
             search(last.srch, last.spage);
         }
         else if (fnc == "category"){
-            filter_category(last.ctg, last.cpage);
+            filter_category(last.ctg, last.cpage, last.sale);
         }
     });
     
@@ -647,8 +666,14 @@
             search(last.srch, page);
         }
         else if (last.fnc == "category"){
-            filter_category(last.ctg, page);
+            filter_category(last.ctg, page, last.sale);
         }
+    });
+    $(document).on('click', '#saler' ,function(){
+        let last = JSON.parse(window.localStorage.getItem('last'));
+        last.sale = 'True';
+        window.localStorage.setItem('last', JSON.stringify(last));
+        filter_category('', 1, last.sale);
     });
     </script>
     

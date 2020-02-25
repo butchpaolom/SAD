@@ -63,7 +63,9 @@
         document.querySelector('.trans_cont').appendChild(clone);
     }
     $(document).on('click', '#pm', function(){
-        window.location = $(this).data('id');
+        if (this.textContent == 'PayPal'){
+            window.location = $(this).data('id');
+        }
     });
 </script>
 {% endblock content %}

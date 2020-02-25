@@ -8,9 +8,10 @@ from front_ep.models import *
 #done
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
     category = serializers.CharField(source='category_name')
+    true_price = serializers.DecimalField(source='t_price', decimal_places=2, max_digits=8)
     class Meta:
         model = Product
-        fields = ['url', 'id', 'product_name', 'description', 'category', 'product_image', 'product_image1', 'product_image2', 'price', 'stock', 'delivery_price', 'views']
+        fields = ['url', 'id', 'product_name', 'description', 'category', 'product_image', 'product_image1', 'product_image2', 'price', 'stock', 'delivery_price', 'views', 'sale', 'true_price']
 #done
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:

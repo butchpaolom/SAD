@@ -28,6 +28,8 @@ class Product(models.Model):
     delivery_price = models.DecimalField(null=True, blank=False, decimal_places=2, max_digits=8)
     views = models.PositiveIntegerField(null=True)
     hidden = models.BooleanField(default=False)
+    sale = models.PositiveSmallIntegerField(default=0)
+    
 
     def in_stock(self):
         return str(self.stock > 0)
@@ -38,8 +40,13 @@ class Product(models.Model):
     def category_name(self):
         return str(self.category.category_name)
 
+    def t_price(self):
+        return float(round(float(self.price)*(100-float(self.sale))*0.01,2))
+
     class Meta:
         unique_together = ('product_name', 'category', 'price')
+
+
 
 
 #Initial Order with quantity

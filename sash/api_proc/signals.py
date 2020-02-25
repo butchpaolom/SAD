@@ -24,5 +24,11 @@ def update_transaction(sender, instance, created, **kwargs):
             for order in orders:
                 quantity = order.quantity
                 order.product.stock = order.product.stock - quantity
+                for each in Product.objects.all():
+                    if order.product.product_name == each.product_name:
+                        each.stock = order.product.stock
+                        each.save()
                 order.product.save()
+
+
                 

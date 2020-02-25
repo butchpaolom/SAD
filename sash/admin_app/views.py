@@ -80,13 +80,14 @@ class ProductUpdateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixi
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        old_list = Product.objects.filter(product_name=self.object.product_name)
-        old = old_list.first()
+        old_list = Product.objects.filter(product_name=self.object.product_name).exclude(id=self.object.id)
         for each in old_list:
             each.hidden = True
+            each.views = self.object.views
+            each.stock = self.object.stock
             each.save()
         if old_list:
-            self.hidden=False
+            self.object.hidden=False
         self.object.save()
         return super(ProductUpdateView, self).form_valid(form)
 
@@ -103,13 +104,14 @@ class ProductCreateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixi
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        old_list = Product.objects.filter(product_name=self.object.product_name)
-        old = old_list.first()
+        old_list = Product.objects.filter(product_name=self.object.product_name).exclude(id=self.object.id)
         for each in old_list:
             each.hidden = True
+            each.views = self.views
+            each.stock = self.stock
             each.save()
         if old_list:
-            self.hidden=False
+            self.object.hidden=False
         self.object.save()
         return super(ProductCreateView, self).form_valid(form)
 
@@ -125,11 +127,11 @@ class ProductRepriceView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMix
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        old_list = Product.objects.filter(product_name=self.object.product_name)
-        old = old_list.first()
+        old_list = Product.objects.filter(product_name=self.object.product_name).exclude(id=self.object.id)
         for each in old_list:
             each.hidden = True
             each.save()
+        old = old_list.first()
         self.object.category = old.category
         self.object.product_image = old.product_image
         self.object.product_image1 = old.product_image1
@@ -137,7 +139,7 @@ class ProductRepriceView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMix
         self.object.description = old.description
         self.object.stock = old.stock
         self.object.views = old.views
-        self.hidden=False
+        self.object.hidden=False
         self.object.save()
         return super(ProductRepriceView, self).form_valid(form)
     

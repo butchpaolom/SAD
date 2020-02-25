@@ -48,7 +48,7 @@
                 for (var x=0; cart.length>x; x++){
                     if (cart[x].id == data.id){
                         load_to_table(data, cart[x]);
-                        gt += ((parseFloat(data.price)+parseFloat(data.delivery_price))*cart[x].quantity);
+                        gt += ((parseFloat(data.true_price)+parseFloat(data.delivery_price))*cart[x].quantity);
                     }
                 }
             }
@@ -77,9 +77,9 @@
         t.content.querySelector('#prod_name').textContent = product.product_name;
         t.content.querySelector('#prod_name').setAttribute('data-id', product.id);
         t.content.querySelector('#prod_quantity').textContent = cart.quantity;
-        t.content.querySelector('#prod_price').textContent = '₱' + product.price;
+        t.content.querySelector('#prod_price').textContent = '₱' + product.true_price;
         t.content.querySelector('#del_price').textContent = '₱' + product.delivery_price;
-        t.content.querySelector('#total_price').innerHTML = '₱' + ((parseFloat(product.price)+parseFloat(product.delivery_price))*cart.quantity).toFixed(2);
+        t.content.querySelector('#total_price').innerHTML = '₱' + ((parseFloat(product.true_price)+parseFloat(product.delivery_price))*cart.quantity).toFixed(2);
         var clone = document.importNode(t.content, true);
         document.querySelector('#cart_table_body').appendChild(clone);
     }

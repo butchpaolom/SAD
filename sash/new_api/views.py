@@ -12,6 +12,7 @@ from front_ep.models import *
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 import json
 from .threader import *
+from .filters import ProductFilterSet
 # Create your views here.
 
 class FrontAssetView(generics.RetrieveAPIView):
@@ -24,6 +25,7 @@ class ProductView(viewsets.ModelViewSet):
     ordering_fields = ['views', 'price']
     queryset = Product.objects.all().exclude(hidden=True)
     filter_backends = [filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend, filters.OrderingFilter]
+    # filter_class = ProductFilterSet
     
     serializer_class = ProductSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
@@ -33,9 +35,13 @@ class ProductView(viewsets.ModelViewSet):
         print(self.object.id)
         product = Product.objects.get(id=self.object.id)
         product.views += 1
+        for each in Product.objects.all():
+            if each.product_name == product.product_name:
+                each.views = product.views
         do_thread(product.save(), arg=None)
         serializer = self.get_serializer(self.object)
         return Response(serializer.data)
+    
 
 class CategoryView(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -64,10 +70,12 @@ class CustomerInfoView(viewsets.ModelViewSet):
             cart = json.loads(data['cart'])
             orders=[]
             for each in cart:
+                prd = Product.objects.get(id=each['id'])
                 order = InitialOrder(
-                    product=Product.objects.get(id=each['id']),
+                    product=prd,
                     quantity=each['quantity'],
-                    total_price= (Product.objects.get(id=each['id']).delivery_price + Product.objects.get(id=each['id']).price)*int(each['quantity']))
+                    total_price= (float(prd.delivery_price) + prd.t_price())*int(each['quantity'])
+                    )
                 order.save()
                 orders.append(order)
             
@@ -86,7 +94,8 @@ class CustomerInfoView(viewsets.ModelViewSet):
                 "trans_id": finalOrder.trans_id,
                 "payment_method": data['payment_method']
             }
-        except:
+        except Exception as e:
+            print(e)
             pass
 
         #saving of data on dafault post request
