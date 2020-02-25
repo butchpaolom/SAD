@@ -57,6 +57,11 @@ class FrontAssetSerializer(serializers.ModelSerializer):
         model = FrontAsset
         fields = ['car_img1', 'car_img2', 'car_img3', 'company_name', 'company_logo', 'address', 'colorscheme', 'about']
 
+class CategoryListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['category_name']
+
 
 
 

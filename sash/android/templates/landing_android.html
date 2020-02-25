@@ -21,7 +21,7 @@
     <div class="prod_filters my-0">
 
         <div class="row mx-0">
-        <div class="col-6 p-0">
+        <div class="col-4 p-0">
         <div id="accordion" role="tablist" class="mx-0">
             <div class="card border-0">
               <div class="card-header py-2" role="tab" id="headingOne">
@@ -40,11 +40,11 @@
                             <div class="col-12">
                                 <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input shower" id="show_names">
-                                    <label class="custom-control-label" for="show_names">Show product name</label>
+                                    <label class="custom-control-label" for="show_names">Product name</label>
                                 </div>
                                 <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input shower" id="show_price">
-                                    <label class="custom-control-label" for="show_price">Show product price</label>
+                                    <label class="custom-control-label" for="show_price">Product price</label>
                                 </div>
                             </div>
                         </div>
@@ -55,7 +55,7 @@
           </div>
         </div>
 
-        <div class="col-6 p-0">
+        <div class="col-4 p-0">
           <div id="accordion" role="tablist" class="mx-0">
             <div class="card border-0">
               <div class="card-header py-2" role="tab" id="headingTwo">
@@ -92,6 +92,29 @@
             </div>
           </div>
         </div>
+        <div class="col-4 p-0">
+            <div id="accordion" role="tablist" class="mx-0">
+              <div class="card border-0">
+                <div class="card-header py-2" role="tab" id="headingThree">
+                  <h5 class="mb-0">
+                    <a class="collapsed" data-toggle="collapse" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                      <div class="text-center">
+                      <span class="text-dark h6">Category</span>
+                      </div>
+                    </a>
+                  </h5>
+                </div>
+                <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree">
+                  <div class="card-body py-2 px-2">
+                      <div class="container-fluid p-0">
+                          <div class="row" id="catlist">
+                          </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
         </div>
           
@@ -141,6 +164,7 @@
         window.localStorage.setItem('transactions', JSON.stringify(trans_id));
         }
         load_landing();
+        load_categories();
     });
     function update_cart(){
         const count = JSON.parse(window.localStorage.getItem('cart')).length;
@@ -168,9 +192,10 @@
             autoplay: true,
             autoplayTimeout: 2000,
             autoplayHoverPause: true,
-            items: 3,
+            items: 4.75,
             loop: true,
             dots: false,
+            
         });
     };
 
@@ -181,6 +206,7 @@
         else{
         $('.prod_container').show();
         for (var i=0; i<prod_length; i++){
+            if (products[i].stock != 0){
                 var t = document.querySelector('#prod_template');
                 t.content.querySelector('.product_card').id = products[i].id;
                 t.content.querySelector('#pic').style = "background-image: url('" + products[i].product_image + "');width: 100%;padding-bottom: 100%;background-size: cover;background-position: center;";
@@ -188,6 +214,21 @@
                 t.content.querySelector('#product_price').textContent = '₱' + products[i].price;
                 var clone = document.importNode(t.content, true);
                 document.querySelector('.prod_container').appendChild(clone);
+                }
+            else{
+                var t = document.querySelector('#prod_template');
+                t.content.querySelector('.product_card').id = products[i].id;
+                t.content.querySelector('#pic').style = "background-image: url('" + products[i].product_image + "');width: 100%;padding-bottom: 100%;background-size: cover;background-position: center;";
+                t.content.querySelector('#product_text').textContent = products[i].product_name;
+                t.content.querySelector('#product_price').textContent = 'OUT OF STOCK';
+                var clone = document.importNode(t.content, true);
+                const oos = clone.getElementById('product_price');
+                const name = clone.getElementById('product_text');
+                name.classList.add('text-danger');
+                name.classList.remove('text-dark');
+                oos.classList.add('text-danger');
+                document.querySelector('.prod_container').appendChild(clone);
+            }
             }
             $('.prod_container').hide();
             setTimeout(function(){
@@ -332,6 +373,33 @@
     function load_landing() {
         render_products();
         render_category();
+    }
+    
+    function load_categories(){
+        $.ajax({
+            url: "/new_api/api_list_categ",
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                const opt = document.createElement('select');
+                opt.classList.add('custom-select','mx-3');
+                const all = document.createElement('option');
+                all.textContent = 'All';
+                all.value = "";
+                opt.append(all);
+                for (let x in data.results){
+                    const acateg = document.createElement('option');
+                    acateg.textContent = data.results[x].category_name;
+                    acateg.value = data.results[x].category_name;
+                    opt.append(acateg);
+                }
+                opt.addEventListener('change', function(){
+                    filter_category(this.value, 1);
+                });
+                const catlist= document.getElementById('catlist');
+                catlist.append(opt);
+            }
+    });
     }
 
     function render_products(page) {

@@ -10,6 +10,7 @@ router.register('api_transaction', views.TransactionView)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('api_frontasset/<pk>', views.FrontAssetView.as_view())
+    path('api_frontasset/<pk>', views.FrontAssetView.as_view()),
+    path('api_list_categ', views.CategoryListView.as_view())
     ]   
 

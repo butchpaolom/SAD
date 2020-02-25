@@ -115,6 +115,9 @@ class TransactionView(viewsets.ModelViewSet):
 
         return [permission() for permission in permission_classes]
 
+class CategoryListView(generics.ListAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategoryListSerializer
 
 
 
