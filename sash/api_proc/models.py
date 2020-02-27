@@ -26,7 +26,7 @@ class Product(models.Model):
     price = models.DecimalField(null=True, decimal_places=2, max_digits=8)
     stock = models.IntegerField(null=True)
     delivery_price = models.DecimalField(null=True, blank=False, decimal_places=2, max_digits=8)
-    views = models.PositiveIntegerField(null=True)
+    views = models.PositiveIntegerField(null=True, default=0)
     hidden = models.BooleanField(default=False)
     sale = models.PositiveSmallIntegerField(default=0)
     
