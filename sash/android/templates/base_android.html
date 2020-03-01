@@ -82,7 +82,9 @@
       $("body").css("overflow-y", "hidden");
       $('.prod_container').hide();
       $(window).on("load", function() {
-      $("#content").removeClass('d-none');
+      setTimeout(function(){
+        $("#content").removeClass('d-none');
+      }, 400);
       setTimeout(function(){
         $('#loading').remove();
         $("body").css("overflow", "auto");
