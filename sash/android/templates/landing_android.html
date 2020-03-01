@@ -676,13 +676,15 @@
         window.localStorage.setItem('last', JSON.stringify(last));
         filter_category('', 1, last.sale);
     });
-    $(window).bind('mousewheel', function(event) {
-    if (event.originalEvent.wheelDelta >= 0) {
-        alert('Scroll up');
+    var lastScrollTop = 0;
+    $(window).scroll(function(event){
+    var st = $(this).scrollTop();
+    if (st > lastScrollTop){
+        alert('down');
+    } else {
+        alert('up');
     }
-    else {
-        alert('Scroll down');
-    }
+    lastScrollTop = st;
     });
     </script>
     
