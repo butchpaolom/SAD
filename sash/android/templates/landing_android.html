@@ -3,11 +3,10 @@
 {% block content %}
 {% include "templates.html" %}
 <div class="container-fluid px-0 mx-0 page" id="xd1">
-    <div class="cat_container row owl-carousel owl-theme w-100 px-0 mx-0">
+    <div class="cat_container row owl-carousel owl-theme w-100 px-0 mx-0" id="cat_loc">
     </div>
-<div class="fixed-top test">
-    <div class="row d-flex justify-content-end mx-0 mb-1 cscheme" style="background-color: #222222;">
-        <button class="btn btn-outline-light my-2 ml-3 text-light animated flipInX" style="display:none" id="back">
+    <div class="row d-flex justify-content-end mx-0 mb-1 cscheme fixed-top" id="search_bar" style="background-color: #222222; z-index: 1;">
+        <button class="btn btn-outline-light my-2 ml-3 text-light animated fadeIn" style="display:none" id="back">
             <i class="fa fa-caret-left my-1 mr-2"></i>Go Back
         </button>
         <div class="input-group my-2 col-5 animated flipInX" id="search_bar">
@@ -18,7 +17,7 @@
         </div>
     </div>
 
-    <div class="prod_filters my-0">
+    <div class="prod_filters my-0"  id="filt_loc">
 
         <div class="row mx-0">
         <div class="col-4 p-0">
@@ -119,9 +118,8 @@
         </div>
           
     </div>
-</div>
     
-    <div class="prod_container row mx-2 my-2">
+    <div class="prod_container row mx-2 my-2" id="prod_loc">
     </div>
 
 </div>
@@ -313,6 +311,9 @@
             method: 'GET',
             dataType: 'json',
             success: function(data) {
+                setTimeout(function(){
+                    document.getElementById('cat_loc').scrollIntoView({behavior: 'smooth'});
+                },200);
                 $('.pg').remove();
                 $('.pg_c').remove();
                 var old = JSON.parse(window.localStorage.getItem('last'));
@@ -321,7 +322,7 @@
                 old.fnc = "search";
                 window.localStorage.setItem('last', JSON.stringify(old));
                 $('.prod_container').empty();
-                $('#back').removeClass('animated flipInX').addClass('animated flipOutX');
+                $('#back').removeClass('animated fadeIn').addClass('animated fadeOut');
                 if (data.count > 0){
                 prod_length = data.results.length;
                 products = data.results;
@@ -369,7 +370,7 @@
                 old.ctg = category;
                 old.fnc = "category";
                 window.localStorage.setItem('last', JSON.stringify(old));
-                $('#back').removeClass('animated flipInX').addClass('animated flipOutX');
+                $('#back').removeClass('animated fadeIn').addClass('animated fadeOut');
                 if (data.count > 0){
                 prod_length = data.results.length;
                 products = data.results;
@@ -437,7 +438,7 @@
                 old.fnc = "landing";
                 old.page = page;
                 window.localStorage.setItem('last', JSON.stringify(old));
-                $('#back').removeClass('animated flipInX').addClass('animated flipOutX').attr("disabled", true);
+                $('#back').removeClass('animated fadeIn').addClass('animated fadeOut').attr("disabled", true);
                 $('.prod_container').empty();
                 prod_length = data.results.length;
                 products = data.results;
@@ -515,7 +516,7 @@
             success: function(data) {
                 $('.prod_container').empty();
                 $('.pg_c').remove();
-                $('#back').show().removeClass('animated flipOutX').addClass('animated flipInX').attr("disabled", false);
+                $('#back').show().removeClass('animated fadeOut').addClass('animated fadeIn').attr("disabled", false);
                 load_product_detail(data);
             }
         });
@@ -639,6 +640,9 @@
     });
 
     $(document).on('change', '.sort' ,function(){
+        setTimeout(function(){
+                    document.getElementById('cat_loc').scrollIntoView({behavior: 'smooth'});
+                },200);
         $('.sort').not(this).prop("checked", false);
         const sort = $(this).attr('data-id');
         var settings=JSON.parse(window.localStorage.getItem('settings'));
@@ -679,11 +683,12 @@
     var lastScrollTop = 0;
     $(window).scroll(function(event){
     var st = $(this).scrollTop();
-    if (st > lastScrollTop){
-        $('.test').addClass('d-none');
-    } else {
-        $('.test').removeClass('d-none');
+    if ((st > lastScrollTop)&&((st-lastScrollTop)>20)){
+        $('#search_bar').removeClass('d-flex').addClass('d-none');
+    } else if  ((st < lastScrollTop)&&((st-lastScrollTop)<20)){
+        $('#search_bar').removeClass('d-none').addClass('d-flex');
     }
+    console.log(`new: ${st} old:${lastScrollTop} difference: ${st-lastScrollTop}`);
     lastScrollTop = st;
     });
     </script>
