@@ -17,7 +17,7 @@
     <script src="{% static '/assets/js/jquery.bootstrap.modal.forms.js' %}"></script>
   </head>
 
-  <body class="bg-white d-none">
+  <body class="bg-white">
     <div id="loading" class="h-100 w-100 align-content-center flex-wrap d-flex justify-content-center" style="background-color: #ffffff; z-index:500; position: fixed;">
       <div class="loadingio-spinner-double-ring-gnu4acl4iv5"><div class="ldio-2581lugbjgw">
         <div></div>
@@ -53,7 +53,7 @@
 	        </ul>
 	      </div>
       </nav>
-        <div id="content">
+        <div id="content" class="d-none">
           <div class="container-fluid d-flex justify-content-center">
             <div class="logo_img col-10 p-4">
             </div>
@@ -82,10 +82,10 @@
       $("body").css("overflow-y", "hidden");
       $('.prod_container').hide();
       $(window).on("load", function() {
+      $("#content").removeClass('d-none');
       setTimeout(function(){
         $('#loading').remove();
         $("body").css("overflow", "auto");
-        $("body").removeClass('d-none').addClass('d-flex');
         $('.prod_container').show();
       }, 500);
     });
