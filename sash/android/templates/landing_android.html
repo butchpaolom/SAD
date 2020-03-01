@@ -7,10 +7,10 @@
     </div>
 
     <div class="row d-flex justify-content-end mx-0 mb-1 cscheme" style="background-color: #222222;">
-        <button class="btn btn-outline-light my-2 ml-3 text-light animated flipInX" style="display:none" id="back">
+        <button class="btn btn-outline-light my-2 ml-3 text-light animated fadeIn faster" style="display:none" id="back">
             <i class="fa fa-caret-left my-1 mr-2"></i>Go Back
         </button>
-        <div class="input-group my-2 col-5 animated flipInX" id="search_bar">
+        <div class="input-group my-2 col-5 animated fadeIn" id="search_bar">
             <input type="text" class="form-control border text-light cscheme" style="background-color: #222222;" placeholder="Search" id="search_input">
             <div class="input-group-append">
                 <button class="btn btn-outline-light" id="search_button" type="button" disabled><i class="fa fa-search"></i></button>
@@ -71,18 +71,18 @@
                 <div class="card-body py-2 px-2">
                     <div class="container-fluid p-0">
                         <div class="row">
-                            <div class="col-12">
+                            <div class="col-12 pl-0">
                                 <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input sort" id="views_desc" data-id="-views">
-                                    <label class="custom-control-label" for="views_desc">Popular</label>
+                                    <label class="custom-control-label" for="views_desc"><i class="fa fa-eye"></i> Popular</label>
                                 </div>
                                 <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input sort" id="price_asc" data-id="price">
-                                    <label class="custom-control-label" for="price_asc">Price low to high</label>
+                                    <label class="custom-control-label" for="price_asc"><i class="fa fa-arrow-up"></i> Price low to high</label>
                                 </div>
                                 <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input sort" id="price_desc" data-id="-price">
-                                    <label class="custom-control-label" for="price_desc">Price high to low</label>
+                                    <label class="custom-control-label" for="price_desc"><i class="fa fa-arrow-down"></i> Price high to low</label>
                                 </div>
                             </div>
                         </div>
@@ -254,7 +254,7 @@
     }
 
     function load_product_detail(product){
-        $('.prod_filters').removeClass('animated flipInX').hide();
+        $('.prod_filters').removeClass('animated fadeIn').hide();
         var t = document.querySelector('#prod_detail_template');
         t.content.querySelector('#det_pic').style = "background-image: url('" + product.product_image + "');width: 100%;padding-bottom: 100%;background-size: cover;background-position: center;";
         t.content.querySelector('#product_title').textContent = product.product_name;
@@ -320,7 +320,7 @@
                 old.fnc = "search";
                 window.localStorage.setItem('last', JSON.stringify(old));
                 $('.prod_container').empty();
-                $('#back').removeClass('animated flipInX').addClass('animated flipOutX');
+                $('#back').removeClass('animated fadeIn').addClass('animated fadeOut');
                 if (data.count > 0){
                 prod_length = data.results.length;
                 products = data.results;
@@ -368,7 +368,7 @@
                 old.ctg = category;
                 old.fnc = "category";
                 window.localStorage.setItem('last', JSON.stringify(old));
-                $('#back').removeClass('animated flipInX').addClass('animated flipOutX');
+                $('#back').removeClass('animated fadeIn').addClass('animated fadeOut');
                 if (data.count > 0){
                 prod_length = data.results.length;
                 products = data.results;
@@ -378,7 +378,7 @@
                 
                 check_show_price();
                 pager(data.previous,data.next, cpage);
-                $('.prod_filters').addClass('animated flipInX').show();
+                $('.prod_filters').addClass('animated fadeIn').show();
                 }
                 else if (data.count == 0){
                     $('.prod_container').append("<div class='container-fluid text-center'><h5 class='animated bounceIn'>We have no more items in " + category + "</h5></div>");
@@ -394,7 +394,6 @@
     }
     
     function load_categories(){
-        const last = JSON.parse(window.localStorage.getItem('last'));
         $.ajax({
             url: "/new_api/api_list_categ",
             method: 'GET',
@@ -413,7 +412,13 @@
                     opt.append(acateg);
                 }
                 opt.addEventListener('change', function(){
+                    const last = JSON.parse(window.localStorage.getItem('last'));
                     filter_category(this.value, 1, last.sale);
+                    setTimeout(function(){
+                        let bot90 = ($(document).height() - $(window).height())*0.9;
+                        console.log(bot90);
+                        $('html, body').animate({scrollTop:bot90},'50');
+                    },500);
                 });
                 const catlist= document.getElementById('catlist');
                 catlist.append(opt);
@@ -436,7 +441,7 @@
                 old.fnc = "landing";
                 old.page = page;
                 window.localStorage.setItem('last', JSON.stringify(old));
-                $('#back').removeClass('animated flipInX').addClass('animated flipOutX').attr("disabled", true);
+                $('#back').removeClass('animated fadeIn').addClass('animated fadeOut').attr("disabled", true);
                 $('.prod_container').empty();
                 prod_length = data.results.length;
                 products = data.results;
@@ -444,7 +449,7 @@
                 check_show_names();
                 check_sort();
                 check_show_price();
-                $('.prod_filters').addClass('animated flipInX').show();
+                $('.prod_filters').addClass('animated fadeIn').show();
                 pager(data.previous,data.next, page);
             }
         });
@@ -514,7 +519,7 @@
             success: function(data) {
                 $('.prod_container').empty();
                 $('.pg_c').remove();
-                $('#back').show().removeClass('animated flipOutX').addClass('animated flipInX').attr("disabled", false);
+                $('#back').show().removeClass('animated fadeOut').addClass('animated fadeIn').attr("disabled", false);
                 load_product_detail(data);
             }
         });
@@ -540,6 +545,11 @@
     $(document).on('click', '.product_card', function() {
         prod_id = $(this).attr('id');
         render_product_detail(prod_id);
+        setTimeout(function(){
+                    let bot90 = ($(document).height() - $(window).height())*0.9;
+                    console.log(bot90);
+                    $('html, body').animate({scrollTop:bot90},'50');
+                },500);
     });
     //Click category card
     $(document).on('click', '.cat_card', function() {
@@ -654,6 +664,11 @@
         else if (fnc == "category"){
             filter_category(last.ctg, last.cpage, last.sale);
         }
+        setTimeout(function(){
+                    let bot90 = ($(document).height() - $(window).height())*0.9;
+                    console.log(bot90);
+                    $('html, body').animate({scrollTop:bot90},'50');
+                },500);
     });
     
     $(document).on('click', '.pg' ,function(){
@@ -666,14 +681,24 @@
             search(last.srch, page);
         }
         else if (last.fnc == "category"){
+            console.log(last.sale);
             filter_category(last.ctg, page, last.sale);
         }
     });
     $(document).on('click', '#saler' ,function(){
         let last = JSON.parse(window.localStorage.getItem('last'));
         last.sale = 'True';
+        console.log(last.sale);
         window.localStorage.setItem('last', JSON.stringify(last));
         filter_category('', 1, last.sale);
+    });
+
+    $(document).on('click', '#homer' ,function(){
+        console.log("invoked");
+        let last = JSON.parse(window.localStorage.getItem('last'));
+        last.sale = 'False';
+        window.localStorage.setItem('last', JSON.stringify(last));
+        window.location = '/android';
     });
     </script>
     
