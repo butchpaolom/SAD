@@ -683,9 +683,9 @@
     var lastScrollTop = 0;
     $(window).scroll(function(event){
     var st = $(this).scrollTop();
-    if ((st > lastScrollTop)&&((st-lastScrollTop)>20)){
+    if ((st > lastScrollTop)&&((st-lastScrollTop)>10)){
         $('#search_bar').removeClass('d-flex').addClass('d-none');
-    } else if  ((st < lastScrollTop)&&((st-lastScrollTop)<20)){
+    } else if  ((st < lastScrollTop)&&((st-lastScrollTop)<10)){
         $('#search_bar').removeClass('d-none').addClass('d-flex');
     }
     console.log(`new: ${st} old:${lastScrollTop} difference: ${st-lastScrollTop}`);
