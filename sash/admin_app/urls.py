@@ -30,9 +30,11 @@ urlpatterns = [
     path('be_delivered', be_delivered, name='admin_be_delivered'),
     path('least_stock', least_stock, name='admin_least_stock'),
 
+
     path('update/customer_name/<int:pk>', CustomerInfoNameUpdateView.as_view(), name='admin_customer_name_update'),
     path('update/customer_address/<int:pk>', CustomerInfoAddressUpdateView.as_view(), name='admin_customer_address_update'),
     
     path('update/front_assets/<int:pk>', UpdateAssets.as_view(), name='admin_update_front_assets'),
 
+    path('bulk', bulk_upload, name='admin_bulk_upload')
 ]   

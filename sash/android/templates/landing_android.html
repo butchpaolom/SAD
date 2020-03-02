@@ -71,7 +71,7 @@
                 <div class="card-body py-2 px-2">
                     <div class="container-fluid p-0">
                         <div class="row">
-                            <div class="col-12 pl-0">
+                            <div class="col-12 pr-0">
                                 <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input sort" id="views_desc" data-id="-views">
                                     <label class="custom-control-label" for="views_desc"><i class="fa fa-eye"></i> Popular</label>
@@ -389,7 +389,13 @@
         }
         
     function load_landing() {
-        render_products();
+        let last = JSON.parse(window.localStorage.getItem('last'));
+        if (last.sale=='True'){
+            filter_category('', 1, last.sale);
+        }
+        else{
+            render_products();
+        }
         render_category();
     }
     
@@ -556,6 +562,11 @@
         id = $(this).attr('id');
         const last = JSON.parse(window.localStorage.getItem('last'));
         filter_category(id, last.cpage, last.sale);
+        setTimeout(function(){
+                    let bot90 = ($(document).height() - $(window).height())*0.9;
+                    console.log(bot90);
+                    $('html, body').animate({scrollTop:bot90},'50');
+                },200);
     });
     //Change images of product detail
     $(document).on('click','.img_bt', function(){
@@ -684,21 +695,6 @@
             console.log(last.sale);
             filter_category(last.ctg, page, last.sale);
         }
-    });
-    $(document).on('click', '#saler' ,function(){
-        let last = JSON.parse(window.localStorage.getItem('last'));
-        last.sale = 'True';
-        console.log(last.sale);
-        window.localStorage.setItem('last', JSON.stringify(last));
-        filter_category('', 1, last.sale);
-    });
-
-    $(document).on('click', '#homer' ,function(){
-        console.log("invoked");
-        let last = JSON.parse(window.localStorage.getItem('last'));
-        last.sale = 'False';
-        window.localStorage.setItem('last', JSON.stringify(last));
-        window.location = '/android';
     });
     </script>
     

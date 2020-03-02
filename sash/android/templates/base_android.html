@@ -25,7 +25,7 @@
         <div><div></div></div>
         <div><div></div></div>
         </div></div>
-      </div>
+    </div>
 		<div class="wrapper d-flex align-items-stretch">
 			<nav id="sidebar" class="position-fixed h-100 shadow cscheme" style="z-index:4;">
 				<div class="custom-menu">
@@ -59,7 +59,7 @@
             </div>
           </div>
           <div class="row d-flex justify-content-center mx-0 text-center cscheme" style="background-color: #222222;">
-            <a href="#xd2" id="homer" class="text-light col-4 my-2 h6"><i class="fa fa-home"></i> Home</a>
+            <a id="homer" class="text-light col-4 my-2 h6"><i class="fa fa-home"></i> Home</a>
             <a href="{% url 'an_cart' %}" class="text-light col-4 my-2 h6 tbar_cart"><i class="fa fa-shopping-cart mr-2"></i>Cart</a>
             <a href="#xd1" id="saler" class="text-light col-4 my-2 h6 tbar_cart"><i class="fa fa-arrow-down"></i> Sale!</a>
         </div>
@@ -132,6 +132,19 @@
                   document.querySelector('.logo_img').appendChild(clone_logo);
               }
         });
+        $(document).on('click', '#saler' ,function(){
+        let last = JSON.parse(window.localStorage.getItem('last'));
+        last.sale = 'True';
+        window.localStorage.setItem('last', JSON.stringify(last));
+        window.location = '/android';
+        });
+
+    $(document).on('click', '#homer' ,function(){
+        let last = JSON.parse(window.localStorage.getItem('last'));
+        last.sale = 'False';
+        window.localStorage.setItem('last', JSON.stringify(last));
+        window.location = '/android';
+    });
   </script>
 
   </body>

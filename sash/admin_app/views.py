@@ -10,12 +10,18 @@ from django.contrib.messages.views import SuccessMessageMixin
 from .forms import *
 from django.contrib import messages
 import datetime
+from django.http import JsonResponse
 from django.db.models import Sum
 from django.core import mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.core.files.storage import FileSystemStorage
+import xlrd
+from django.contrib import messages
+
 import threading
 
 
@@ -275,6 +281,7 @@ class UpdateAssets(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return message
 
 #DASHBOARD CHARTS
+@login_required
 def sales_chart(request):
     date_now = datetime.datetime.now()
     month = date_now.month
@@ -304,6 +311,7 @@ def sales_chart(request):
 
     return render(request, 'dashboard_components/sales_chart.html', context)
 
+@login_required
 def most_viewed(request):
     product = Product.objects.all().order_by('views').last()
 
@@ -314,6 +322,7 @@ def most_viewed(request):
 
     return render(request, 'dashboard_components/most_viewed.html', context)
 
+@login_required
 def total_transactions(request):
     date_now = datetime.datetime.now()
     month = date_now.month
@@ -326,6 +335,7 @@ def total_transactions(request):
 
     return render(request, 'dashboard_components/total_transactions.html', context)
 
+@login_required
 def total_earnings(request):
     date_now = datetime.datetime.now()
     month = date_now.month
@@ -340,6 +350,7 @@ def total_earnings(request):
     
     return render(request, 'dashboard_components/total_earnings.html', context)
 
+@login_required
 def be_delivered(request):
     date_now = datetime.datetime.now()
     month = date_now.month
@@ -352,6 +363,7 @@ def be_delivered(request):
     
     return render(request, 'dashboard_components/be_delivered.html', context)
 
+@login_required
 def least_stock(request):
     products = Product.objects.all().order_by('stock')
 
@@ -362,7 +374,64 @@ def least_stock(request):
     return render(request, 'dashboard_components/least_stock.html', context)
 
 
+#bulk
+@login_required
+def bulk_upload(request):
+    if request.method == 'GET':
+        return render(request, 'fileuploads.html')
+    if request.method == 'POST':
+        try:
+            uploaded_images = request.FILES.getlist('images')
+            array_print(uploaded_images)
 
+            for image in uploaded_images:
+                f = FileSystemStorage()
+                f.save(image.name, image)
+
+            xl = request.FILES['infos']
+            xlf = FileSystemStorage()
+            xlf.save(xl.name, xl)
+
+            wb = xlrd.open_workbook(xlf.path(xl.name)) 
+            sheet = wb.sheet_by_index(0)
+            print(sheet)
+            for row in range(1,sheet.nrows):
+                product_name = sheet.cell_value(row, 0)
+                image = sheet.cell_value(row, 1)
+                category = sheet.cell_value(row, 2)
+                description = sheet.cell_value(row, 3)
+                price = sheet.cell_value(row, 4)
+                stock = sheet.cell_value(row, 5)
+                delivery = sheet.cell_value(row, 6)
+                hidden = sheet.cell_value(row, 7)
+
+                print(f"{product_name} {image} {category} {description} {price} {stock} {delivery} {hidden}")
+                product = Product(
+                                product_name=product_name,
+                                product_image=image,
+                                category = Category.objects.get(category_name__icontains=category),
+                                description = description,
+                                price = price,
+                                stock = stock,
+                                hidden = hidden,
+                                delivery_price=delivery,
+                                )
+                product.save()
+
+            
+            messages.success(request, 'Products Successfully Added!')
+
+
+            return redirect('admin_products')
+        except Exception as e:
+            print(e)
+            messages.error(request, str(e), extra_tags='danger')
+            return redirect('admin_products')
+
+
+def array_print(array):
+    for each in array:
+        print(each)
 
 
     

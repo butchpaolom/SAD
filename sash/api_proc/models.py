@@ -24,7 +24,7 @@ class Product(models.Model):
     product_image2 = models.ImageField(null=True, blank=True)
     description = models.TextField()
     price = models.DecimalField(null=True, decimal_places=2, max_digits=8)
-    stock = models.IntegerField(null=True)
+    stock = models.IntegerField(null=True, default=0)
     delivery_price = models.DecimalField(null=True, blank=False, decimal_places=2, max_digits=8)
     views = models.PositiveIntegerField(null=True, default=0)
     hidden = models.BooleanField(default=False)
