@@ -35,7 +35,7 @@ class Product(models.Model):
         return str(self.stock > 0)
 
     def __str__(self):
-        return str(self.product_name)
+        return f"{'{0:0=5d}'.format(self.id)}-{self.category.category_name[:3].upper()}"
 
     def category_name(self):
         return str(self.category.category_name)
@@ -76,7 +76,7 @@ class FinalOrder(models.Model):
 #Customer info + Final Order
 #no login required
 class CustomerInfo(models.Model):
-    final_order = models.ForeignKey(FinalOrder, on_delete=models.PROTECT)
+    final_order = models.OneToOneField(FinalOrder, on_delete=models.PROTECT)
     address = models.TextField(blank=False, null=False)
     first_name = models.CharField(max_length=30,  blank=False)
     last_name = models.CharField(max_length=30,  blank=False)

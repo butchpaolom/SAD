@@ -193,7 +193,7 @@
             autoplay: true,
             autoplayTimeout: 2000,
             autoplayHoverPause: true,
-            items: 4.75,
+            items: 4.35,
             loop: true,
             dots: false,
             
@@ -396,7 +396,9 @@
         else{
             render_products();
         }
-        render_category();
+        setTimeout(function(){
+            render_category();
+        },200)
     }
     
     function load_categories(){

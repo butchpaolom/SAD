@@ -1,9 +1,10 @@
 import django_filters
 from api_proc.models import Product
+from rest_framework.filters import OrderingFilter
+from django.db.models import F,Q
 
 class ProductFilterSet(django_filters.FilterSet):
     sale_list = django_filters.filters.BooleanFilter(field_name='sale', method='get_sale')
-
 
 
     class Meta:
@@ -18,3 +19,15 @@ class ProductFilterSet(django_filters.FilterSet):
             return queryset
 
 
+class ProductOrder(OrderingFilter):
+    def filter_queryset(self, request, queryset, view):
+        ordering = self.get_ordering(request, queryset, view)
+
+        if ordering == ['price']:
+            return queryset.order_by(F('price')*(1-(F('sale')*0.01)))
+        elif ordering == ['-price']:
+            return queryset.order_by(F('price')*(1-(F('sale')*0.01))).reverse()
+        elif ordering:
+            return queryset.order_by(*ordering)
+
+        return queryset

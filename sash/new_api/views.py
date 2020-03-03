@@ -12,7 +12,7 @@ from front_ep.models import *
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 import json
 from .threader import *
-from .filters import ProductFilterSet
+from .filters import ProductFilterSet, ProductOrder
 # Create your views here.
 
 class FrontAssetView(generics.RetrieveAPIView):
@@ -24,7 +24,7 @@ class ProductView(viewsets.ModelViewSet):
     # filter_fields = ['category__category_name', 'product_name', 'price']
     ordering_fields = ['views', 'price']
     queryset = Product.objects.all().exclude(hidden=True)
-    filter_backends = [filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend, filters.OrderingFilter]
+    filter_backends = [filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend, ProductOrder]
     filter_class = ProductFilterSet
     
     serializer_class = ProductSerializer

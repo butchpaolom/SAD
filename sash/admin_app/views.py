@@ -120,6 +120,10 @@ class ProductCreateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixi
             self.object.hidden=False
         self.object.save()
         return super(ProductCreateView, self).form_valid(form)
+    
+    def form_invalid(self, form):
+        messages.error(self.request, message=form.errors, extra_tags='danger')
+        return redirect('admin_products')
 
 class ProductRepriceView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
     template_name = 'reprice.html'

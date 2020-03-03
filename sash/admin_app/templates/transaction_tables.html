@@ -31,7 +31,7 @@
                       {% elif transaction.delivery_date and not transaction.delivered_date %}class="table-warning"
                       {% endif %}>
                       <td class="d-none d-sm-table-cell">{{ forloop.counter }}</td>
-                      <td id="trans_id{(transaction.id}}" class="d-none d-sm-table-cell">{{ transaction.final_order.trans_id }}</td>
+                      <td id="trans_id{{transaction.id}}" class="d-none d-sm-table-cell">{{ transaction.final_order.trans_id }}</td>
                       <td class="d-none d-sm-table-cell">
                         {% for customer_info in customer_infos %}
                         {% if customer_info.final_order == transaction.final_order %}

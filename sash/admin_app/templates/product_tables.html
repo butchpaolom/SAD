@@ -12,12 +12,12 @@
               </div>
               <div class="card-body">
                   <button class="action px-3 btn btn-info float-right" data-id="{% url 'admin_product_create' %}"><i class="fa fa-plus pr-2"></i>Product</button>
-                  <button class="action px-3 btn btn-info float-right" data-id="{% url 'admin_product_reprice' %}">Reprice</button>
-                  <button class="action px-3 btn btn-info float-right" data-id="{% url 'admin_bulk_upload' %}">Bulk Upload</button>
+                  <button class="action px-3 btn btn-info float-right" data-id="{% url 'admin_product_reprice' %}"><i class="fas fa-tags pr-2"></i>Reprice</button>
+                  <button class="action px-3 btn btn-info float-right" data-id="{% url 'admin_bulk_upload' %}"><i class="fas fa-list-ol pr-2"></i>Bulk Upload</button>
                   <table class="table table-striped table-bordered" id="product-table">
                     <thead class="text-primary">
                       <th class="d-none d-sm-table-cell">#</th>
-                      <th>Product Name</th>
+                      <th>ID <em class="d-none d-sm-inline">- Product Name</em></th>
                       <th class="d-none d-sm-table-cell">Category</th>
                       <th>Price</th>
                       <th>Stock</th>
@@ -26,10 +26,10 @@
                     </thead>
                     <tbody>
                     {% for product in products %}
-                      <tr {%if not product.in_stock %}class="table-danger"{% endif %}>
+                      <tr {%if product.stock == 0 %}class="table-danger"{% endif %}>
                         <td class="d-none d-sm-table-cell">{{ forloop.counter }}</td>
                         <td id="product_name{{product.id}}">
-                          {{ product.product_name }}
+                          {{ product }} <em class="d-none d-sm-inline">({{ product.product_name }})</em class="">
                         </td>
                         <td class="d-none d-sm-table-cell" id="category{{product.id}}">
                           {{ product.category}}

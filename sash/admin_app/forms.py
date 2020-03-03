@@ -14,14 +14,18 @@ class ProductForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
 
 class ProductEditForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
     price = forms.DecimalField(
-    widget=forms.TextInput(attrs={'readonly':'readonly'})
+        widget=forms.TextInput(attrs={'readonly':'readonly'})
     )
     delivery_price = forms.DecimalField(
-    widget=forms.TextInput(attrs={'readonly':'readonly'})
+        widget=forms.TextInput(attrs={'readonly':'readonly'})
     )
+    product_name = forms.CharField(
+        widget=forms.TextInput(attrs={'readonly':'readonly'})
+    )   
+    
     class Meta:
         model = Product
-        exclude = ['views']
+        exclude = ['views','category']
 
 class ProductRepriceForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
     def get_products():
