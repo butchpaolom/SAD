@@ -12,7 +12,7 @@
     </div>
 </template>
 <template id="pager_template">
-    <div class="row d-flex justify-content-center my-4 pg_c mx-0">
+    <div class="row d-flex justify-content-center my-4 pg_c mx-0 fixed-bottom animated zoomInUp faster" id="pager_button" style="display:none !important">
         <div class="btn-group d-flex col-3" role="group" aria-label="Basic example">
             <button type="button" class="btn btn-outline-dark pg" id="prev"><i class="fa fa-chevron-left"></i></button>
             <button type="button" class="btn btn-outline-dark pg" id="next"><i class="fa fa-chevron-right"></i></button>
@@ -22,7 +22,7 @@
 
 <!--Category Template-->
 <template id="cat_template">
-    <div class="cat_card p-0 animated zoomInLeft faster">
+    <div class="cat_card p-0 animated zoomInDown faster">
         <div class="card border-0 p-0 m-0">
             <div class="card-body pb-1 p-0 cscheme" style="background-color: #222222;">
                     <div class="square" id="pic">
@@ -34,7 +34,7 @@
 </template>
 <!--Product Detail Template-->
 <template id="prod_detail_template">
-    <div class="container-fluid mb-4 mx-0 animated slideInLeft" id="product_detail_base">
+    <div class="container-fluid mb-4 mx-0 animated slideInLeft faster" id="product_detail_base">
         <div class="row">
             <div class="col-md-12 col-lg-6 col-sm-12 col-12 m-0 p-0 justify-content-center">
                 <div class="square m-0" id="det_pic" style="background-image: url('{{ product_image }}');width: 100%;padding-bottom: 100%;background-size: cover;background-position: center;">
@@ -76,7 +76,7 @@
 </template>
 <!--Carousel Template-->
 <template id="car_template">
-    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+    <div id="carouselExampleControls" class="carousel slide animated slideInLeft faster" data-ride="carousel">
         <div class="carousel-inner">
             <div class="img1 carousel-item active">
                 <img id="img1" class="d-block w-100">

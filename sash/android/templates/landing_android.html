@@ -2,23 +2,23 @@
 {% load static %}
 {% block content %}
 {% include "templates.html" %}
-<div class="container-fluid px-0 mx-0 page" id="xd1">
+<div class="container-fluid px-0 mx-0 page mb-4 pb-4" id="xd1">
     <div class="cat_container row owl-carousel owl-theme w-100 px-0 mx-0">
     </div>
 
-    <div class="row d-flex justify-content-end mx-0 mb-1 cscheme" style="background-color: #222222;">
-        <button class="btn btn-outline-light my-2 ml-3 text-light animated fadeIn faster" style="display:none" id="back">
+    <div class="row d-flex justify-content-end mx-0 mb-1 cscheme" style="background-color: #222222;" id="back_div">
+        <button class="btn btn-outline-light my-2 ml-3 mr-3 text-light animated fadeIn faster" style="display:none" id="back">
             <i class="fa fa-caret-left my-1 mr-2"></i>Go Back
         </button>
-        <div class="input-group my-2 col-5 animated fadeIn" id="search_bar">
+        <!-- <div class="input-group my-2 col-5 animated fadeIn" id="search_bar">
             <input type="text" class="form-control border text-light cscheme" style="background-color: #222222;" placeholder="Search" id="search_input">
             <div class="input-group-append">
                 <button class="btn btn-outline-light" id="search_button" type="button" disabled><i class="fa fa-search"></i></button>
             </div>
-        </div>
+        </div> -->
     </div>
 
-    <div class="prod_filters my-0">
+    <div class="prod_filters my-0 animated fadeInDownBig faster">
 
         <div class="row mx-0">
         <div class="col-4 p-0">
@@ -120,7 +120,7 @@
           
     </div>
     
-    <div class="prod_container row mx-2 my-2">
+    <div class="prod_container row mx-2 mt-2 mb-4 pb-3">
     </div>
 
 </div>
@@ -409,6 +409,7 @@
             success: function(data) {
                 const opt = document.createElement('select');
                 opt.classList.add('custom-select','mx-3');
+                opt.setAttribute('id', 'cat_select')
                 const all = document.createElement('option');
                 all.textContent = 'All';
                 all.value = "";
@@ -423,7 +424,7 @@
                     const last = JSON.parse(window.localStorage.getItem('last'));
                     filter_category(this.value, 1, last.sale);
                     setTimeout(function(){
-                        let bot90 = ($(document).height() - $(window).height())*0.9;
+                        let bot90 = $(document).height() - $(window).height()*0.8;
                         console.log(bot90);
                         $('html, body').animate({scrollTop:bot90},'50');
                     },500);
@@ -554,18 +555,20 @@
         prod_id = $(this).attr('id');
         render_product_detail(prod_id);
         setTimeout(function(){
-                    let bot90 = ($(document).height() - $(window).height())*0.9;
+                    let bot90 = $('#back_div').offset().top;
                     console.log(bot90);
                     $('html, body').animate({scrollTop:bot90},'50');
                 },500);
     });
     //Click category card
     $(document).on('click', '.cat_card', function() {
-        id = $(this).attr('id');
+        const id = $(this).attr('id');
+        const cat_select = $('#cat_select');
+        cat_select.val(id);
         const last = JSON.parse(window.localStorage.getItem('last'));
         filter_category(id, last.cpage, last.sale);
         setTimeout(function(){
-                    let bot90 = ($(document).height() - $(window).height())*0.9;
+                    let bot90 = ($(document).height() - $(window).height())*0.8;
                     console.log(bot90);
                     $('html, body').animate({scrollTop:bot90},'50');
                 },200);
@@ -678,15 +681,15 @@
             filter_category(last.ctg, last.cpage, last.sale);
         }
         setTimeout(function(){
-                    let bot90 = ($(document).height() - $(window).height())*0.9;
+                    let bot90 = ($(document).height() - $(window).height())*0.65;
                     console.log(bot90);
-                    $('html, body').animate({scrollTop:bot90},'50');
+                    $('html, body').animate({scrollTop:$(".cat_container").offset().top},'50');
                 },500);
     });
     
     $(document).on('click', '.pg' ,function(){
         const last = JSON.parse(window.localStorage.getItem('last'));
-        page = $(this).attr('data-id');
+        const page = $(this).attr('data-id');
         if (last.fnc == "landing"){
             render_products(page);
         }
@@ -696,6 +699,26 @@
         else if (last.fnc == "category"){
             console.log(last.sale);
             filter_category(last.ctg, page, last.sale);
+        }
+        setTimeout(function(){
+                    let bot90 = ($(document).height() - $(window).height())*0.7;
+                    console.log(bot90);
+                    $('html, body').animate({scrollTop:bot90},'50');
+                },500);
+    });
+    let lastScrollTop = 0;
+    $(window).scroll(function(event){
+        let max = ($(document).height() - $(window).height())+1;
+        let current = $(document).scrollTop()+1;
+        // console.log(`${max} ${current}`);
+        if (document.getElementById('pager_button')){
+            if (current/max > 0.9){
+            console.log(`90% ${max} ${current}`);
+                $('#pager_button').show();
+            }
+            else{
+                $('#pager_button').attr("style", "display: none !important");
+            }
         }
     });
     </script>
