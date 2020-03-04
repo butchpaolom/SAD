@@ -326,12 +326,12 @@
                 products = data.results;
                 pager(data.previous,data.next, spage);
                 if (search_value != ""){
-                    $('.prod_container').append("<div class='container-fluid text-center mb-2'><h5 class='animated bounceIn'>Showing (" + data.count + ") results for '" + search_value + "'.</h5></div>");
+                    $('.prod_container').append("<div class='container-fluid text-center mb-2'><h5 class='animated bounceIn mt-2'>Showing (" + data.count + ") results for '" + search_value + "'.</h5></div>");
                 }
                 load_product(products);
                 }
                 else if (data.count == 0){
-                    $('.prod_container').append("<div class='container-fluid text-center'><h5 class='animated bounceIn'>No results!</h5></div>");
+                    $('.prod_container').append("<div class='container-fluid text-center'><h5 class='animated bounceIn mt-2'>No results!</h5></div>");
                 }
                 check_sort();
                 check_show_names();
