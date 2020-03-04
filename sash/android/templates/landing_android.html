@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 {% include "templates.html" %}
-<div class="container-fluid px-0 mx-0 page mb-4 pb-4" id="xd1">
+<div class="container-fluid px-0 mx-0 page mb-4" id="xd1">
     <div class="cat_container row owl-carousel owl-theme w-100 px-0 mx-0">
     </div>
 
@@ -120,7 +120,7 @@
           
     </div>
     
-    <div class="prod_container row mx-2 mt-2 mb-4 pb-3">
+    <div class="prod_container row mx-2 my-2">
     </div>
 
 </div>
@@ -706,21 +706,21 @@
                     $('html, body').animate({scrollTop:bot90},'50');
                 },500);
     });
-    let lastScrollTop = 0;
-    $(window).scroll(function(event){
-        let max = ($(document).height() - $(window).height())+1;
-        let current = $(document).scrollTop()+1;
-        // console.log(`${max} ${current}`);
-        if (document.getElementById('pager_button')){
-            if (current/max > 0.9){
-            console.log(`90% ${max} ${current}`);
-                $('#pager_button').show();
-            }
-            else{
-                $('#pager_button').attr("style", "display: none !important");
-            }
-        }
-    });
+
+    // $(window).scroll(function(event){
+    //     let max = ($(document).height() - $(window).height())+1;
+    //     let current = $(document).scrollTop()+1;
+    //     // console.log(`${max} ${current}`);
+    //     if (document.getElementById('pager_button')){
+    //         if (current/max > 0.9){
+    //         console.log(`90% ${max} ${current}`);
+    //             $('#pager_button').show();
+    //         }
+    //         else{
+    //             $('#pager_button').attr("style", "display: none !important");
+    //         }
+    //     }
+    // });
     </script>
     
 {% endblock content %}
