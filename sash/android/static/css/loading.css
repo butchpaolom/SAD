@@ -94,6 +94,6 @@
 
   body{
     overflow-x: hidden !important;
-    width:100% !important;
+    width:100%;
     /* overflow-y: auto !important; */
   }
