@@ -18,6 +18,28 @@
   </head>
 
   <body class="bg-white">
+    <div class="row d-flex justify-content-center mx-0 text-center cscheme py-1 shadow w-100" style="background-color: #222222;">
+      <a id="sidebarCollapse" class="text-light col-1 my-2 h5 text-left"><i class="mt-2 fa fa-bars"></i></a>
+      <a id="homer" class="text-light col-2 my-2 h5 text-right"><i class="mt-2 fa fa-th"></i></a>
+      <a href="#xd1" id="saler" class="text-light col-2 my-2 h5 tbar_cart text-right"><i class="mt-2 fa fa-tag"></i></a>
+      <a href="{% url 'an_cart' %}" class="text-light col-2 my-2 h5 tbar_cart text-center"><i class="mt-2 fa fa-shopping-cart mr-2"></i></a>
+      <div class="col-5 my-2">
+      <div class="input-group animated fadeIn text" id="search_bar">
+          <input type="text" class="form-control border text-light cscheme" style="background-color: #222222;" placeholder="Search" id="search_input">
+          <div class="input-group-append">
+              <button class="btn btn-outline-light" id="search_button" type="button" disabled><i class="fa fa-search"></i></button>
+          </div>
+      </div>
+      </div>
+
+
+
+      <!-- <a id="homer" class="text-light col-3 my-2 h5"><i class="fa fa-home"></i> Home</a>
+      <a href="{% url 'an_cart' %}" class="text-light col-3 my-2 h5 tbar_cart"><i class="fa fa-shopping-cart mr-2"></i>Cart</a>
+      <a href="#xd1" id="saler" class="text-light col-3 my-2 h5 tbar_cart"><i class="fa fa-arrow-down"></i> Sale!</a> -->
+
+
+    </div>
     <div id="loading" class="h-100 w-100 align-content-center flex-wrap d-flex justify-content-center" style="background-color: #ffffff; z-index:500; position: fixed;">
       <div class="loadingio-spinner-double-ring-gnu4acl4iv5"><div class="ldio-2581lugbjgw">
         <div></div>
@@ -53,30 +75,6 @@
 	        </ul>
 	      </div>
       </nav>
-      <div class="row d-flex justify-content-center mx-0 text-center cscheme fixed-top py-1 shadow w-100" style="background-color: #222222;">
-        <div class="container-fluid">
-        <a id="sidebarCollapse" class="text-light col-1 my-2 h5 text-left"><i class="mt-2 fa fa-bars"></i></a>
-        <a id="homer" class="text-light col-2 my-2 h5 text-right"><i class="mt-2 fa fa-th"></i></a>
-        <a href="#xd1" id="saler" class="text-light col-2 my-2 h5 tbar_cart text-right"><i class="mt-2 fa fa-tag"></i></a>
-        <a href="{% url 'an_cart' %}" class="text-light col-2 my-2 h5 tbar_cart text-center"><i class="mt-2 fa fa-shopping-cart mr-2"></i></a>
-        <div class="col-5 my-2">
-        <div class="input-group animated fadeIn text" id="search_bar">
-            <input type="text" class="form-control border text-light cscheme" style="background-color: #222222;" placeholder="Search" id="search_input">
-            <div class="input-group-append">
-                <button class="btn btn-outline-light" id="search_button" type="button" disabled><i class="fa fa-search"></i></button>
-            </div>
-        </div>
-        </div>
-
-
-
-        <!-- <a id="homer" class="text-light col-3 my-2 h5"><i class="fa fa-home"></i> Home</a>
-        <a href="{% url 'an_cart' %}" class="text-light col-3 my-2 h5 tbar_cart"><i class="fa fa-shopping-cart mr-2"></i>Cart</a>
-        <a href="#xd1" id="saler" class="text-light col-3 my-2 h5 tbar_cart"><i class="fa fa-arrow-down"></i> Sale!</a> -->
-
-
-      </div>
-      </div>
         <div id="content" class="d-none">
           <div class="container-fluid d-flex justify-content-center mt-4 pt-4 animated slideInRight">
             <div class="logo_img col-10 p-4">
