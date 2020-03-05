@@ -109,13 +109,14 @@ class Transaction(models.Model):
     delivered_date = models.DateTimeField(null=True)
     choices = (
         (1,"Packaging"),
-        (2,"In Transit"),
-        (3,"Out for Delivery"),
+        (2,"Out for Delivery"),
+        (3,"Delivered"),
         (4,"Validation")
     )
     status = models.IntegerField(choices=choices, null=True, default=4)
 
     def __str__(self):
         return '{0}'.format(self.final_order)
+
 
     

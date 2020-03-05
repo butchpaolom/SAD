@@ -20,27 +20,29 @@
       background: #555; 
     }
     </style>
-<div class="modal-header">
-    <h5 class="modal-title">Order Now</h5>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-</div>
+    <div class="animated slideInDown faster">
+        <div class="modal-header">
+            <h5 class="modal-title">Order Now</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
 
-<div class="modal-body">
-    <div class="content-section">
-        <fieldset class="form-group">
-            {{ form|crispy }}
-            <div  style="text-align: justify;">
-                <input id="cb" type="checkbox" class="mr-2"><span>I have read and agree to the Terms and Conditions and other important reminders and information posted by the company. I hereby confirm that Power Sash Enterprises reserves the right to refuse or cancel my order
-                for any reason relating to my purchase in their sole discretion.</span>
+        <div class="modal-body">
+            <div class="content-section">
+                <fieldset class="form-group">
+                    {{ form|crispy }}
+                    <div  style="text-align: justify;">
+                        <input id="cb" type="checkbox" class="mr-2"><span>I have read and agree to the Terms and Conditions and other important reminders and information posted by the company. I hereby confirm that Power Sash Enterprises reserves the right to refuse or cancel my order
+                        for any reason relating to my purchase in their sole discretion.</span>
+                    </div>
+                </fieldset>
+                <div class="modal-footer">
+                    <button class="submit btn btn-outline-primary" type="submit" disabled>Order Now</button>
+                </div>
             </div>
-        </fieldset>
-        <div class="modal-footer">
-            <button class="submit btn btn-outline-primary" type="submit" disabled>Order Now</button>
         </div>
     </div>
-</div>
 <script>
     $('#cb').click(function(){
             if ($('#cb').is(":checked")){

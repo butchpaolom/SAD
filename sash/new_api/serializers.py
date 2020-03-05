@@ -21,7 +21,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class InitialOrderSerializer(serializers.ModelSerializer):
     product = serializers.CharField(source='product.product_name')
     delivery = serializers.DecimalField(source='product.delivery_price', max_digits=10, decimal_places=2)
-    product_price = serializers.DecimalField(source='product.price', max_digits=10, decimal_places=2)
+    product_price = serializers.DecimalField(source='product.t_price', max_digits=10, decimal_places=2)
     class Meta:
         model = InitialOrder
         fields = ['product', 'quantity', 'total_price','delivery', 'product_price']

@@ -218,12 +218,24 @@ class TransactionListView(LoginRequiredMixin, ListView):
         return context
 
 
+
+
 class TransactionDeliveryDateSet(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Transaction
     template_name = 'update.html'
     success_url = reverse_lazy('admin_transactions')
     form_class = TransactionDeliveryDateForm
     
+    def form_valid(self, form):
+        if self.object.delivery_date and not self.object.paid and not self.object.delivered_date:
+            self.object.status = 1
+        elif self.object.delivered_date and self.object.paid and not self.object.delivered_date:
+            self.object.status = 2
+        else:
+            self.object.status = 3
+        self.object = form.save()
+        return super().form_valid(form)
+
     def get_success_message(self, cleaned_data):
         transaction = Transaction.objects.get(id=self.kwargs.get('pk'))
         trans_id = transaction.final_order.trans_id
@@ -247,6 +259,16 @@ class TransactionDeliveredDateSet(LoginRequiredMixin, SuccessMessageMixin, Updat
         message = "Successfully updated " + str(trans_id)
         return message
 
+    def form_valid(self, form):
+        if self.object.delivery_date and not self.object.paid and not self.object.delivered_date:
+            self.object.status = 1
+        elif self.object.delivered_date and self.object.paid and not self.object.delivered_date:
+            self.object.status = 2
+        else:
+            self.object.status = 3
+        self.object = form.save()
+        return super().form_valid(form)
+
 
 
 #FinalOrderView
@@ -267,6 +289,17 @@ class CashOnDeliveryUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     template_name = 'update.html'
     success_url = reverse_lazy('admin_transactions')
     form_class = CashOnDeliveryUpdate
+
+    def form_valid(self, form):
+        if self.object.delivery_date and not self.object.paid and not self.object.delivered_date:
+            self.object.status = 1
+        elif self.object.delivered_date and self.object.paid and not self.object.delivered_date:
+            self.object.status = 2
+        else:
+            self.object.status = 3
+        print(self.object)
+        self.object = form.save()
+        return super().form_valid(form)
 
     def get_success_message(self, cleaned_data):
         trans_id = Transaction.objects.get(id=self.kwargs.get('pk')).final_order.trans_id
