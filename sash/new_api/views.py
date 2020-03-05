@@ -13,6 +13,7 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 import json
 from .threader import *
 from .filters import ProductFilterSet, ProductOrder
+from api_proc.views import send_email
 # Create your views here.
 
 class FrontAssetView(generics.RetrieveAPIView):
@@ -107,6 +108,12 @@ class CustomerInfoView(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
+        #email send
+        thread_list = []
+        thread = threading.Thread(target=send_email, args=(data,))
+        thread_list.append(thread)
+        thread.start()
+
         if not return_data:
             return_data = serializer.data
         return Response(return_data, status=status.HTTP_201_CREATED, headers=headers)
