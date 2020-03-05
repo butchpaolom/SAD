@@ -66,10 +66,11 @@
     
     $('.submit').click(function() {
         const cart = window.localStorage.getItem('cart');
+        console.log(cart);
         $.ajax({
             url: "/new_api/api_customer_info/",
             method: 'POST',
-            dataType: "json",
+            // dataType: "json",
             data: {
                 address: $('#id_address').val(),
                 first_name: $('#id_first_name').val(),
@@ -81,17 +82,21 @@
                 cart: cart,
             },
             success: function(data){
+                console.log(data);
                 var trans = JSON.parse(window.localStorage.getItem('transactions'));
+                console.log(trans);
                 const cart = [];
                 window.localStorage.setItem('cart', JSON.stringify(cart));
                 const count = JSON.parse(window.localStorage.getItem('cart')).length;
                 $('#cart_count').html('(' + count + ')');
-                if (trans&&data.payment_method==2){
+                if (data.payment_method==2){
+                    console.log('ahhhhhh');
                     trans.push(data.trans_id);
                     window.localStorage.setItem('transactions', JSON.stringify(trans));
+                    console.log(data.trans_id);
                     $('.modal-body').empty().load("{% url 'payment_process' %}?trans_id=" + data.trans_id);
                 }
-                else if (trans&&data.payment_method==1){
+                else if (data.payment_method==1){
                     $('.cart_cont').empty();
                     trans.push(data.trans_id);
                     window.localStorage.setItem('transactions', JSON.stringify(trans));

@@ -65,12 +65,15 @@ class CustomerInfoView(viewsets.ModelViewSet):
     
     def create(self, request):
         data = request.data.copy()
+        print(data)
         return_data = ""
         try:
             cart = json.loads(data['cart'])
+            print(cart)
             orders=[]
             for each in cart:
                 prd = Product.objects.get(id=each['id'])
+                print(prd)
                 order = InitialOrder(
                     product=prd,
                     quantity=each['quantity'],
@@ -94,8 +97,9 @@ class CustomerInfoView(viewsets.ModelViewSet):
                 "trans_id": finalOrder.trans_id,
                 "payment_method": data['payment_method']
             }
-        except Exception as e:
-            print(e)
+        except Exception:
+            import traceback
+            print(traceback.format_exc())
             pass
 
         #saving of data on dafault post request

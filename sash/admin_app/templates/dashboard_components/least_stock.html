@@ -13,6 +13,7 @@
                 </thead>
                 <tbody>
                 {% for product in products %}
+                  {% if not product.hidden %}
                   <tr {% if product.stock == 0 %}class="table-danger"{% elif product.stock <= 3 %}class="table-warning"{% endif %}>
                     <td>{{ forloop.counter }}</td>
                     <td>
@@ -25,6 +26,7 @@
                       {{ product.views }}
                     </td>
                   </tr>
+                  {% endif %}
                   {% endfor %}
                 </tbody>
               </table>

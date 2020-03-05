@@ -13,7 +13,7 @@
     </thead>
     <thead>
       <th>#</th>
-      <th>Categ</th>
+      <th>Product ID</th>
       <th>Price / unit</th>
       <th>Delivery price per unit</th>
       <th>Qnty</th>
@@ -24,7 +24,7 @@
       <tr>
           <td>{{ forloop.counter }}</td>
           <td>{{ initial_order.product }}</td>
-          <td>₱{{ initial_order.product.price }}</td>
+          <td>₱{{ initial_order.product.t_price }}</td>
           <td>₱{{ initial_order.product.delivery_price }}</td>
           <td>{{ initial_order.quantity }}</td>
           <td>₱{{ initial_order.total_price }}</td>
