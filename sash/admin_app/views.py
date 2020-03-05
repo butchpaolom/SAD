@@ -256,6 +256,7 @@ class TransactionDeliveredDateSet(LoginRequiredMixin, SuccessMessageMixin, Updat
     def get_success_message(self, cleaned_data):
         transaction = Transaction.objects.get(id=self.kwargs.get('pk'))
         trans_id = transaction.final_order.trans_id
+        print(self.object.final_order.trans_id)
         message = "Successfully updated " + str(trans_id)
         return message
 
@@ -293,7 +294,7 @@ class CashOnDeliveryUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     def form_valid(self, form):
         if self.object.delivery_date and not self.object.paid and not self.object.delivered_date:
             self.object.status = 1
-        elif self.object.delivered_date and self.object.paid and not self.object.delivered_date:
+        elif self.object.delivery_date and self.object.paid and not self.object.delivered_date:
             self.object.status = 2
         else:
             self.object.status = 3
