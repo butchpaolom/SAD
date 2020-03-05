@@ -19,10 +19,10 @@
 
   <body class="bg-white">
     <div class="row justify-content-center mx-0 text-center cscheme py-1 shadow d-flex fixed-top" style="background-color: #222222;" id="navi_new">
-      <a id="sidebarCollapse" class="text-light col-1 my-2 h4 text-left"><i class="mt-2 fa fa-bars"></i></a>
-      <a id="homer" class="text-light col-2 my-2 h4 text-right"><i class="mt-2 fa fa-th"></i></a>
-      <a href="#xd1" id="saler" class="text-light col-2 my-2 h4 tbar_cart text-right"><i class="mt-2 fa fa-tag"></i></a>
-      <a href="{% url 'an_cart' %}" class="text-light col-2 my-2 h4 tbar_cart text-right"><i class="mt-2 fa fa-shopping-cart mr-2"></i></a>
+      <a id="sidebarCollapse" class="text-light col-1 my-2 h3 text-left"><i id="menu_nav" class="mt-2 nav_it fa fa-bars text-secondary"></i></a>
+      <a id="homer" class="text-light col-2 my-2 h3 text-right"><i id="all_nav" class="mt-2 nav_it fa fa-th text-secondary"></i></a>
+      <a href="#xd1" id="saler" class="text-light col-2 my-2 h3 tbar_cart text-right"><i id="sale_nav" class="mt-2 nav_it fa fa-tag text-secondary"></i></a>
+      <a id="carter" class="text-light col-2 my-2 h3 tbar_cart text-right"><i id="cart_nav" class="mt-2 nav_it fa fa-shopping-cart mr-2 text-secondary"></i></a>
       <div class="col-5 my-2">
       <div class="input-group text" id="search_bar">
           <input type="text" class="form-control border text-light cscheme" style="background-color: #222222;" placeholder="Search" id="search_input">
@@ -66,16 +66,16 @@
           <span id="address"></span>
 	        <ul class="list-unstyled components mb-5">
 	          <li>
-	            <a href="{% url 'an_landing' %}"><span class="fa fa-home mr-3"></span>Home</a>
+	            <a class="sidenavlist" id="side_all_nav" data-id="all_nav"><span class="fa fa-home mr-3"></span>Home</a>
 	          </li>
 	          <li>
-	            <a href="{% url 'an_cart' %}"><span class="fa fa-shopping-cart mr-3"></span>Cart<span class="ml-1" id="cart_count"></span></a>
+	            <a class="sidenavlist" id="side_cart_nav" data-id="cart_nav"><span class="fa fa-shopping-cart mr-3"></span>Cart<span class="ml-1" id="cart_count"></span></a>
             </li>
             <li>
-              <a href="{% url 'an_transactions' %}"><span class="fa fa-truck mr-3"></span>Track your Order</a>
+              <a class="sidenavlist" id="side_orders_nav" data-id="none"><span class="fa fa-truck mr-3"></span>Track your Order</a>
 	          </li>
 	          <li>
-              <a href="{% url 'an_about' %}"><span class="fa fa-info mr-4"></span>About</a>
+              <a class="sidenavlist" id="side_about_nav" data-id="none"><span class="fa fa-info mr-4"></span>About</a>
             </li>
 	        </ul>
 	      </div>
@@ -98,7 +98,9 @@
     <script>
         $(document).ready(function(){
           const count = JSON.parse(window.localStorage.getItem('cart')).length;
+          const last = JSON.parse(window.localStorage.getItem('last'))
           $('#cart_count').html('(' + count + ')');
+          $(`#${last.tab}`).removeClass('text-secondary');
         });
       
       $("body").css("overflow-y", "hidden");
@@ -157,6 +159,7 @@
         $(document).on('click', '#saler' ,function(){
         let last = JSON.parse(window.localStorage.getItem('last'));
         last.sale = 'True';
+        last.tab = 'sale_nav';
         window.localStorage.setItem('last', JSON.stringify(last));
         window.location = '/android';
         });
@@ -164,8 +167,39 @@
     $(document).on('click', '#homer' ,function(){
         let last = JSON.parse(window.localStorage.getItem('last'));
         last.sale = 'False';
+        last.srch = '';
+        last.tab = 'all_nav';
         window.localStorage.setItem('last', JSON.stringify(last));
         window.location = '/android';
+    });
+
+    $(document).on('click', '#carter' ,function(){
+        let last = JSON.parse(window.localStorage.getItem('last'));
+        last.tab = 'cart_nav';
+        window.localStorage.setItem('last', JSON.stringify(last));
+        window.location = "{% url 'an_cart' %}";
+    });
+
+    $(document).on('click', '#sidebarCollapse' ,function(){
+      $('#menu_nav').toggleClass('text-secondary');
+    });
+    
+    $(document).on('click', '.sidenavlist' ,function(){
+      let last = JSON.parse(window.localStorage.getItem('last'));
+      last.tab = $(this).data('id');
+      window.localStorage.setItem('last', JSON.stringify(last));
+      if ($(this).attr("id") == 'side_all_nav'){
+        window.location = "{% url 'an_landing' %}";
+      }
+      else if ($(this).attr("id") == 'side_cart_nav'){
+        window.location = "{% url 'an_cart' %}";
+      }
+      else if ($(this).attr("id") == 'side_orders_nav'){
+        window.location = "{% url 'an_transactions' %}";
+      }
+      else {
+        window.location = "{% url 'an_about' %}";
+      }
     });
   </script>
 

@@ -67,6 +67,34 @@
             window.location = $(this).data('id');
         }
     });
+
+    $('#search_input').keyup(function(){
+    if ($('#search_input').val() == ""){
+        $('#search_button').attr("disabled", true);
+    }
+    else{
+        $('#search_button').attr("disabled", false);
+    }
+    });
+
+    $('#search_button').click(function(){
+        let input = $('#search_input').val();
+        let last = JSON.parse(window.localStorage.getItem('last'));
+        last.tab = 'all_nav';
+        window.localStorage.setItem('last', JSON.stringify(last));
+        window.location = "{% url 'an_landing' %}?action=search&value=" + input;
+        }
+    );
+    $('#search_input').keypress(function(e){
+        var input = $('#search_input').val();
+        if (e.which == 13 ){
+            window.location = "{% url 'an_landing' %}?action=search&value=" + input;
+            let last = JSON.parse(window.localStorage.getItem('last'));
+            last.tab = 'all_nav';
+            window.localStorage.setItem('last', JSON.stringify(last));
+        }
+    });
 </script>
+
 {% endblock content %}
 

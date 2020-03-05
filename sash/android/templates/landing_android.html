@@ -131,7 +131,6 @@
     $(document).ready(function (){
         const urlParams = new URLSearchParams(window.location.search);
         const myParam = urlParams.get('action');
-        const pid =  urlParams.get('id');
         const cart = [];
         const transid_single = "";
         const trans_id = [];
@@ -142,7 +141,8 @@
             "page": 1,
             "spage": 1,
             "cpage": 1,
-            "sale": "False"
+            "sale": "False",
+            "tab": "all_nav"
         }
         const settings = {
             show_pn: true,
@@ -162,12 +162,18 @@
         window.localStorage.setItem('transactions', JSON.stringify(trans_id));
         }
         if (myParam=="load_product"){
+            const pid =  urlParams.get('id');
             render_product_detail(pid);
             setTimeout(function(){
                     let bot90 = $('#back_div').offset().top-5;
                     console.log(bot90);
                     $('html, body').animate({scrollTop:bot90},'50');
                 },500);
+        }
+        else if (myParam=="search"){
+            const sval = urlParams.get('value');
+            search(sval,1);
+            load_categories();
         }
         else{
             load_landing();
@@ -312,11 +318,12 @@
     }
     function search(search_value, spage){
         const order = JSON.parse(window.localStorage.getItem('settings')).ordering;
+        const last = JSON.parse(window.localStorage.getItem('last'));
         if (!spage){
             spage=1;
         }
         $.ajax({
-            url: "/new_api/api_products/?search=" + search_value + '&ordering=' + order + '&page=' + spage,
+            url: "/new_api/api_products/?search=" + search_value + '&ordering=' + order + '&page=' + spage + '&sale_list=' + last.sale,
             method: 'GET',
             dataType: 'json',
             success: function(data) {
@@ -361,7 +368,7 @@
     }
     });
 
-    function filter_category(category, cpage, sale_list){
+    function filter_category(category, cpage, sale_list, search){
         const order = JSON.parse(window.localStorage.getItem('settings')).ordering;
         if (sale_list ==  null){
             sale_list = 0
@@ -369,7 +376,7 @@
 
         $('.prod_container').empty();
         $.ajax({
-            url: "/new_api/api_products/?category__category_name=" + category + '&page=' + cpage + '&ordering=' + order + '&sale_list=' + sale_list,
+            url: "/new_api/api_products/?category__category_name=" + category + '&page=' + cpage + '&ordering=' + order + '&sale_list=' + sale_list + '&search=' + search,
             method: 'GET',
             dataType: 'json',
             success: function(data) {
@@ -396,7 +403,12 @@
                 $('.prod_filters').addClass('animated fadeIn').show();
                 }
                 else if (data.count == 0){
-                    $('.prod_container').append("<div class='container-fluid text-center'><h5 class='animated bounceIn'>We have no more items in " + category + "</h5></div>");
+                    if (search == ''){
+                        $('.prod_container').append("<div class='container-fluid text-center'><h5 class='animated bounceIn'>We have no more items in " + category + "</h5></div>");
+                    }
+                    else{
+                        $('.prod_container').append("<div class='container-fluid text-center'><h5 class='animated bounceIn'>We don't have "+ search + " in " + category + "</h5></div>");
+                    }
                 }
                 check_sort();
                 }
@@ -406,7 +418,7 @@
     function load_landing() {
         let last = JSON.parse(window.localStorage.getItem('last'));
         if (last.sale=='True'){
-            filter_category('', 1, last.sale);
+            filter_category('', 1, last.sale ,'');
         }
         else{
             render_products();
@@ -437,7 +449,7 @@
                 }
                 opt.addEventListener('change', function(){
                     const last = JSON.parse(window.localStorage.getItem('last'));
-                    filter_category(this.value, 1, last.sale);
+                    filter_category(this.value, 1, last.sale, last.srch);
                     setTimeout(function(){
                         let bot90 = $(document).height() - $(window).height()*0.8;
                         console.log(bot90);
@@ -593,7 +605,7 @@
         const cat_select = $('#cat_select');
         cat_select.val(id);
         const last = JSON.parse(window.localStorage.getItem('last'));
-        filter_category(id, last.cpage, last.sale);
+        filter_category(id, last.cpage, last.sale, '');
         setTimeout(function(){
                     let bot90 = ($(document).height() - $(window).height())*0.8;
                     console.log(bot90);
@@ -705,7 +717,7 @@
             search(last.srch, last.spage);
         }
         else if (fnc == "category"){
-            filter_category(last.ctg, last.cpage, last.sale);
+            filter_category(last.ctg, last.cpage, last.sale, last.srch);
         }
         setTimeout(function(){
                     let bot90 = ($(document).height() - $(window).height())*0.65;
@@ -725,7 +737,7 @@
         }
         else if (last.fnc == "category"){
             console.log(last.sale);
-            filter_category(last.ctg, page, last.sale);
+            filter_category(last.ctg, page, last.sale, last.srch);
         }
         setTimeout(function(){
                     let bot90 = ($(document).height() - $(window).height())*0.7;

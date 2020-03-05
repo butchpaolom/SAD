@@ -225,25 +225,13 @@ class TransactionDeliveryDateSet(LoginRequiredMixin, SuccessMessageMixin, Update
     template_name = 'update.html'
     success_url = reverse_lazy('admin_transactions')
     form_class = TransactionDeliveryDateForm
-    
-    # def form_valid(self, form):
-    #     if self.object.delivery_date and not self.object.paid and not self.object.delivered_date:
-    #         self.object.status = 1
-    #     elif self.object.delivered_date and self.object.paid and not self.object.delivered_date:
-    #         self.object.status = 2
-    #     else:
-    #         self.object.status = 3
-    #     self.object = form.save()
-    #     return super().form_valid(form)
 
     def get_success_message(self, cleaned_data):
-        transaction = Transaction.objects.get(id=self.kwargs.get('pk'))
-        trans_id = transaction.final_order.trans_id
+        message = "Successfully updated " + str(self.object.final_order.trans_id)
         thread_list = []
-        thread = threading.Thread(target=update_delivery_email, args=(transaction,))
+        thread = threading.Thread(target=update_delivery_email, args=(self.object,))
         thread_list.append(thread)
         thread.start()
-        message = "Successfully updated " + str(trans_id)
         return message
 
 
@@ -254,21 +242,9 @@ class TransactionDeliveredDateSet(LoginRequiredMixin, SuccessMessageMixin, Updat
     form_class = TransactionDeliveredDateForm
 
     def get_success_message(self, cleaned_data):
-        transaction = Transaction.objects.get(id=self.kwargs.get('pk'))
-        trans_id = transaction.final_order.trans_id
-        print(self.object.final_order.trans_id)
-        message = "Successfully updated " + str(trans_id)
+        message = "Successfully updated " + str(self.object.final_order.trans_id)
         return message
 
-    # def form_valid(self, form):
-    #     if self.object.delivery_date and not self.object.paid and not self.object.delivered_date:
-    #         self.object.status = 1
-    #     elif self.object.delivered_date and self.object.paid and not self.object.delivered_date:
-    #         self.object.status = 2
-    #     else:
-    #         self.object.status = 3
-    #     self.object = form.save()
-    #     return super().form_valid(form)
 
 
 
@@ -291,20 +267,9 @@ class CashOnDeliveryUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_url = reverse_lazy('admin_transactions')
     form_class = CashOnDeliveryUpdate
 
-    # def form_valid(self, form):
-    #     if self.object.delivery_date and not self.object.paid and not self.object.delivered_date:
-    #         self.object.status = 1
-    #     elif self.object.delivery_date and self.object.paid and not self.object.delivered_date:
-    #         self.object.status = 2
-    #     else:
-    #         self.object.status = 3
-    #     print(self.object)
-    #     self.object = form.save()
-    #     return super().form_valid(form)
 
     def get_success_message(self, cleaned_data):
-        trans_id = Transaction.objects.get(id=self.kwargs.get('pk')).final_order.trans_id
-        message = "Successfully updated " + str(trans_id)
+        message = "Successfully updated " + str(self.object.final_order.trans_id)
         return message
 
 #Assets
