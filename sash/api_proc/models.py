@@ -118,5 +118,13 @@ class Transaction(models.Model):
     def __str__(self):
         return '{0}'.format(self.final_order)
 
+    def save(self, *args, **kwargs):
+        if self.delivery_date and not self.paid and not self.delivered_date:
+            self.status = 1
+        elif self.delivered_date and self.paid and not self.delivered_date:
+            self.status = 2
+        else:
+            self.status = 3
+        super(Transaction, self).save(*args, **kwargs)
 
     
