@@ -125,8 +125,10 @@ class Transaction(models.Model):
             self.status = 1
         elif self.delivery_date and self.paid and not self.delivered_date:
             self.status = 2
-        else:
+        elif self.delivery_date and self.paid and self.delivered_date:
             self.status = 3
+        else:
+            self.status = 4
         super(Transaction, self).save(*args, **kwargs)
 
     

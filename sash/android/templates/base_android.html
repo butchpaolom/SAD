@@ -108,9 +108,10 @@
           const count = JSON.parse(window.localStorage.getItem('cart')).length;
           const last = JSON.parse(window.localStorage.getItem('last'));
           var ratio = window.devicePixelRatio || 1;
-          var h = screen.height * ratio;
-          var w = screen.width * ratio;
-          $('#cart_count').html('(' + count + ')' + `width${w} - height${h}`);
+          const w = screen.width * ratio;
+          if (w < 800){
+            $('.navx').removeClass('h3').addClass('h5')
+          }
           $(`#${last.tab}`).removeClass('text-secondary');
         });
       
