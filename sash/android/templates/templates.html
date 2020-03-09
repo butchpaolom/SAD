@@ -6,7 +6,7 @@
                     <div class="square" id="pic">
                     </div>
                     <h6 id="product_text" class="card-title prod_name text-truncate text-dark mt-2 mb-0"></h6>
-                    <span id="product_price" class="card-title prod_price text-truncate text-center mt-0"></span>
+                    <h6 id="product_price" class="card-title prod_price text-truncate mx-0 mt-0"></h6>
             </div>
         </div>
     </div>
@@ -60,10 +60,10 @@
                         <span style="white-space: pre-wrap" id="product_desc" class="card-text">
                         </span style="white-space: pre-wrap">
                         <div id="product_button" class="form-inline col-12 mt-4 px-0">
-                            <select class="quantity form-control col-2">
+                            <select class="quantity form-control col-5">
                                 <option class="qt_option"></option>
                             </select>
-                            <button class="add_cart btn btn-outline-dark py-2 px-0 col-4"><i class="fa fa-cart-plus mr-2"></i>Add to Cart</button>
+                            <button class="add_cart btn btn-outline-dark py-2 px-0 col-7"><i class="fa fa-cart-plus mr-2"></i>Add to Cart</button>
                         </div>
                         <div class="col-12 px-0 mt-4">
                             <button id="prod_out" class="btn btn-dark py-2 mx-0" disabled>Out of stock</button>
@@ -192,7 +192,7 @@
                         </thead>
                         <tbody id="trans_info" class="table-body">
                             <tr class="text-dark prod_row text-primary">
-                                <td id="trans_id" class="p-1 text-primary"></td>
+                                <td id="trans_id" class="p-1 text-primary text-truncate"></td>
                                 <td id="pm" class="p-1 text-center"></td>
                                 <td class="p-1 text-center"><i id="paid" class="fa fa-check"></i></td>
                                 <td id="status" class="p-1 text-center"></td>
@@ -208,7 +208,7 @@
 
 <template id="empty_trans_template">
     <div class="container-fluid m-0 p-0">
-        <div class="jumbotron bg-white">
+        <div class="jumbotron bg-white p-2">
             <span class="display-4 text-dark">Hello, you have 0 transactions!</span>
             <hr class="mb-4">
             <span class="h6">
