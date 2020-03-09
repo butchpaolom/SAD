@@ -105,9 +105,13 @@
     <script src="{% static 'js/main.js' %}"></script>
     <script>
         const ratio = window.devicePixelRatio || 1;
-          const w = screen.width * ratio;
+        const w = screen.width * ratio;
           if (w < 800){
             $('.navx').removeClass('h3').addClass('h5').removeClass('d-none');
+            $('.searchx').removeClass('d-none');
+          }
+          else{
+            $('.navx').removeClass('d-none');
             $('.searchx').removeClass('d-none');
           }
         $(document).ready(function(){
