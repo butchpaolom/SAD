@@ -19,16 +19,16 @@
 
   <body class="bg-white">
     <div class="row justify-content-center mx-0 text-center cscheme py-1 shadow d-flex fixed-top" style="background-color: #222222;" id="navi_new">
-      <a id="sidebarCollapse" class="navx text-light col-2 my-2 h3 text-left">
+      <a id="sidebarCollapse" class="navx d-none text-light col-2 my-2 h3 text-left">
         <i id="menu_nav" class="mt-2 nav_it fa fa-bars text-secondary"></i>
       </a>
-      <a id="homer" class="navx text-light col-2 my-2 h3 text-right">
+      <a id="homer" class="navx d-none text-light col-2 my-2 h3 text-right">
         <i id="all_nav" class="mt-2 nav_it fa fa-th text-secondary"></i>
       </a>
-      <a href="#xd1" id="saler" class="navx text-light col-2 my-2 h3 tbar_cart text-right">
+      <a href="#xd1" id="saler" class="navx d-none text-light col-2 my-2 h3 tbar_cart text-right">
         <i id="sale_nav" class="mt-2 nav_it fa fa-tag text-secondary"></i>
       </a>
-      <a id="carter" class="navx text-light col-2 my-2 h3 tbar_cart text-right">
+      <a id="carter" class="navx d-none text-light col-2 my-2 h3 tbar_cart text-right">
         <i id="cart_nav" class="mt-2 nav_it fa fa-shopping-cart mr-2 text-secondary"></i>
       </a>
       <div class="searchx col-4 my-2">
@@ -107,7 +107,7 @@
         const ratio = window.devicePixelRatio || 1;
           const w = screen.width * ratio;
           if (w < 800){
-            $('.navx').removeClass('h3').addClass('h5');
+            $('.navx').removeClass('h3').addClass('h5').removeClass('d-none');
           }
         $(document).ready(function(){
           const count = JSON.parse(window.localStorage.getItem('cart')).length;
