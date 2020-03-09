@@ -104,14 +104,14 @@
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
     <script>
+        const ratio = window.devicePixelRatio || 1;
+          const w = screen.width * ratio;
+          if (w < 800){
+            $('.navx').removeClass('h3').addClass('h5');
+          }
         $(document).ready(function(){
           const count = JSON.parse(window.localStorage.getItem('cart')).length;
           const last = JSON.parse(window.localStorage.getItem('last'));
-          var ratio = window.devicePixelRatio || 1;
-          const w = screen.width * ratio;
-          if (w < 800){
-            $('.navx').removeClass('h3').addClass('h5')
-          }
           $(`#${last.tab}`).removeClass('text-secondary');
         });
       
