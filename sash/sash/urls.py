@@ -16,7 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
+from django.conf.urls import url
 from django.conf.urls.static import static
+from django.shortcuts import HttpResponse
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,13 +28,13 @@ urlpatterns = [
     path('', include('front_ep.urls')),
     path('payment/', include('payment.urls')),
     path('paypal/', include('paypal.standard.ipn.urls')),
-
     #new gen
     path('new_api/', include('new_api.urls')),
     path('api_auth/', include('rest_framework.urls')),
     path('android/', include('android.urls')),
-
 ]
+
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -19,11 +19,19 @@
 
   <body class="bg-white">
     <div class="row justify-content-center mx-0 text-center cscheme py-1 shadow d-flex fixed-top" style="background-color: #222222;" id="navi_new">
-      <a id="sidebarCollapse" class="text-light col-1 my-2 h3 text-left"><i id="menu_nav" class="mt-2 nav_it fa fa-bars text-secondary"></i></a>
-      <a id="homer" class="text-light col-2 my-2 h3 text-right"><i id="all_nav" class="mt-2 nav_it fa fa-th text-secondary"></i></a>
-      <a href="#xd1" id="saler" class="text-light col-2 my-2 h3 tbar_cart text-right"><i id="sale_nav" class="mt-2 nav_it fa fa-tag text-secondary"></i></a>
-      <a id="carter" class="text-light col-2 my-2 h3 tbar_cart text-right"><i id="cart_nav" class="mt-2 nav_it fa fa-shopping-cart mr-2 text-secondary"></i></a>
-      <div class="col-5 my-2">
+      <a id="sidebarCollapse" class="navx text-light col-2 my-2 h3 text-left">
+        <i id="menu_nav" class="mt-2 nav_it fa fa-bars text-secondary"></i>
+      </a>
+      <a id="homer" class="navx text-light col-2 my-2 h3 text-right">
+        <i id="all_nav" class="mt-2 nav_it fa fa-th text-secondary"></i>
+      </a>
+      <a href="#xd1" id="saler" class="navx text-light col-2 my-2 h3 tbar_cart text-right">
+        <i id="sale_nav" class="mt-2 nav_it fa fa-tag text-secondary"></i>
+      </a>
+      <a id="carter" class="navx text-light col-2 my-2 h3 tbar_cart text-right">
+        <i id="cart_nav" class="mt-2 nav_it fa fa-shopping-cart mr-2 text-secondary"></i>
+      </a>
+      <div class="searchx col-4 my-2">
       <div class="input-group text" id="search_bar">
           <input type="text" class="form-control border text-light cscheme" style="background-color: #222222;" placeholder="Search" id="search_input">
           <div class="input-group-append">
@@ -98,8 +106,11 @@
     <script>
         $(document).ready(function(){
           const count = JSON.parse(window.localStorage.getItem('cart')).length;
-          const last = JSON.parse(window.localStorage.getItem('last'))
-          $('#cart_count').html('(' + count + ')');
+          const last = JSON.parse(window.localStorage.getItem('last'));
+          var ratio = window.devicePixelRatio || 1;
+          var h = screen.height * ratio;
+          var w = screen.width * ratio;
+          $('#cart_count').html('(' + count + ')' + `width${w} - height${h}`);
           $(`#${last.tab}`).removeClass('text-secondary');
         });
       
@@ -201,6 +212,24 @@
         window.location = "{% url 'an_about' %}";
       }
     });
+    $(document).on('focusin input', '#search_input', function(){
+      $('.navx').addClass('d-none');
+      $('.searchx').removeClass('col-4').addClass('col-12');
+      $(document).on('focusout', '#search_input', function(){
+        $('.searchx').addClass('col-4').removeClass('col-12');
+        $('.navx').removeClass('d-none');
+      });
+      $(document).on('click', '#search_button', function(){
+        $('.searchx').addClass('col-4').removeClass('col-12');
+        $('.navx').removeClass('d-none');
+      });
+      $('#search_input').keypress(function(e){
+        if (e.which == 13 ){
+          $('.searchx').addClass('col-4').removeClass('col-12');
+          $('.navx').removeClass('d-none');
+        }
+    });
+    })
   </script>
 
   </body>
