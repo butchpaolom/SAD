@@ -31,7 +31,7 @@
       <a id="carter" class="navx d-none text-light col-2 my-2 h3 tbar_cart text-right">
         <i id="cart_nav" class="mt-2 nav_it fa fa-shopping-cart mr-2 text-secondary"></i>
       </a>
-      <div class="searchx col-4 my-2">
+      <div class="searchx col-4 my-2 d-none">
       <div class="input-group text" id="search_bar">
           <input type="text" class="form-control border text-light cscheme" style="background-color: #222222;" placeholder="Search" id="search_input">
           <div class="input-group-append">
@@ -108,6 +108,7 @@
           const w = screen.width * ratio;
           if (w < 800){
             $('.navx').removeClass('h3').addClass('h5').removeClass('d-none');
+            $('.searchx').removeClass('d-none');
           }
         $(document).ready(function(){
           const count = JSON.parse(window.localStorage.getItem('cart')).length;

@@ -94,6 +94,11 @@
             window.localStorage.setItem('last', JSON.stringify(last));
         }
     });
+    const ratio = window.devicePixelRatio || 1;
+        const w = screen.width * ratio;
+          if (w < 800){
+            $('ttex').text('You have 0 transacs!')
+          }
 </script>
 
 {% endblock content %}
