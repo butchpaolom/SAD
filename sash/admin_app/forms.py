@@ -12,6 +12,11 @@ class ProductForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
         model = Product
         exclude = ['views','hidden']
 
+class CategoryForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = '__all__'
+
 class ProductEditForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
     price = forms.DecimalField(
         widget=forms.TextInput(attrs={'readonly':'readonly'})

@@ -98,6 +98,16 @@ class ProductUpdateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixi
         return super(ProductUpdateView, self).form_valid(form)
 
 
+class CategoryCreateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
+    template_name = 'create_category.html'
+    form_class = CategoryForm
+    context_object_name = 'category'
+    success_url = reverse_lazy('admin_products')
+
+    def get_success_message(self, cleaned_data):
+        message = "Successfully added " + str(self.object)
+        return message 
+
 class ProductCreateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
     template_name = 'create.html'
     form_class = ProductForm
